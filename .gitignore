@@ -9,6 +9,8 @@ requirements-dev.txt
 .vscode
 edteam-cursodjango-main.zip
 venv/
+Recursos del curso/
+IMAGENES_TIENDA/
 
 ### Django ###
 *.log

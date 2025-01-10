@@ -13,5 +13,5 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ["title", "category", "image"]
+    list_display = ["title", "category", "image", "description", "price"]
     readonly_fields = ["created", "updated"]
