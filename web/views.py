@@ -114,10 +114,11 @@ def user_account(request: HttpRequest):
 def create_user(request: HttpRequest):
 
     if request.method == "POST":
-        user_data = request.POST["new_user"]
-        password_data = request.POST["new_password"]
+        username = request.POST["new_user_gmail"].split("@")[0].capitalize()
+        user_gmail = request.POST["new_user_gmail"]
+        password_data = request.POST["new_user_password"]
         new_user = User.objects.create_user(
-            username=user_data, email=user_data, password=password_data
+            username=username, email=user_gmail, password=password_data
         )
 
         if new_user is not None:
@@ -128,4 +129,4 @@ def create_user(request: HttpRequest):
 
 
 def login_user(request: HttpRequest):
-    pass
+    return redirect("/account/")
