@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8" />
     <title>EdShop</title>
@@ -10,8 +11,7 @@
 
     <link
       href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900%7COpen+Sans:300,300i,400,400i,600,600i,700,700i&amp;subset=cyrillic"
-      rel="stylesheet"
-    />
+      rel="stylesheet" />
 
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}" />
@@ -21,10 +21,7 @@
     <link rel="stylesheet" href="{% static 'css/flexslider.css' %}" />
     <link rel="stylesheet" href="{% static 'css/jquery.fancybox.css' %}" />
     <link rel="stylesheet" href="{% static 'css/ion.rangeSlider.css' %}" />
-    <link
-      rel="stylesheet"
-      href="{% static 'css/jquery.mThumbnailScroller.css' %}"
-    />
+    <link rel="stylesheet" href="{% static 'css/jquery.mThumbnailScroller.css' %}" />
     <link rel="stylesheet" href="{% static 'css/chosen.css' %}" />
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
@@ -32,10 +29,10 @@
     <link rel="stylesheet" href="{% static 'css/media.css' %}" />
     <link rel="stylesheet" href="{% static 'css/elements-media.css' %}" />
   </head>
+
   <body>
     <div id="page" class="site">
       {% include 'includes/navbar.html' %} {% include 'includes/header.html' %}
-
       <div id="content" class="site-content">
         <div id="primary" class="content-area">
           <main id="main" class="site-main">
@@ -43,18 +40,13 @@
               {% block content %} {% endblock content %}
             </div>
           </main>
-          <!-- #main -->
         </div>
-        <!-- #primary -->
       </div>
-      <!-- #content -->
-
       {% include 'includes/footer.html' %}
     </div>
-    <!-- #page -->
-
     <script src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
     <script src="{% static 'js/jquery-plugins.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
   </body>
+
 </html>

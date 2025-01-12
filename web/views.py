@@ -1,3 +1,5 @@
+from django.contrib.auth import login
+from django.contrib.auth.models import User
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
 
@@ -60,7 +62,8 @@ def product_detail(request: HttpRequest, product_id):
 
     return render(request, "producto.html", {"product": product})
 
-# Cart views
+
+""" CART VIEWS """
 
 
 def cart(request: HttpRequest):
@@ -99,3 +102,30 @@ def clear_cart(request: HttpRequest):
     cart.clear()
 
     return render(request, "carrito.html")
+
+
+""" USER/CLIENT VIEWS """
+
+
+def user_account(request: HttpRequest):
+    return render(request, "cuenta.html")
+
+
+def create_user(request: HttpRequest):
+
+    if request.method == "POST":
+        user_data = request.POST["new_user"]
+        password_data = request.POST["new_password"]
+        new_user = User.objects.create_user(
+            username=user_data, email=user_data, password=password_data
+        )
+
+        if new_user is not None:
+            login(request, new_user)
+            return redirect("/account/")
+
+    return render(request, "login.html")
+
+
+def login_user(request: HttpRequest):
+    pass

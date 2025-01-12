@@ -21,7 +21,8 @@ urlpatterns = [
         views.product_detail,
         name="product_detail",
     ),
-    # Cart
+
+    # CART
     path("cart/", views.cart, name="cart"),
     path(
         "add-to-cart/<int:product_id>",
@@ -34,4 +35,9 @@ urlpatterns = [
         name="delete_product_cart",
     ),
     path("clear-cart/", views.clear_cart, name="clear_cart"),
+
+    # USER/CLIENT
+    path("account/", views.user_account, name="user_account"),
+    path("login-sigup/", views.create_user, name="create_user"),
+    path("login-sigup/", views.login_user, name="login_user"),
 ]
