@@ -3,7 +3,7 @@
     <ul class="b-crumbs">
         <li><a href="/">Home</a></li>
         <li><a href="/">Catalog</a></li>
-        <li>Producto</li>
+        <li>Product</li>
     </ul>
     <article>
         <div class="prod">
@@ -68,37 +68,37 @@
                 </div>
                 <p class="prod-categs">
                     <a href="{% url 'web:filter_by_category' product.category.id %}">
-                        {{product.category}}
+                        {{ product.category }}
                     </a>
                 </p>
-                <h1>{{product.title}}</h1>
+                <h1>{{ product.title }}</h1>
                 <div class="variations_form cart">
-                    <p class="prod-price">${{product.price}}</p>
-                    <p class="prod-excerpt">{{product.description}}
+                    <p class="prod-price">${{ product.price }}</p>
+                    <p class="prod-excerpt">{{ product.description }}
                         <a id="prod-showdesc" class="prod-excerpt-more" href="#">read more</a>
                     </p>
                     <div class="prod-add">
-                        <form action="#" method="post">
+                        <form action="{% url 'web:add_product_cart' product.id %}" method="post">
                             {% csrf_token %}
                             <div class="variations">
                                 <div class="variations-row">
-                                    <div class="label"><label>Сolor</label></div>
+                                    <div class="label"><label>Color</label></div>
                                     <div class="value">
                                         <select>
                                             <option value="">Choose an option</option>
-                                            <option value="blue">Blue</option>
-                                            <option value="green">Green</option>
-                                            <option value="yellow">Yellow</option>
+                                            <option value="blue">{{ product.color }}</option>
+                                            <!-- <option value="green">Green</option>
+                                            <option value="yellow">Yellow</option> -->
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="button">
-                                <i class="icon ion-android-cart"></i>Add to Card
+                            <button type="submit" class="button"><i class="icon ion-android-cart"></i>
+                                Add to Card
                             </button>
                             <p class="qnt-wrap prod-li-qnt">
                                 <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
-                                <input type="text" name="cantidad" value="1">
+                                <input type="text" name="quantity" value="1">
                                 <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
                             </p>
                         </form>

@@ -1,6 +1,7 @@
 from django.http import HttpRequest
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
+from web.cart import Cart
 from web.models import Category, Product
 
 # Create your views here.
@@ -31,7 +32,7 @@ def filter_by_category(request: HttpRequest, category_id):
         "index.html",
         {
             "products": products,
-            "categories": categories
+            "categories": categories,
         },
     )
 
@@ -49,7 +50,7 @@ def search_product_title(request: HttpRequest):
             {
                 "products": products,
                 "categories": categories,
-            }
+            },
         )
     return render(request, "index.html")
 
@@ -58,3 +59,43 @@ def product_detail(request: HttpRequest, product_id):
     product = Product.objects.get(id=product_id)
 
     return render(request, "producto.html", {"product": product})
+
+# Cart views
+
+
+def cart(request: HttpRequest):
+    # obj_cart = Cart(request)
+    # print(obj_cart.cart.get("8").get("category"))
+    return render(request, "carrito.html")
+
+
+def add_product_cart(request: HttpRequest, product_id):
+
+    if request.method == "POST":
+        quantity = int(request.POST["quantity"])
+    else:
+        quantity = 1
+
+    product = Product.objects.get(id=product_id)
+    cart = Cart(request)
+    cart.add(product, quantity)
+
+    if request.method == "GET":
+        return redirect("/")
+
+    return render(request, "carrito.html")
+
+
+def delete_product_cart(request: HttpRequest, product_id):
+    product = Product.objects.get(id=product_id)
+    cart = Cart(request)
+    cart.delete(product)
+
+    return render(request, "carrito.html")
+
+
+def clear_cart(request: HttpRequest):
+    cart = Cart(request)
+    cart.clear()
+
+    return render(request, "carrito.html")

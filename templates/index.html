@@ -1,11 +1,10 @@
 {% extends 'layout.html' %}
 {% block content %}
         <div class="section-top">
-
-            <h1 class="maincont-ttl">Catalogo</h1>
+            <h1 class="maincont-ttl">Catalog</h1>
             <ul class="b-crumbs">
-                <li><a href="/">Inicio</a></li>
-                <li>Catalogo</li>
+                <li><a href="/">Home</a></li>
+                <li>Catalog</li>
             </ul>
         </div>
         <!-- To make Sidebar "Not Sticky" just remove  id="section-list-withsb" -->
@@ -13,7 +12,7 @@
             <aside class="blog-sb-widgets section-sb" id="section-sb">
                 <div class="theiaStickySidebar">
                     <p class="section-filter-toggle filter_hidden">
-                        <a href="#" id="section-filter-toggle-btn">Filtros</a>
+                        <a href="#" id="section-filter-toggle-btn">Filters</a>
                     </p>
                     <div class="section-filter">
                         <div class="section-filter">
@@ -21,10 +20,11 @@
                         </div>
                     </div>
                 </div>
-            </aside>        <div class="section-list-withsb" id="section-list-withsb">
-            <div class="theiaStickySidebar">
-                {% include 'includes/catalogo/catalogo.html' %}
-            </div><!-- .theiaStickySidebar -->
-        </div><!-- .section-list-withsb -->
+            </aside>
+            <div class="section-list-withsb" id="section-list-withsb">
+                <div class="theiaStickySidebar">
+                    {% include 'includes/catalogo/catalogo.html' %}
+                </div><!-- .theiaStickySidebar -->
+            </div><!-- .section-list-withsb -->
         </div><!-- .section-wrap-withsb -->
 {% endblock %}

@@ -1,30 +1,30 @@
 <li class="h-cart">
-    <a class="cart-contents" href="cart.html">
-        <p class="h-cart-icon">
-            <i class="ion-android-cart"></i>
-            <span>1</span>
-        </p>
-        <p class="h-cart-total">$100</p>
-    </a>
-    <div class="widget_shopping_cart">
-        <div class="widget_shopping_cart_content">
-            <ul class="cart_list">
-
-                <li>
-                    <a href="#" class="remove">&times;</a>
-                    <a href="#">
-                        <img src="https://via.placeholder.com/250" alt="">
-                        Producto
-                    </a>
-                    <span class="quantity">1 &times; $100</span>
-                </li>
-
-            </ul>
-            <p class="total"><b>Subtotal:</b> $100</p>
-            <p class="buttons">
-                <a href="#" class="button">Ver Carrito</a>
-                <a href="#" class="button">Pedido</a>
-            </p>
-        </div>
+  <a class="cart-contents" href="{% url 'web:cart' %}">
+    <p class="h-cart-icon">
+      <i class="ion-android-cart"></i>
+      <span>{{ request.session.cart.items|length }}</span>
+    </p>
+    <p class="h-cart-total">${{ request.session.cart_total_price }}</p>
+  </a>
+  <div class="widget_shopping_cart">
+    <div class="widget_shopping_cart_content">
+      {% for key,value in request.session.cart.items %}
+        <ul class="cart_list">
+          <li>
+            <a href="{% url 'web:delete_product_cart' value.product_id %}" class="remove">&times;</a>
+            <a href="{% url 'web:product_detail' value.product_id %}">
+              <img src="{{ value.image }}" alt="">
+              Product
+            </a>
+            <span class="quantity">{{value.quantity}} &times; ${{ value.subtotal }}</span>
+          </li>
+        </ul>
+      {% endfor %}
+      <p class="total"><b>Total:</b> ${{ request.session.cart_total_price }}</p>
+      <p class="buttons">
+        <a href="{% url 'web:cart' %}" class="button">Show Cart</a>
+        <a href="#" class="button">Pedido</a>
+      </p>
     </div>
+  </div>
 </li>
