@@ -12,6 +12,8 @@ repos:
     rev: 7.1.1
     hooks:
     -   id: flake8
+        args: [--exclude=*/migrations/*]
+        # entry: flake8 --exclude=*/migrations/
 -   repo: local
     hooks:
     -   id: run-tests
