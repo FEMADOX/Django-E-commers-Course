@@ -16,7 +16,7 @@
             <div class="prod-li-cont">
               <div class="prod-li-ttl-wrap">
                 <p>
-                  <a href="#">{{ value.category }}</a>
+                  <a href="#">{{ value.category }}</a><!------------->
                 </p>
                 <h3><a href="{% url 'web:product_detail' value.product_id %}">{{ value.title }}</a></h3>
               </div>
@@ -50,7 +50,7 @@
                 <p class="prod-li-rating-count">12</p>
               </div>
               <p class="prod-li-add">
-                <a href="{% url 'web:delete_product_cart' value.product_id %}" class="button hover-label prod-addbtn">
+                <a href="{% url 'cart:delete_product_cart' value.product_id %}" class="button hover-label prod-addbtn">
                   <i class="icon ion-close-round"></i><span>Delete</span>
                 </a>
               </p>
@@ -62,7 +62,7 @@
           <div class="page-styling prod-li-informations">
             <dl class="prod-li-props">
               <dt>Brand:</dt>
-              <dd><a href="#">{{ value.brand }}</a></dd>
+              <dd><a href="#">{{ value.brand }}</a></dd><!----------------->>
               <dt>Weight:</dt>
               <dd>{{ value.weight }} kg</dd>
               <dt>Dimension:</dt>
@@ -80,7 +80,7 @@
         <input type="submit" class="button" value="Apply">
       </div>
       <div class="cart-collaterals">
-        <a href="{% url 'web:clear_cart' %}" class="checkout-button button">Clear Cart</a>
+        <a href="{% url 'cart:clear_cart' %}" class="checkout-button button">Clear Cart</a>
         <a href="#" class="checkout-button button">Place Order</a>
         <div class="order-total">
           <p class="cart-totals-ttl">Total</p>
@@ -89,4 +89,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock content %}

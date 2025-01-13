@@ -1,57 +1,59 @@
 {% extends 'layout.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<h1 class="maincont-ttl">PEDIDO NRO : {{pedido.nro_pedido}}</h1>
-    <ul class="b-crumbs">
-        <li><a href="/">Home</a></li>
-        <li>Pedido</li>
-    </ul>
-<div class="page-styling">
+  <h1 class="maincont-ttl">ORDER # : {{order.order_num}}</h1>
+  <ul class="b-crumbs">
+    <li><a href="{% url 'web:index' %}">Home</a></li>
+    <li>Order</li>
+  </ul>
+  <div class="page-styling">
     <div class="woocommerce prod-litems section-list">
-            <h2>Fecha : {{pedido.fecha_registro}}</h2>
-            {% for detalle in pedido.pedidodetalle_set.all %}
-            <article class="prod-li sectls">
-                <div class="prod-li-inner">
-                    <a href="#" class="prod-li-img">
-                        <img src="{{ detalle.producto.imagen.url }}" alt="">
-                    </a>
-                    <div class="prod-li-cont">
-                        <div class="prod-li-ttl-wrap">
-                            <p>
-                                <a href="#">{{detalle.producto.categoria}}</a>
-                            </p>
-                            <h3><a href="product.html">{{ detalle.producto.nombre }}</a></h3>
-                        </div>
-                        <div class="prod-li-prices">
-                            <div class="prod-li-price-wrap">
-                                <p>Precio</p>
-                                <p class="prod-li-price">${{detalle.producto.precio}}</p>
-                            </div>
-                        </div>
-                        <div class="prod-li-qnt-wrap">
-                            <p class="qnt-wrap prod-li-qnt">
-                                <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
-                                <input type="text" value="{{detalle.cantidad}}">
-                                <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
-                            </p>
-                        </div>
-                        <div class="prod-li-total-wrap">
-                            <p>Total</p>
-                            <p class="prod-li-total">${{detalle.subtotal}}</p>
-                        </div>
-                    </div>
-                </div>
-            </article>
-            {% endfor %}
+      <h2>Date : {{order.registration_date }}</h2>
+      {% for detail in order.order_detail_set.all %}
+      <article class="prod-li sectls">
+        <div class="prod-li-inner">
+          <a href="{% url 'web:product_detail' detail.product.id %}" class="prod-li-img">
+            <img src="{{ detail.product.image.url }}" alt="">
+          </a>
+          <div class="prod-li-cont">
+            <div class="prod-li-ttl-wrap">
+              <p>
+                <a href="{% url 'web:filter_by_category' detail.product.category.id %}">
+                  {{detail.product.category}}
+                </a>
+              </p>
+              <h3><a href="{% url 'web:product_detail' detail.product.id %}">{{ detail.product.title }}</a></h3>
+            </div>
+            <div class="prod-li-prices">
+              <div class="prod-li-price-wrap">
+                <p>Price</p>
+                <p class="prod-li-price">${{ detail.product.price }}</p>
+              </div>
+            </div>
+            <div class="prod-li-qnt-wrap">
+              <p class="qnt-wrap prod-li-qnt">
+                <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
+                <input type="text" value="{{ detail.quantity }}">
+                <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
+              </p>
+            </div>
+            <div class="prod-li-total-wrap">
+              <p>Total</p>
+              <p class="prod-li-total">${{ detail.subtotal }}</p>
+            </div>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
     </div>
     <div class="cart-actions">
-            <div class="cart-collaterals">
-                {{ formpaypal.render }}
-                <div class="order-total">
-                    <p class="cart-totals-ttl">Total</p>
-                    <p class="cart-totals-val">${{pedido.monto_total}}</p>
-                </div>
-            </div>
+      <div class="cart-collaterals">
+        {{ form_paypal.render }}
+        <div class="order-total">
+          <p class="cart-totals-ttl">Total</p>
+          <p class="cart-totals-val">${{ order.total_price }}</p>
+        </div>
+      </div>
     </div>
-</div>
-{% endblock %}
+  </div>
+{% endblock content %}
