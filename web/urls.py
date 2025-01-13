@@ -38,6 +38,7 @@ urlpatterns = [
 
     # USER/CLIENT
     path("account/", views.user_account, name="user_account"),
-    path("login-sigup/", views.create_user, name="create_user"),
-    path("login-sigup/", views.login_user, name="login_user"),
+    path("login-signup/", views.create_user, name="create_user"),
+    path("login/", views.login_user, name="login_user"),
+    path("logout/", views.logout_user, name="logout_user"),
 ]

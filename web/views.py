@@ -1,5 +1,6 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
 
@@ -114,19 +115,48 @@ def user_account(request: HttpRequest):
 def create_user(request: HttpRequest):
 
     if request.method == "POST":
-        username = request.POST["new_user_gmail"].split("@")[0].capitalize()
-        user_gmail = request.POST["new_user_gmail"]
+        username = request.POST["new_user_email"].split("@")[0].lower()
+        user_email = request.POST["new_user_email"]
         password_data = request.POST["new_user_password"]
-        new_user = User.objects.create_user(
-            username=username, email=user_gmail, password=password_data
-        )
 
-        if new_user is not None:
+        try:
+            new_user = User.objects.create_user(
+                username=username, email=user_email, password=password_data
+            )
             login(request, new_user)
             return redirect("/account/")
+        except IntegrityError:
+            raise "A user with that email already exists."
+        except Exception as e:
+            raise str(e)
+
+        # if new_user is not None:
+        #     login(request, new_user)
+        #     return redirect("/account/")
 
     return render(request, "login.html")
 
 
 def login_user(request: HttpRequest):
-    return redirect("/account/")
+
+    if request.method == "POST":
+        user_email = request.POST["email"].split("@")[0].lower()
+        user_password = request.POST["password"]
+        user = authenticate(request,
+                            username=user_email,
+                            password=user_password)
+
+        if user is not None:
+            login(request, user)
+            return redirect("/account/")
+
+    return render(request, "login.html")
+
+
+def logout_user(request: HttpRequest):
+
+    if request.method == "GET":
+        logout(request)
+        return redirect("/login-signup/")
+
+    return render(request, "catalogo.html")

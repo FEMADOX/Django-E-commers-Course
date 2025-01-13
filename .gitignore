@@ -3,6 +3,7 @@
 
 # User
 *.db
+migrations/
 requirements-dev.txt
 *.code-workspace
 .vscode

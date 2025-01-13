@@ -4,14 +4,17 @@
       <i class="ion-android-cart"></i>
       <span>{{ request.session.cart.items|length }}</span>
     </p>
-    <p class="h-cart-total">${{ request.session.cart_total_price }}</p>
+    {% if request.session.cart.items|length > 0 %}
+      <p class="h-cart-total">${{ request.session.cart_total_price }}</p>
+    {% endif %}
   </a>
   <div class="widget_shopping_cart">
     <div class="widget_shopping_cart_content">
       {% for key,value in request.session.cart.items %}
         <ul class="cart_list">
           <li>
-            <a href="{% url 'web:delete_product_cart' value.product_id %}" class="remove">&times;</a>
+            <a href="{% url 'web:delete_product_cart' value.product_id %}"
+             class="remove">&times;</a>
             <a href="{% url 'web:product_detail' value.product_id %}">
               <img src="{{ value.image }}" alt="">
               Product
@@ -20,11 +23,11 @@
           </li>
         </ul>
       {% endfor %}
-      <p class="total"><b>Total:</b> ${{ request.session.cart_total_price }}</p>
-      <p class="buttons">
-        <a href="{% url 'web:cart' %}" class="button">Show Cart</a>
-        <a href="#" class="button">Pedido</a>
-      </p>
+        <p class="total"><b>Total:</b> ${{ request.session.cart_total_price }}</p>
+        <p class="buttons">
+          <a href="{% url 'web:cart' %}" class="button">Show Cart</a>
+          <a href="#" class="button">Pedido</a>
+        </p>
     </div>
   </div>
 </li>
