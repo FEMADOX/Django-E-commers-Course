@@ -22,6 +22,8 @@ from edshop import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("web.urls")),
+    path("account/", include("account.urls")),
+    path("cart/", include("cart.urls")),
 ]
 
 if settings.DEBUG:
