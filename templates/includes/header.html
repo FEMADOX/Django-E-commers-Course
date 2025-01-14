@@ -22,8 +22,9 @@
           {% if request.user.is_authenticated %}
             {% comment %} <li><a href="{% url 'account:logout_user' %}" >Logout</a></li> {% endcomment %}
             <li>
-              <form action="{% url 'account:logout_user' %}" method="post" class="login">{% csrf_token %}
-                <input type="submit" value="LogOut">
+              <form action="{% url 'account:logout_user' %}" method="post" class="logout-form">{% csrf_token %}
+                <!-- <button type="submit" class="logout-button">LogOut</button> -->
+                <input type="submit" class="" value="LogOut">
               </form>
             </li>
           {% else %}

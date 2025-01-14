@@ -1344,10 +1344,35 @@ body .widget_search .dgwt-wcas-si img {
 	font-size: 13px;
 	font-weight: 600;
 }
+.site-header .h-profile .h-profile-links li form {
+	justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+.site-header .h-profile .h-profile-links li form input {
+	color: #283346;
+	transition: color 0.2s;
+	white-space: nowrap;
+	display: block;
+	padding: 5px 18px 5px;
+	/* border-top: 1px solid #e9e9ef; */
+	font-size: 13px;
+	font-weight: 600;
+	border: none;
+	background-color: #fff;
+	margin-bottom: 1%;
+}
 .site-header .h-profile .h-profile-links li:first-child a {
 	border-top: none;
 }
 .site-header .h-profile .h-profile-links li a:hover {
+	text-decoration: none;
+	background-color: #f1f1fb;
+}
+.site-header .h-profile .h-profile-links li form:hover {
+	text-decoration: none;
+	background-color: #f1f1fb;
+}
+.site-header .h-profile .h-profile-links li form input:hover {
 	text-decoration: none;
 	background-color: #f1f1fb;
 }
