@@ -34,10 +34,16 @@ class Cart:
                 "title": product.title,
                 "price": str(product.price),
                 "quantity": quantity,
-                "category": product.category.name,
+                "category": {
+                    "id": product.category.pk,
+                    "name": product.category.name,
+                },
                 "description": product.description,
                 "image": product.image.url,
-                "brand": product.brand,
+                "brand": {
+                    "id": product.brand.pk,
+                    "name": product.brand.name,
+                },
                 "weight": product.weight,
                 "dimension": product.dimension,
                 "color": product.color,

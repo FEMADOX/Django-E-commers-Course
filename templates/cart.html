@@ -16,7 +16,7 @@
             <div class="prod-li-cont">
               <div class="prod-li-ttl-wrap">
                 <p>
-                  <a href="#">{{ value.category }}</a><!------------->
+                  <a href="{% url 'web:filter_by_category' value.category.id %}">{{ value.category.name }}</a><!------------->
                 </p>
                 <h3><a href="{% url 'web:product_detail' value.product_id %}">{{ value.title }}</a></h3>
               </div>
@@ -62,7 +62,7 @@
           <div class="page-styling prod-li-informations">
             <dl class="prod-li-props">
               <dt>Brand:</dt>
-              <dd><a href="#">{{ value.brand }}</a></dd><!----------------->>
+              <dd><a href="{% url 'web:filter_by_brand' value.brand.id %}">{{ value.brand.name }}</a></dd>
               <dt>Weight:</dt>
               <dd>{{ value.weight }} kg</dd>
               <dt>Dimension:</dt>

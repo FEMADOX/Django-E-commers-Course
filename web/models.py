@@ -3,6 +3,11 @@ from django.db import models
 # Create your models here.
 
 
+def get_default_brand():
+    brand, created = Brand.objects.get_or_create(name="None")
+    return brand.pk
+
+
 class Category(models.Model):
     name = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
@@ -22,6 +27,11 @@ class Category(models.Model):
 class Brand(models.Model):
     name = models.CharField(max_length=50)
     fundator = models.CharField(max_length=100)
+    image = models.ImageField(
+        upload_to="brands",
+        blank=True, null=True,
+        default=""
+    )
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -33,7 +43,7 @@ class Brand(models.Model):
         ]
 
     def __str__(self) -> str:
-        return f"{self.name} - {self.fundator}"
+        return f"{self.name}"
 
 
 class Product(models.Model):
@@ -50,8 +60,8 @@ class Product(models.Model):
                               blank=True, null=True,
                               default="")
     brand = models.ForeignKey(Brand, on_delete=models.RESTRICT,
-                              blank=True, null=True,
-                              default=None)
+                              blank=True,
+                              default=get_default_brand)
     weight = models.PositiveIntegerField(blank=True, null=True, default=0)
     dimension = models.CharField(max_length=50,
                                  blank=True, null=True,

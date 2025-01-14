@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from web.models import Category, Product
+from web.models import Category, Product, Brand
 
 # Register your models here.
 
@@ -15,3 +15,9 @@ class CategoryAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     list_display = ["title", "category", "image", "description", "price"]
     readonly_fields = ["created", "updated"]
+
+
+@admin.register(Brand)
+class BrandAdmin(admin.ModelAdmin):
+    list_display = ["name", "fundator", "image"]
+    readonly_fields = ["created"]

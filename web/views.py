@@ -1,7 +1,7 @@
 from django.http import HttpRequest
 from django.shortcuts import render
 
-from web.models import Category, Product
+from web.models import Brand, Category, Product
 
 # Create your views here.
 
@@ -9,6 +9,7 @@ from web.models import Category, Product
 def index(request: HttpRequest):
     products = Product.objects.all()
     categories = Category.objects.all()
+    brands = Brand.objects.all()
 
     return render(
         request,
@@ -16,6 +17,7 @@ def index(request: HttpRequest):
         {
             "products": products,
             "categories": categories,
+            "brands": brands,
         },
     )
 
@@ -32,6 +34,21 @@ def filter_by_category(request: HttpRequest, category_id):
         {
             "products": products,
             "categories": categories,
+        },
+    )
+
+
+def filter_by_brand(request: HttpRequest, brand_id):
+    brands = Brand.objects.all()
+    brand = Brand.objects.get(id=brand_id)
+    products = Product.objects.filter(brand=brand)
+
+    return render(
+        request,
+        "index.html",
+        {
+            "products": products,
+            "brands": brands,
         },
     )
 

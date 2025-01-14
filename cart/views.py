@@ -9,8 +9,6 @@ from web.models import Product
 
 
 def cart(request: HttpRequest):
-    # obj_cart = Cart(request)
-    # print(obj_cart.cart.get("8").get("category"))
     return render(request, "cart.html")
 
 

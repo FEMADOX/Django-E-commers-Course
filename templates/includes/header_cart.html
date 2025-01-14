@@ -17,7 +17,7 @@
              class="remove">&times;</a>
             <a href="{% url 'web:product_detail' value.product_id %}">
               <img src="{{ value.image }}" alt="">
-              Product
+              {{ value.title }}
             </a>
             <span class="quantity">{{value.quantity}} &times; ${{ value.subtotal }}</span>
           </li>
@@ -26,7 +26,7 @@
       <p class="total"><b>Total:</b> ${{ request.session.cart_total_price }}</p>
       <p class="buttons">
         <a href="{% url 'cart:cart' %}" class="button">Show Cart</a>
-        <a href="#" class="button">Pedido</a>
+        <a href="#" class="button">Order</a>
       </p>
     </div>
   </div>

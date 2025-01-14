@@ -21,4 +21,9 @@ urlpatterns = [
         views.product_detail,
         name="product_detail",
     ),
+    path(
+        "by-brand/<int:brand_id>",
+        views.filter_by_brand,
+        name="filter_by_brand",
+    ),
 ]

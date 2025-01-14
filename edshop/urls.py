@@ -15,8 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 
+from account.views import create_user
 from edshop import settings
 
 urlpatterns = [
@@ -24,6 +25,7 @@ urlpatterns = [
     path("", include("web.urls")),
     path("account/", include("account.urls")),
     path("cart/", include("cart.urls")),
+    re_path(r".*login-signup/$", create_user, name="create_user"),
 ]
 
 if settings.DEBUG:

@@ -131,8 +131,8 @@ def login_user(request: HttpRequest):
 
 def logout_user(request: HttpRequest):
 
-    if request.method == "GET":
+    if request.method == "POST":
         logout(request)
-        return redirect("/login-signup/")
+        return redirect("login-signup/")
 
     return render(request, "catalog.html")

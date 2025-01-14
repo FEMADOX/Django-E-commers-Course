@@ -3,13 +3,13 @@
   <div class="section-sb-current">
     <ul class="section-sb-list">
       {% for category in categories %}
-      <li>
-        <a href="{% url 'web:filter_by_category' category.id %}">
-          <span class="section-sb-label">{{category.name}}
-            <span class="count">{{category.product_set.count}}</span>
-          </span>
-        </a>
-      </li>
+        <li>
+          <a href="{% url 'web:filter_by_category' category.id %}">
+            <span class="section-sb-label">{{ category.name }}
+              <span class="count">{{ category.product_set.count }}</span>
+            </span>
+          </a>
+        </li>
       {% endfor %}
     </ul>
   </div>
