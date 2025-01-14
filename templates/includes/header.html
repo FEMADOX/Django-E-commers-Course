@@ -14,18 +14,18 @@
     <ul class="h-shop-links">
       <li class="h-search-btn" id="h-search-btn"><i class="ion-search"></i></li>
       <li class="h-shop-icon h-profile">
-        <a href="{% url 'web:user_account' %}" title="My Account">
+        <a href="{% url 'account:user_account' %}" title="My Account">
           <i class="ion-android-person"></i>
         </a>
         <ul class="h-profile-links">
-          <li><a href="{% url 'web:create_user' %}">Login / SignUp</a></li>
+          <li><a href="{% url 'account:create_user' %}">Login / SignUp</a></li>
           {% if request.user.is_authenticated %}
-            <li><a href="{% url 'logout_user' %}">Logout</a></li>
+            <li><a href="{% url 'account:logout_user' %}">Logout</a></li>
           {% else %}
           {% endif %}
         </ul>
       </li>
-      {% include 'includes/header_carrito.html' %}
+      {% include 'includes/header_cart.html' %}
     </ul>
   </div>
 </div>

@@ -1,5 +1,5 @@
 <li class="h-cart">
-  <a class="cart-contents" href="{% url 'web:cart' %}">
+  <a class="cart-contents" href="{% url 'cart:cart' %}">
     <p class="h-cart-icon">
       <i class="ion-android-cart"></i>
       <span>{{ request.session.cart.items|length }}</span>
@@ -13,7 +13,7 @@
       {% for key,value in request.session.cart.items %}
         <ul class="cart_list">
           <li>
-            <a href="{% url 'web:delete_product_cart' value.product_id %}"
+            <a href="{% url 'cart:delete_product_cart' value.product_id %}"
              class="remove">&times;</a>
             <a href="{% url 'web:product_detail' value.product_id %}">
               <img src="{{ value.image }}" alt="">
@@ -23,11 +23,11 @@
           </li>
         </ul>
       {% endfor %}
-        <p class="total"><b>Total:</b> ${{ request.session.cart_total_price }}</p>
-        <p class="buttons">
-          <a href="{% url 'web:cart' %}" class="button">Show Cart</a>
-          <a href="#" class="button">Pedido</a>
-        </p>
+      <p class="total"><b>Total:</b> ${{ request.session.cart_total_price }}</p>
+      <p class="buttons">
+        <a href="{% url 'cart:cart' %}" class="button">Show Cart</a>
+        <a href="#" class="button">Pedido</a>
+      </p>
     </div>
   </div>
 </li>
