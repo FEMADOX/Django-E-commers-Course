@@ -14,7 +14,7 @@
       <div class="auth-wrap">
         <div class="auth-col">
           <h2>Sign Up</h2>
-          <form method="post" class="register" action="{% url 'account:create_user' %}">{% csrf_token %}
+          <form method="post" class="register" action="{% url 'order:create_order_user' %}">{% csrf_token %}
             <p>
               <label for="reg_email">Email <span class="required">*</span></label>
               <input type="email" id="reg_email" name="new_user_email">

@@ -152,37 +152,3 @@ def logout_user(request: HttpRequest):
         return redirect("login/")
 
     return render(request, "catalog.html")
-
-
-@login_required(login_url="login/")
-def create_order(request: HttpRequest):
-    user = User.objects.get(pk=request.user.pk)
-
-    try:
-        client = Client.objects.get(user=user)
-        client_data = {
-            "name": user.first_name,
-            "last_name": user.last_name,
-            "email": user.email,
-            "dni": client.dni,
-            "sex": client.sex,
-            "address": client.address,
-            "phone": client.phone,
-            "birth": client.birth,
-        }
-    except Client.DoesNotExist:
-        client_data = {
-            "name": user.first_name,
-            "last_name": user.last_name,
-            "email": user.email
-        }
-
-    client_form = ClientForm(client_data)
-
-    return render(
-        request,
-        "order.html",
-        {
-            "client_form": client_form,
-        }
-    )
