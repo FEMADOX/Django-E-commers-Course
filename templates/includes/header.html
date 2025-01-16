@@ -18,12 +18,10 @@
           <i class="ion-android-person"></i>
         </a>
         <ul class="h-profile-links">
-          <li><a href="{% url 'create_user' %}">LogIn / SignUp</a></li>
+          <li><a href="{% url 'login_user' %}">LogIn / SignUp</a></li>
           {% if request.user.is_authenticated %}
-            {% comment %} <li><a href="{% url 'account:logout_user' %}" >Logout</a></li> {% endcomment %}
             <li>
               <form action="{% url 'account:logout_user' %}" method="post" class="logout-form">{% csrf_token %}
-                <!-- <button type="submit" class="logout-button">LogOut</button> -->
                 <input type="submit" class="" value="LogOut">
               </form>
             </li>

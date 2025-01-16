@@ -11,7 +11,7 @@ from account.models import Client
 # Create your views here.
 
 
-@login_required(login_url="login-signup/")
+@login_required(login_url="login/")
 def user_account(request: HttpRequest):
     user = User.objects.get(pk=request.user.pk)
 
@@ -43,7 +43,7 @@ def user_account(request: HttpRequest):
     )
 
 
-@login_required(login_url="login-signup/")
+@login_required(login_url="login/")
 def update_account(request: HttpRequest):
     message = ""
     client_form = ClientForm()
@@ -107,32 +107,82 @@ def create_user(request: HttpRequest):
         #     login(request, new_user)
         #     return redirect("/account/")
 
-    return render(request, "login.html")
+    return render(request, "signup.html")
 
 
 def login_user(request: HttpRequest):
     message = ""
+    destiny_page = request.GET.get("next", None)
 
     if request.method == "POST":
         user_name = request.POST["email"].split("@")[0].lower()
         user_password = request.POST["password"]
-        user = authenticate(request,
-                            username=user_name,
-                            password=user_password)
+        data_destiny = request.POST["next"]
+
+        user = authenticate(
+            request,
+            username=user_name,
+            password=user_password
+        )
 
         if user is not None:
             login(request, user)
+
+            if data_destiny != "None":
+                return redirect(data_destiny)
+
             return redirect("/account/")
         else:
             message = "The credencials aren't valid"
 
-    return render(request, "login.html", {"message": message})
+    return render(
+        request,
+        "login.html",
+        {
+            "message": message,
+            "destiny": destiny_page,
+        },
+    )
 
 
 def logout_user(request: HttpRequest):
 
     if request.method == "POST":
         logout(request)
-        return redirect("login-signup/")
+        return redirect("login/")
 
     return render(request, "catalog.html")
+
+
+@login_required(login_url="login/")
+def create_order(request: HttpRequest):
+    user = User.objects.get(pk=request.user.pk)
+
+    try:
+        client = Client.objects.get(user=user)
+        client_data = {
+            "name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+            "dni": client.dni,
+            "sex": client.sex,
+            "address": client.address,
+            "phone": client.phone,
+            "birth": client.birth,
+        }
+    except Client.DoesNotExist:
+        client_data = {
+            "name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email
+        }
+
+    client_form = ClientForm(client_data)
+
+    return render(
+        request,
+        "order.html",
+        {
+            "client_form": client_form,
+        }
+    )

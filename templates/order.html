@@ -1,59 +1,101 @@
 {% extends 'layout.html' %}
-{% load crispy_forms_tags %}
 {% block content %}
-  <h1 class="maincont-ttl">ORDER # : {{order.order_num}}</h1>
+  <h1 class="maincont-ttl">ORDER REGISTRATION</h1>
   <ul class="b-crumbs">
     <li><a href="{% url 'web:index' %}">Home</a></li>
     <li>Order</li>
   </ul>
-  <div class="page-styling">
-    <div class="woocommerce prod-litems section-list">
-      <h2>Date : {{order.registration_date }}</h2>
-      {% for detail in order.order_detail_set.all %}
-      <article class="prod-li sectls">
-        <div class="prod-li-inner">
-          <a href="{% url 'web:product_detail' detail.product.id %}" class="prod-li-img">
-            <img src="{{ detail.product.image.url }}" alt="">
-          </a>
-          <div class="prod-li-cont">
-            <div class="prod-li-ttl-wrap">
-              <p>
-                <a href="{% url 'web:filter_by_category' detail.product.category.id %}">
-                  {{detail.product.category}}
+  <form method="post" action="#" class="register">{% csrf_token %}
+    <article class="page-cont">
+      <div class="page-styling">
+        <div class="auth-wrap">
+          <div>
+            <h2>Personal Information</h2>
+            <p>
+              <label for="username">First Name<span class="required">*</span></label>
+              {{ client_form.name }}
+            </p>
+            <p>
+              <label for="username">Last Name<span class="required">*</span></label>
+              {{ client_form.last_name }}
+            </p>
+            <p>
+              <label for="username">Email<span class="required">*</span></label>
+              {{ client_form.email }}
+            </p>
+          </div>
+          <div class="auth-col">
+            <h2>Shipping Information</h2>
+            <p>
+              <label for="username">Phone<span class="required">*</span></label>
+              {{ client_form.phone }}
+            </p>
+            <p>
+              <label for="username">Address<span class="required">*</span></label>
+              {{ client_form.address }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="page-cont">
+      <div class="page-styling">
+        <h2>Product Confirmation</h2>
+        <div class="woocommerce prod-litems section-list">
+          {% for key,value in request.session.cart.items %}
+            <article class="prod-li sectls">
+              <div class="prod-li-inner">
+                <a href="{% url 'web:product_detail' value.product_id %}" class="prod-li-img">
+                  <img src="{{ value.image }}" alt="">
                 </a>
-              </p>
-              <h3><a href="{% url 'web:product_detail' detail.product.id %}">{{ detail.product.title }}</a></h3>
-            </div>
-            <div class="prod-li-prices">
-              <div class="prod-li-price-wrap">
-                <p>Price</p>
-                <p class="prod-li-price">${{ detail.product.price }}</p>
+                <div class="prod-li-cont">
+                  <div class="prod-li-ttl-wrap">
+                    <p>
+                      <a href="{% url 'web:filter_by_category' value.category.id %}">{{ value.category.name }}</a>
+                    </p>
+                    <h3><a href="{% url 'web:product_detail' value.product_id %}">{{ value.name }}</a></h3>
+                  </div>
+                  <div class="prod-li-prices">
+                    <div class="prod-li-price-wrap">
+                      <p>Price</p>
+                      <p class="prod-li-price">${{ value.price }}</p>
+                    </div>
+                  </div>
+                  <div class="prod-li-qnt-wrap">
+                    <p class="qnt-wrap prod-li-qnt">
+                      <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
+                      <input type="text" value="{{ value.quantity }}">
+                      <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
+                    </p>
+                  </div>
+                  <div class="prod-li-total-wrap">
+                    <p>SubTotal</p>
+                    <p class="prod-li-total">${{ value.subtotal }}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="prod-li-qnt-wrap">
-              <p class="qnt-wrap prod-li-qnt">
-                <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
-                <input type="text" value="{{ detail.quantity }}">
-                <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
-              </p>
-            </div>
-            <div class="prod-li-total-wrap">
-              <p>Total</p>
-              <p class="prod-li-total">${{ detail.subtotal }}</p>
+            </article>
+          {% endfor %}
+        </div>
+        <div class="cart-actions">
+          <div class="cart-collaterals">
+            <div class="order-total">
+              <p class="cart-totals-ttl">Total</p>
+              <p class="cart-totals-val">${{ request.session.cart_total_price }}</p>
             </div>
           </div>
         </div>
-      </article>
-      {% endfor %}
-    </div>
-    <div class="cart-actions">
-      <div class="cart-collaterals">
-        {{ form_paypal.render }}
-        <div class="order-total">
-          <p class="cart-totals-ttl">Total</p>
-          <p class="cart-totals-val">${{ order.total_price }}</p>
-        </div>
       </div>
-    </div>
-  </div>
-{% endblock content %}
+    </article>
+    <article class="page-cont">
+      <div class="page-styling">
+        <div class="auth-wrap">
+          <div class="auth-col">
+            <p class="auth-submit">
+              <input type="submit" value="Confirm Order">
+            </p>
+          </div>
+        </div>
+    </article>
+  </form>
+{% endblock %}

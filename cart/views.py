@@ -12,7 +12,7 @@ def cart(request: HttpRequest):
     return render(request, "cart.html")
 
 
-@login_required(login_url="login-signup/")
+@login_required(login_url="login/")
 def add_product_cart(request: HttpRequest, product_id):
 
     if request.method == "POST":

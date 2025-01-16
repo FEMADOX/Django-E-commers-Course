@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path, re_path
 
-from account.views import create_user
+from account.views import login_user
 from edshop import settings
 
 urlpatterns = [
@@ -25,7 +25,7 @@ urlpatterns = [
     path("", include("web.urls")),
     path("account/", include("account.urls")),
     path("cart/", include("cart.urls")),
-    re_path(r".*login-signup/$", create_user, name="create_user"),
+    re_path(r".*login/$", login_user, name="login_user"),
 ]
 
 if settings.DEBUG:
