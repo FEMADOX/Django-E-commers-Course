@@ -5,7 +5,7 @@
     <li><a href="{% url 'web:index' %}">Home</a></li>
     <li>Order</li>
   </ul>
-  <form method="post" action="#" class="register">{% csrf_token %}
+  <form method="post" action="{% url 'order:confirm_order' %}" class="register">{% csrf_token %}
     <article class="page-cont">
       <div class="page-styling">
         <div class="auth-wrap">
@@ -49,11 +49,11 @@
                   <img src="{{ value.image }}" alt="">
                 </a>
                 <div class="prod-li-cont">
-                  <div class="prod-li-ttl-wrap">
+                  <div class="prod-li-ttl-wrap" style="padding-left: 10px;">
                     <p>
                       <a href="{% url 'web:filter_by_category' value.category.id %}">{{ value.category.name }}</a>
                     </p>
-                    <h3><a href="{% url 'web:product_detail' value.product_id %}">{{ value.name }}</a></h3>
+                    <h3><a href="{% url 'web:product_detail' value.product_id %}">{{ value.title }}</a></h3>
                   </div>
                   <div class="prod-li-prices">
                     <div class="prod-li-price-wrap">
@@ -61,7 +61,7 @@
                       <p class="prod-li-price">${{ value.price }}</p>
                     </div>
                   </div>
-                  <div class="prod-li-qnt-wrap">
+                  <div class="prod-li-qnt-wrap" style="padding-left: 0px;">
                     <p class="qnt-wrap prod-li-qnt">
                       <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
                       <input type="text" value="{{ value.quantity }}">

@@ -18,7 +18,6 @@
           <i class="ion-android-person"></i>
         </a>
         <ul class="h-profile-links">
-          <li><a href="{% url 'login_user' %}">LogIn / SignUp</a></li>
           {% if request.user.is_authenticated %}
             <li>
               <form action="{% url 'account:logout_user' %}" method="post" class="logout-form">{% csrf_token %}
@@ -26,6 +25,7 @@
               </form>
             </li>
           {% else %}
+            <li><a href="{% url 'login_user' %}">LogIn / SignUp</a></li>
           {% endif %}
         </ul>
       </li>

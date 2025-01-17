@@ -1,3 +1,5 @@
+from decimal import Decimal
+from typing import Any
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpRequest
@@ -5,7 +7,8 @@ from django.shortcuts import render
 
 from account.forms import ClientForm
 from account.models import Client
-from order.models import Order
+from order.models import Order, OrderDetail
+from web.models import Product
 
 # Create your views here.
 
@@ -64,12 +67,28 @@ def confirm_order(request: HttpRequest):
             address=request.POST["address"],
             phone=request.POST["phone"],
         )
+
+    # ORDER
     new_order = Order()
     new_order.client = client
     new_order.save()
+
+    # ORDER DETAIL
+    order_cart: dict | Any = request.session.get("cart", None)
+
+    for value in order_cart.values():
+        order_product = Product.objects.get(pk=value["product_id"])
+        order_detail = OrderDetail(
+            order=new_order,
+            product=order_product,
+            quantity=int(value["quantity"]),
+            subtotal=Decimal(value["subtotal"])
+        )
+        order_detail.save()
+
     order_num = f"Order #{new_order.pk} - "\
         f"Date {new_order.registration_date.strftime('%Y')}"
-    total_price = request.session["cart_total_price"]
+    total_price = Decimal(request.session["cart_total_price"])
     new_order.order_num = order_num
     new_order.total_price = total_price
     new_order.save()

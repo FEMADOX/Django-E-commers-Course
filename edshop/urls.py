@@ -25,6 +25,8 @@ urlpatterns = [
     path("", include("web.urls")),
     path("account/", include("account.urls")),
     path("cart/", include("cart.urls")),
+    path("order/", include("order.urls")),
+    path("payment/", include("payment.urls")),
     re_path(r".*login/$", login_user, name="login_user"),
 ]
 
