@@ -56,16 +56,22 @@ def confirm_order(request: HttpRequest):
         user.last_name = request.POST["last_name"]
         user.email = request.POST["email"]
         user.save()
+
+        # Storing the data in the session
+        request.session["client_data"] = {
+            "phone": request.POST.get("phone", ""),
+            "address": request.POST.get("address", ""),
+        }
     try:
         client = Client.objects.get(user=user)
-        client.phone = request.POST["phone"]
-        client.address = request.POST["address"]
+        client.phone = request.session["client_data"]["phone"]
+        client.address = request.session["client_data"]["address"]
         client.save()
     except Client.DoesNotExist:
         client = Client.objects.create(
             user=user,
-            address=request.POST["address"],
-            phone=request.POST["phone"],
+            address=request.session["client_data"]["address"],
+            phone=request.session["client_data"]["phone"],
         )
 
     # ORDER

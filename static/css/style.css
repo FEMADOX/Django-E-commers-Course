@@ -458,7 +458,7 @@ body p.maincont-subttl {
 	background: #fff;
 	position: relative;
 	z-index: 2;
-	padding: 45px 50px 50px;
+	padding: 45px 50px 10px;
 	font-size: 15px;
 }
 
@@ -5251,7 +5251,7 @@ span.badge-1 {
 	display: inline-block;
 	vertical-align: middle;
 	width: 52%;
-	padding: 15px 20px 10px 25px;
+	padding: 15px 10px 10px ;
 	text-transform: uppercase;
 	font-size: 12px;
 	color: #9292b4;
@@ -5259,7 +5259,7 @@ span.badge-1 {
 }
 
 .prod-litems .prod-li-ttl-wrap p {
-	margin: 0 0 13px;
+	margin: 0 0 15px;
 }
 
 .prod-litems .prod-li-ttl-wrap .variation {
@@ -5281,7 +5281,6 @@ span.badge-1 {
 .prod-litems .prod-li-ttl-wrap h3 {
 	font-size: 18px;
 	margin: 0;
-
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 700;
 	color: #283346;
@@ -5381,7 +5380,7 @@ span.badge-1 {
 	overflow: hidden;
 	min-height: initial;
 	position: relative;
-	padding: 13px 0;
+	padding: 12px 0;
 	margin: 0;
 }
 

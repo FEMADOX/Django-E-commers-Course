@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 import stripe
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
@@ -19,14 +17,14 @@ stripe.api_key = STRIPE_API
 def payment_process(request: HttpRequest):
     client = Client.objects.get(user=request.user)
     order = Order.objects.get(client=client)
-    order_detail = OrderDetail.objects.get(order=order)
+    order_detail = OrderDetail.objects.filter(order=order)
 
     if request.method == "POST":
         success_url = request.build_absolute_uri(
-            reverse("payment:completed")
+            reverse("payment:payment_completed")
         )
         cancel_url = request.build_absolute_uri(
-            reverse("payment:canceled")
+            reverse("payment:payment_canceled")
         )
 
         # STRIPE checkout session data
@@ -39,12 +37,12 @@ def payment_process(request: HttpRequest):
         }
 
         # Add order items to the STRIPE checkout session
-        for item in order_detail.objects.all():
+        for item in order_detail:
             session_data["line_items"].append(
                 {
                     "price_data": {
-                        "unit_amount": Decimal(
-                            item.product.price * Decimal("100")
+                        "unit_amount": int(
+                            item.product.price * int("100")
                         ),
                         "currency": "usd",
                         "product_data": {
@@ -61,3 +59,13 @@ def payment_process(request: HttpRequest):
         return redirect(session.url if session and session.url else "/")
 
     return render(request, "payment.html", locals())
+
+
+@login_required(login_url="login/")
+def payment_completed(request: HttpRequest):
+    return render(request, "payment_completed.html")
+
+
+@login_required(login_url="login/")
+def payment_canceled(request: HttpRequest):
+    return render(request, "payment_canceled.html")

@@ -25,6 +25,7 @@ def index(request: HttpRequest):
 def filter_by_category(request: HttpRequest, category_id):
     categories = Category.objects.all()
     category = Category.objects.get(id=category_id)
+    brands = Brand.objects.all()
     # products = category.product_set.all()
     products = Product.objects.filter(category=category)
 
@@ -34,6 +35,7 @@ def filter_by_category(request: HttpRequest, category_id):
         {
             "products": products,
             "categories": categories,
+            "brands": brands,
         },
     )
 
@@ -41,6 +43,7 @@ def filter_by_category(request: HttpRequest, category_id):
 def filter_by_brand(request: HttpRequest, brand_id):
     brands = Brand.objects.all()
     brand = Brand.objects.get(id=brand_id)
+    categories = Category.objects.all()
     products = Product.objects.filter(brand=brand)
 
     return render(
@@ -49,6 +52,7 @@ def filter_by_brand(request: HttpRequest, brand_id):
         {
             "products": products,
             "brands": brands,
+            "categories": categories,
         },
     )
 
