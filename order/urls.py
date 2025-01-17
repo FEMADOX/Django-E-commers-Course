@@ -1,6 +1,6 @@
 from django.urls import path
 
-from order.views import confirm_order, create_order
+from order.views import confirm_order, create_order, order_summary
 
 app_name = "order"
 
@@ -14,5 +14,10 @@ urlpatterns = [
         "confirm-order/",
         confirm_order,
         name="confirm_order",
+    ),
+    path(
+        "order_summary/<int:order_id>",
+        order_summary,
+        name="order_summary",
     ),
 ]

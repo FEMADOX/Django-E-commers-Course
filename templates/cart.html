@@ -6,6 +6,7 @@
     <li>Cart</li>
   </ul>
   <div class="page-styling">
+    <h2>{{ message }}</h2>
     <div class="woocommerce prod-litems section-list">
       {% for key,value in request.session.cart.items %}
         <article class="prod-li sectls">

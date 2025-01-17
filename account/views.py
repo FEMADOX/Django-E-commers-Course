@@ -60,15 +60,24 @@ def update_account(request: HttpRequest):
             user.email = client_data["email"]
             user.save()
 
-            client = Client(
-                user=user,
-                dni=client_data["dni"],
-                sex=client_data["sex"],
-                phone=client_data["phone"],
-                birth=client_data["birth"],
-                address=client_data["address"],
-            )
-            client.save()
+            try:
+                client = Client.objects.get(user=user)
+                client.dni = client_data["dni"]
+                client.sex = client_data["sex"]
+                client.phone = client_data["phone"]
+                client.birth = client_data["birth"]
+                client.address = client_data["address"]
+                client.save()
+            except Client.DoesNotExist:
+                client = Client(
+                    user=user,
+                    dni=client_data["dni"],
+                    sex=client_data["sex"],
+                    phone=client_data["phone"],
+                    birth=client_data["birth"],
+                    address=client_data["address"],
+                )
+                client.save()
 
             message = "The data has been updated."
         else:

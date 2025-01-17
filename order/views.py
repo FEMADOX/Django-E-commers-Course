@@ -3,7 +3,8 @@ from typing import Any
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpRequest
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 
 from account.forms import ClientForm
 from account.models import Client
@@ -74,14 +75,18 @@ def confirm_order(request: HttpRequest):
             phone=request.session["client_data"]["phone"],
         )
 
+    # Check the cart
+    order_cart: dict | Any = request.session.get("cart", None)
+    if not order_cart:
+        return redirect("cart:cart")
+
     # ORDER
-    new_order = Order()
-    new_order.client = client
+    new_order = Order(
+        client=client
+    )
     new_order.save()
 
     # ORDER DETAIL
-    order_cart: dict | Any = request.session.get("cart", None)
-
     for value in order_cart.values():
         order_product = Product.objects.get(pk=value["product_id"])
         order_detail = OrderDetail(
@@ -99,4 +104,16 @@ def confirm_order(request: HttpRequest):
     new_order.total_price = total_price
     new_order.save()
 
-    return render(request, "shipping.html", {"order": new_order})
+    # Cleaning the cart after the order is confirmed
+    order_cart.clear()
+    del request.session["cart_total_price"]
+    del request.session["client_data"]
+
+    return redirect(reverse("order:order_summary", args=[new_order.pk]))
+    # return render(request, "shipping.html", {"order": new_order})
+
+
+@login_required(login_url="login/")
+def order_summary(request: HttpRequest, order_id: int):
+    order = Order.objects.get(pk=order_id)
+    return render(request, "shipping.html", {"order": order})

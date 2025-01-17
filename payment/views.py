@@ -31,6 +31,7 @@ def payment_process(request: HttpRequest):
         session_data = {
             "mode": "payment",
             "client_reference_id": order.order_num,
+            "customer_email": client.user.email,
             "success_url": success_url,
             "cancel_url": cancel_url,
             "line_items": [],
@@ -55,10 +56,11 @@ def payment_process(request: HttpRequest):
 
         # Create STRIPE checkout session
         session = stripe.checkout.Session.create(**session_data)
+        # session = stripe.checkout.Session.create()
 
         return redirect(session.url if session and session.url else "/")
 
-    return render(request, "payment.html", locals())
+    return render(request, "shipping.html", locals())
 
 
 @login_required(login_url="login/")

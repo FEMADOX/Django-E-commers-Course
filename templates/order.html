@@ -38,67 +38,86 @@
         </div>
       </div>
     </article>
-    <article class="page-cont" style="padding-top: 20px;">
-      <div class="page-styling">
-        <h2>Product Confirmation</h2>
-        <div class="woocommerce prod-litems section-list" style="padding-top: 10px;">
-          {% for key,value in request.session.cart.items %}
-            <article class="prod-li sectls">
-              <div class="prod-li-inner">
-                <a href="{% url 'web:product_detail' value.product_id %}" class="prod-li-img">
-                  <img src="{{ value.image }}" alt="">
-                </a>
-                <div class="prod-li-cont">
-                  <div class="prod-li-ttl-wrap">
-                    <p>
-                      <a href="{% url 'web:filter_by_category' value.category.id %}">{{ value.category.name }}</a>
-                    </p>
-                    <p>
-                      <a href="{% url 'web:filter_by_brand' value.brand.id %}">{{ value.brand.name }}</a>
-                    </p>
-                    <h3><a href="{% url 'web:product_detail' value.product_id %}">{{ value.title }}</a></h3>
-                  </div>
-                  <div class="prod-li-prices" style="padding-right: 0px; margin-right: 0px;">
-                    <div class="prod-li-price-wrap" style="padding-right: 0px; margin-right: 0px;">
-                      <p>Price</p>
-                      <p class="prod-li-price">${{ value.price }}</p>
+    {% if request.session.cart.items|length > 0 %}
+      <article class="page-cont" style="padding-top: 20px;">
+        <div class="page-styling">
+          <h2>Product Confirmation</h2>
+          <div class="woocommerce prod-litems section-list" style="padding-top: 10px;">
+            {% for key,value in request.session.cart.items %}
+              <article class="prod-li sectls">
+                <div class="prod-li-inner">
+                  <a href="{% url 'web:product_detail' value.product_id %}" class="prod-li-img">
+                    <img src="{{ value.image }}" alt="">
+                  </a>
+                  <div class="prod-li-cont">
+                    <div class="prod-li-ttl-wrap">
+                      <p>
+                        <a href="{% url 'web:filter_by_category' value.category.id %}">{{ value.category.name }}</a>
+                      </p>
+                      <p>
+                        <a href="{% url 'web:filter_by_brand' value.brand.id %}">{{ value.brand.name }}</a>
+                      </p>
+                      <h3><a href="{% url 'web:product_detail' value.product_id %}">{{ value.title }}</a></h3>
+                    </div>
+                    <div class="prod-li-prices" style="padding-right: 0px; margin-right: 0px;">
+                      <div class="prod-li-price-wrap" style="padding-right: 0px; margin-right: 0px;">
+                        <p>Price</p>
+                        <p class="prod-li-price">${{ value.price }}</p>
+                      </div>
+                    </div>
+                    <div class="prod-li-qnt-wrap" style="padding-left: 0px; margin-left: 0px;">
+                      <p class="qnt-wrap prod-li-qnt" style="padding-left: 0px; margin-left: 0px;">
+                        <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
+                        <input type="text" value="{{ value.quantity }}">
+                        <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
+                      </p>
+                    </div>
+                    <div class="prod-li-total-wrap">
+                      <p>SubTotal</p>
+                      <p class="prod-li-total">${{ value.subtotal }}</p>
                     </div>
                   </div>
-                  <div class="prod-li-qnt-wrap" style="padding-left: 0px; margin-left: 0px;">
-                    <p class="qnt-wrap prod-li-qnt" style="padding-left: 0px; margin-left: 0px;">
-                      <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
-                      <input type="text" value="{{ value.quantity }}">
-                      <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
-                    </p>
-                  </div>
-                  <div class="prod-li-total-wrap">
-                    <p>SubTotal</p>
-                    <p class="prod-li-total">${{ value.subtotal }}</p>
-                  </div>
                 </div>
+              </article>
+            {% endfor %}
+          </div>
+          <div class="cart-actions" style="padding-bottom: 5px; margin-bottom: 5px;">
+            <div class="cart-collaterals">
+              <div class="order-total">
+                  <p class="cart-totals-ttl">Total</p>
+                  <p class="cart-totals-val">${{ request.session.cart_total_price }}</p>
               </div>
-            </article>
-          {% endfor %}
-        </div>
-        <div class="cart-actions" style="padding-bottom: 5px; margin-bottom: 5px;">
-          <div class="cart-collaterals">
-            <div class="order-total">
-              <p class="cart-totals-ttl">Total</p>
-              <p class="cart-totals-val">${{ request.session.cart_total_price }}</p>
             </div>
           </div>
         </div>
-      </div>
-    </article>
-    <article class="page-cont" style="padding-top: 0px; margin-top: 0px;">
-      <div class="page-styling">
-        <div class="auth-wrap">
-          <div class="auth-col">
-            <p class="auth-submit">
-              <input type="submit" value="Confirm Order">
-            </p>
+      </article>
+      <article class="page-cont" style="padding-top: 0px; margin-top: 0px;">
+        <div class="page-styling">
+          <div class="auth-wrap">
+            <div class="auth-col">
+              <p class="auth-submit">
+                <input type="submit" value="Confirm Order">
+              </p>
+            </div>
           </div>
+      </article>
+    {% else %}
+      <article class="page-cont" style="padding-top: 20px;">
+        <div class="page-styling">
+          <h2>Please add some product to the cart to continue</h2>
+          <article class="page-cont" style="padding-top: 0px; margin-top: 0px;">
+            <div class="page-styling">
+              <div class="auth-wrap">
+                <div class="auth-col">
+                  <p class="auth-submit">
+                    <a href="{% url 'web:index' %}">Catalog of Products</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
-    </article>
+      </article>
+    {% endif %}
   </form>
 {% endblock %}

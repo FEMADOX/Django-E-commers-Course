@@ -1,8 +1,0 @@
-{% extends 'layout.html' %}
-{% block content %}
-  <h1>Payment</h1>
-  <form action="{% url 'payment:payment_process' %}" method="post">
-      {% csrf_token %}
-      <button type="submit">Proceed to Payment</button>
-  </form>
-{% endblock %}
