@@ -81,60 +81,55 @@ def confirm_order(request: HttpRequest):
         return redirect("cart:cart")
 
     # ORDER
-    new_order = Order(
-        client=client
-    )
+    new_order = Order(client=client)
     new_order.save()
 
     # Handle pending orders
-    if Order.objects.filter(client=client, status="0").count() > 0:
-        pending_orders = Order.objects.filter(client=client, status="0")
-        for pending_order in pending_orders:
-            if pending_order.pk != new_order.pk:
-                order_details = OrderDetail.objects.filter(order=pending_order)
-                for order_detail in order_details:
-                    order_same_product_order_pending = (
-                        OrderDetail.objects.filter(
-                            order=pending_order,
-                            product=order_detail.product
-                        )
-                    )
-                    if order_same_product_order_pending.count() > 1:
-                        order_detail.delete()
-                    order_detail.order = new_order
-                    order_detail.save()
-                pending_order.delete()
+    pending_orders = (
+        Order.objects
+        .filter(client=client, status="0")
+        .exclude(pk=new_order.pk)
+    )
+    for pending_order in pending_orders:
+        order_details = OrderDetail.objects.filter(order=pending_order)
+        for order_detail in order_details:
+            order_same_product_order_pending = (
+                OrderDetail.objects.filter(
+                    order=pending_order,
+                    product=order_detail.product
+                )
+            )
+            if order_same_product_order_pending.count() > 1:
+                order_detail.delete()
+            order_detail.order = new_order
+            order_detail.save()
+        pending_order.delete()
 
     # ORDER DETAIL
     for value in order_cart.values():
         cart_product = Product.objects.get(pk=value["product_id"])
-
-        if not OrderDetail.objects.filter(order=new_order,
-                                          product=cart_product):
-            order_detail = OrderDetail.objects.create(
-                order=new_order,
-                product=cart_product,
-                quantity=int(value["quantity"]),
-                subtotal=Decimal(value["subtotal"])
-            )
-        else:
-            order_detail = (
-                OrderDetail.objects.get(order=new_order, product=cart_product)
-            )
+        order_detail, created = OrderDetail.objects.get_or_create(
+            order=new_order,
+            product=cart_product,
+            defaults={
+                "quantity": int(value["quantity"]),
+                "subtotal": Decimal(value["subtotal"]),
+            }
+        )
+        if not created:
             order_detail.quantity = int(value["quantity"])
             order_detail.subtotal = Decimal(value["subtotal"])
             order_detail.save()
 
-    order_num = f"Order #{new_order.pk} - "\
+    new_order.order_num = f"Order #{new_order.pk} - "\
         f"Date {new_order.registration_date.strftime('%Y')}"
-    total_price = Decimal(request.session["cart_total_price"])
-    new_order.order_num = order_num
-    new_order.total_price = total_price
+    new_order.total_price = Decimal(
+        request.session.pop("cart_total_price", "0.00")
+    )
     new_order.save()
 
     # Cleaning the cart after the order is confirmed
     order_cart.clear()
-    del request.session["cart_total_price"]
     del request.session["client_data"]
 
     return redirect(reverse("order:order_summary", args=[new_order.pk]))
