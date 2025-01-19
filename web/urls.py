@@ -12,7 +12,7 @@ urlpatterns = [
         name="filter_by_category",
     ),
     path(
-        "by-name",
+        "by-title/",
         views.search_product_title,
         name="search_product_title",
     ),

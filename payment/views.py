@@ -65,6 +65,12 @@ def payment_process(request: HttpRequest):
 
 @login_required(login_url="login/")
 def payment_completed(request: HttpRequest):
+    # Changing the status of the order
+    client = Client.objects.get(user=request.user)
+    order = Order.objects.get(client=client)
+    order.status = "1"  # PAID
+    order.save()
+
     return render(request, "payment_completed.html")
 
 

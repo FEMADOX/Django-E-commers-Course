@@ -23,7 +23,9 @@
           </li>
         </ul>
       {% endfor %}
-      <p class="total"><b>Total:</b> ${{ request.session.cart_total_price }}</p>
+      {% if request.session.cart.items|length > 0 %}
+        <p class="total"><b>Total:</b> ${{ request.session.cart_total_price }}</p>
+      {% endif %}
       <p class="buttons">
         <a href="{% url 'cart:cart' %}" class="button">Show Cart</a>
         <a href="{% url 'order:create_order' %}" class="button">Order</a>

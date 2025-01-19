@@ -1532,9 +1532,10 @@ body .widget_search .dgwt-wcas-si img {
 	position: relative;
 	border: none;
 	transition: background-color 0.2s;
+	border-radius: 20px;
 }
 
-.site-header .h-shop-links .h-shop-icon>a:hover {
+.site-header .h-shop-links .h-shop-icon a:hover {
 	background-color: #f1f1fb;
 }
 
@@ -1617,7 +1618,7 @@ body .widget_search .dgwt-wcas-si img {
 	font-weight: 600;
 	border: none;
 	background-color: #fff;
-	margin-bottom: 1%;
+	/* margin-bottom: 1%; */
 }
 
 .site-header .h-profile .h-profile-links li:first-child a {
@@ -1625,11 +1626,6 @@ body .widget_search .dgwt-wcas-si img {
 }
 
 .site-header .h-profile .h-profile-links li a:hover {
-	text-decoration: none;
-	background-color: #f1f1fb;
-}
-
-.site-header .h-profile .h-profile-links li form:hover {
 	text-decoration: none;
 	background-color: #f1f1fb;
 }
@@ -1659,13 +1655,18 @@ body .widget_search .dgwt-wcas-si img {
 	margin: 0 10px 0 0;
 	border-radius: 0;
 	position: relative;
-	border: none;
+	/* border: none; */
 }
 
 .site-header .h-shop-links .h-cart-icon i {
 	margin: 0;
 	font-size: 20px;
 	color: #283346;
+}
+
+.site-header .h-shop-links .h-cart-icon i:hover {
+	background-color: #f1f1fb;
+	border-radius: 20px;
 }
 
 .site-header .h-shop-links .h-cart-icon span {

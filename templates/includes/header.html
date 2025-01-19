@@ -20,7 +20,7 @@
         <ul class="h-profile-links">
           {% if request.user.is_authenticated %}
             <li>
-              <form action="{% url 'account:logout_user' %}" method="post" class="logout-form">{% csrf_token %}
+              <form action="{% url 'account:logout_user' %}" method="post">{% csrf_token %}
                 <input type="submit" class="" value="LogOut">
               </form>
             </li>
