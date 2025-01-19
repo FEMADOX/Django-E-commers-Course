@@ -45,5 +45,9 @@ class OrderDetail(models.Model):
             models.Index(fields=["order"])
         ]
 
+    def save(self, *args, **kwargs):
+        self.subtotal = self.product.price * self.quantity
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.order} - {self.product} - {self.quantity}"

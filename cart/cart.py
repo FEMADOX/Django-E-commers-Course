@@ -26,7 +26,7 @@ class Cart:
             total += Decimal(value["subtotal"])
         return total
 
-    def add(self, product: Product, quantity):
+    def add(self, product: Product, quantity: int):
 
         if str(product.pk) not in self.cart.keys():
             self.cart[product.pk] = {

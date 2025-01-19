@@ -65,8 +65,8 @@ def confirm_order(request: HttpRequest):
         }
     try:
         client = Client.objects.get(user=user)
-        client.phone = request.session["client_data"]["phone"]
-        client.address = request.session["client_data"]["address"]
+        client.phone = request.session["client_data"].pop("phone", "")
+        client.address = request.session["client_data"].pop("address", "")
         client.save()
     except Client.DoesNotExist:
         client = Client.objects.create(
@@ -81,8 +81,7 @@ def confirm_order(request: HttpRequest):
         return redirect("cart:cart")
 
     # ORDER
-    new_order = Order(client=client)
-    new_order.save()
+    new_order = Order.objects.create(client=client)
 
     # Handle pending orders
     pending_orders = (
@@ -130,7 +129,6 @@ def confirm_order(request: HttpRequest):
 
     # Cleaning the cart after the order is confirmed
     order_cart.clear()
-    del request.session["client_data"]
 
     return redirect(reverse("order:order_summary", args=[new_order.pk]))
     # return render(request, "shipping.html", {"order": new_order})
