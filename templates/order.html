@@ -81,26 +81,36 @@
               </article>
             {% endfor %}
           </div>
-          <div class="cart-actions" style="padding-bottom: 5px; margin-bottom: 5px;">
+          <!-- <div class="cart-actions" style="padding-bottom: 5px; margin-bottom: 5px;">
             <div class="cart-collaterals">
               <div class="order-total">
-                  <p class="cart-totals-ttl">Total</p>
-                  <p class="cart-totals-val">${{ request.session.cart_total_price }}</p>
+                <p class="cart-totals-ttl">Total</p>
+                <p class="cart-totals-val">${{ request.session.cart_total_price }}</p>
               </div>
-            </div>
-          </div>
+            </div> -->
+          <!-- </div> -->
+        <!-- </div> -->
+      <!-- </article> -->
+      <!-- <article class="page-cont" style="padding-top: 0px; margin-top: 0px;"> -->
+        <!-- <div class="page-styling"> -->
+          <!-- <div class="auth-wrap"> -->
         </div>
       </article>
-      <article class="page-cont" style="padding-top: 0px; margin-top: 0px;">
-        <div class="page-styling">
-          <div class="auth-wrap">
+      <div class="page-styling">
+        <div class="cart-actions" style="padding-top: 15px;">
+          <div class="cart-collaterals">
+            <div class="order-total">
+              <p class="cart-totals-ttl">Total</p>
+              <p class="cart-totals-val">$ {{ request.session.cart_total_price }}</p>
+            </div>
             <div class="auth-col">
               <p class="auth-submit">
                 <input type="submit" value="Confirm Order">
               </p>
             </div>
           </div>
-      </article>
+        </div>
+      </div>
     {% else %}
       <article class="page-cont" style="padding-top: 20px;">
         <div class="page-styling">

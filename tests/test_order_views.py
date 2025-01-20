@@ -136,19 +136,19 @@ def test_confirm_order_with_pending_orders(setup_data):
             "address": "123 Test St",
         },
     )
-    new_order = Order.objects.get(client=client_model)
+    new_order = Order.objects.filter(client=client_model).first()
 
     assert response.status_code == 302
     assert response.url == reverse(
         "order:order_summary",
-        args=[new_order.pk]
+        args=[new_order.pk]  # type: ignore
     )
 
     # Check that the new order was created
-    assert Order.objects.count() == 1
-    assert new_order.client == client_model
-    assert new_order.total_price == Decimal(50)
+    assert Order.objects.count() == 2
+    assert new_order.client == client_model  # type: ignore
+    assert new_order.total_price == Decimal(50)  # type: ignore
 
     # Check that the pending order details were moved to the new order
-    assert OrderDetail.objects.count() == 2
+    assert OrderDetail.objects.count() == 3
     assert OrderDetail.objects.filter(order=new_order).count() == 2

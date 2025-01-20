@@ -32,8 +32,12 @@ class Order(models.Model):
 
 
 class OrderDetail(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.RESTRICT)
-    product = models.ForeignKey(Product, on_delete=models.RESTRICT)
+    order = models.ForeignKey(
+        Order, related_name="order_details", on_delete=models.RESTRICT
+    )
+    product = models.ForeignKey(
+        Product, related_name="order_details", on_delete=models.RESTRICT
+    )
     quantity = models.PositiveIntegerField(blank=True, default=1)
     subtotal = models.DecimalField(max_digits=10, decimal_places=2,
                                    default=0.00)

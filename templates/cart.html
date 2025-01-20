@@ -6,7 +6,6 @@
     <li>Cart</li>
   </ul>
   <div class="page-styling">
-    <h2>{{ message }}</h2>
     <div class="woocommerce prod-litems section-list">
       {% for key,value in request.session.cart.items %}
         <article class="prod-li sectls">
@@ -90,4 +89,41 @@
       </div>
     </div>
   </div>
+  {% if pending_orders %}
+    <div class="page-styling">
+      <div class="woocommerce prod-litems section-list">
+        <article class="prod-li sectls">
+          <h2 style="padding: 30px 30px 10px;">Pending Orders:</h2>
+          {% for pending_order in pending_orders %}
+            <div style="padding: 30px 50px;">
+              <h5>Order ID: {{ pending_order.id }}</h5>
+              <h5>Order Date: {{ pending_order.registration_date }}</h5>
+              <h5 style="margin-bottom: 0px;">Details: </h5>
+              <div style="padding-left: 30px;">
+                {% for order_detail in pending_order.order_details.all %}
+                  <ul>
+                    <li>Product: {{ order_detail.product.title }}</li>
+                    <li>Price: $ {{ order_detail.product.price }}</li>
+                    <li>Quantity: {{ order_detail.quantity }}</li>
+                    <li>Subtotal: {{ order_detail.subtotal }}</li>
+                  </ul>
+                {% endfor %}
+              </div>
+              <h5>Total Amount: $ {{ pending_order.total_price }}</h5>
+              <div style="padding-bottom: 15px;">
+                <a href="{% url 'cart:restore_order_pending_cart' pending_order.id  %}">
+                  Add all this order to the CART again
+                </a>
+              </div>
+              <div style="padding-bottom: 15px;">
+                <a href="{% url 'order:order_summary' pending_order.id  %}">
+                  Add all the order to the SUMMARY
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+        </article>
+      </div>
+    </div>
+  {% endif %}
 {% endblock content %}

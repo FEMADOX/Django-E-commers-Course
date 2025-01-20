@@ -83,26 +83,26 @@ def confirm_order(request: HttpRequest):
     # ORDER
     new_order = Order.objects.create(client=client)
 
-    # Handle pending orders
-    pending_orders = (
-        Order.objects
-        .filter(client=client, status="0")
-        .exclude(pk=new_order.pk)
-    )
-    for pending_order in pending_orders:
-        order_details = OrderDetail.objects.filter(order=pending_order)
-        for order_detail in order_details:
-            order_same_product_order_pending = (
-                OrderDetail.objects.filter(
-                    order=pending_order,
-                    product=order_detail.product
-                )
-            )
-            if order_same_product_order_pending.count() > 1:
-                order_detail.delete()
-            order_detail.order = new_order
-            order_detail.save()
-        pending_order.delete()
+    # # Handle pending orders
+    # pending_orders = (
+    #     Order.objects
+    #     .filter(client=client, status="0")
+    #     .exclude(pk=new_order.pk)
+    # )
+    # for pending_order in pending_orders:
+    #     order_details = OrderDetail.objects.filter(order=pending_order)
+    #     for order_detail in order_details:
+    #         order_same_product_order_pending = (
+    #             OrderDetail.objects.filter(
+    #                 order=pending_order,
+    #                 product=order_detail.product
+    #             )
+    #         )
+    #         if order_same_product_order_pending.count() > 1:
+    #             order_detail.delete()
+    #         order_detail.order = new_order
+    #         order_detail.save()
+    #     pending_order.delete()
 
     # ORDER DETAIL
     for value in order_cart.values():
@@ -137,4 +137,5 @@ def confirm_order(request: HttpRequest):
 @login_required(login_url="login/")
 def order_summary(request: HttpRequest, order_id: int):
     order = Order.objects.get(pk=order_id)
+    request.session["order_id"] = order.pk
     return render(request, "shipping.html", {"order": order})

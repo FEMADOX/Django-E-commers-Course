@@ -8,7 +8,7 @@
   <div class="page-styling">
     <div class="woocommerce prod-litems section-list">
       <h2>Date : {{ order.registration_date }}</h2>
-      {% for detail in order.orderdetail_set.all %}
+      {% for detail in order.order_details.all %}
         <article class="prod-li sectls">
           <div class="prod-li-inner">
             <a href="{% url 'web:product_detail' detail.product.id %}" class="prod-li-img">
@@ -42,15 +42,15 @@
         </article>
       {% endfor %}
     </div>
-    <div class="cart-actions">
+    <div class="cart-actions" style="padding-top: 15px;">
       <div class="cart-collaterals">
-        <form action="{% url 'payment:payment_process' %}" method="post">{% csrf_token %}
-          <input type="submit" value="Pay Now">
-        </form>
         <div class="order-total">
           <p class="cart-totals-ttl">Total</p>
           <p class="cart-totals-val">$ {{ order.total_price }}</p>
         </div>
+        <form action="{% url 'payment:payment_process' %}" method="post">{% csrf_token %}
+          <input type="submit" value="Pay Now">
+        </form>
       </div>
     </div>
   </div>

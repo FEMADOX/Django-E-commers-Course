@@ -1,10 +1,12 @@
 import stripe
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from account.models import Client
+from edshop import settings
 from edshop.settings import STRIPE_API
 from order.models import Order, OrderDetail
 
@@ -16,7 +18,8 @@ stripe.api_key = STRIPE_API
 @login_required(login_url="login/")
 def payment_process(request: HttpRequest):
     client = Client.objects.get(user=request.user)
-    order = Order.objects.get(client=client)
+    order_id = request.session["order_id"]
+    order = Order.objects.get(pk=order_id)
     order_detail = OrderDetail.objects.filter(order=order)
 
     if request.method == "POST":
@@ -65,13 +68,40 @@ def payment_process(request: HttpRequest):
 
 @login_required(login_url="login/")
 def payment_completed(request: HttpRequest):
-    # Changing the status of the order
-    client = Client.objects.get(user=request.user)
-    order = Order.objects.get(client=client)
-    order.status = "1"  # PAID
-    order.save()
 
-    return render(request, "payment_completed.html")
+    if request.session.get("order_id"):
+        client = Client.objects.get(user=request.user)
+        order_id = request.session.pop("order_id", "")
+        order = Order.objects.get(pk=order_id)
+
+        # Changing the status of the order
+        order.status = "1"  # PAID
+        order.save()
+
+        order_details_products = [
+            product.name
+            for product
+            in order.order_details.all()  # type: ignore
+        ]
+
+        # Sending Mail
+        send_mail(
+            subject="Thanks for your bough",
+            message=(
+                f"Thanks for your bough {client.user.first_name}\n"
+                f"Your order was completed successfully\n"
+                f"Your order num is {order.order_num}\n"
+                f"Order details: {', '.join(order_details_products)}\n"
+                f"Total Price {order.total_price}\n"
+            ),
+            from_email=str(settings.EMAIL_HOST_USER),
+            recipient_list=[order.client.user.email],
+            fail_silently=False,
+        )
+    else:
+        return redirect(reverse("web:index"))
+
+    return render(request, "payment_completed.html", {"order": order})
 
 
 @login_required(login_url="login/")

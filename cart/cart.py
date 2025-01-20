@@ -1,6 +1,7 @@
 from decimal import Decimal
 from django.http import HttpRequest
 
+from order.models import Order
 from web.models import Product
 
 
@@ -68,6 +69,11 @@ class Cart:
 
     def clear(self):
         self.session["cart"] = {}
+
+    def restore_order_prending(self, order_id: int):
+        order = Order.objects.get(pk=order_id, status="0")
+        for order_detail in order.order_details.all():  # type: ignore
+            self.add(order_detail.product, order_detail.quantity)
 
     def save(self):
         self.session["cart"] = self.cart
