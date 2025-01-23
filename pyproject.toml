@@ -1,0 +1,55 @@
+[tool.ruff]
+show-fixes = true
+lint.extend-select = [
+    "A",    # flake8-builtins
+    "AIR",  # Airflow
+    "ARG",  # flake8-unused-arguments
+    "ASYNC",# flake8-async
+    "B",    # flake8-bugbear
+    "BLE",  # flake8-blind-except
+    "C4",   # flake8-comprehensions
+    "C90",  # mccabe
+    "COM",  # flake8-commas
+    "DJ",   # flake8-django
+    "DOC",  # pydoclint
+    "DTZ",  # flake8-datetimez
+    "EM",   # flake8-errmsg
+    "ERA",  # eradicate
+    "EXE",  # flake8-executable
+    "FA",   # flake8-future-annotations
+    "FBT",  # flake8-boolean-trap
+    "FIX",  # flake8-fixme
+    "FLY",  # flynt
+    "F",    # Pyflakes
+    "FURB", # refurb
+    "G",    # flake8-logging-format
+    "I",    # isort
+    "ICN",  # flake8-import-conventions
+    "INP",  # flake8-no-pep420
+    "INT",  # flake8-gettext
+    "ISC",  # flake8-implicit-str-concat
+    "LOG",  # flake8-logging
+    "N",    # pep8-naming
+    "PERF", # Perflint
+    "PGH",  # pygrep-hooks
+    "PIE",  # flake8-pie
+    "PL",   # Pylint
+    "PT",   # flake8-pytest-style
+    "PYI",  # flake8-pyi
+    "Q",    # flake8-quotes
+    "RSE",  # flake8-raise
+    "RET",  # flake8-return
+    "RUF",  # Ruff-specific rules
+    "S",    # flake8-bandit
+    "SLF",  # flake8-self
+    "SLOT", # flake8-slots
+    "SIM",  # flake8-simplify
+    "T10",  # flake8-debugger
+    "T20",  # flake8-print
+    "TC",   # flake8-type-checking
+    "TD",   # flake8-todos
+    "TID",  # flake8-tidy-imports
+    "TRY",  # tryceratops
+    "UP",   # pyupgrade
+    "YTT",  # flake8-2020
+]

@@ -58,7 +58,6 @@ def filter_by_brand(request: HttpRequest, brand_id):
 
 
 def search_product_title(request: HttpRequest):
-
     if request.method == "POST":
         product_title = request.POST["title"]
         categories = Category.objects.all()
