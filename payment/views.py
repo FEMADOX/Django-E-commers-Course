@@ -24,10 +24,10 @@ def payment_process(request: HttpRequest):
 
     if request.method == "POST":
         success_url = request.build_absolute_uri(
-            reverse("payment:payment_completed")
+            reverse("payment:payment_completed"),
         )
         cancel_url = request.build_absolute_uri(
-            reverse("payment:payment_canceled")
+            reverse("payment:payment_canceled"),
         )
 
         # STRIPE checkout session data
@@ -46,24 +46,23 @@ def payment_process(request: HttpRequest):
                 {
                     "price_data": {
                         "unit_amount": int(
-                            item.product.price * int("100")
+                            item.product.price * int("100"),
                         ),
                         "currency": "usd",
                         "product_data": {
                             "name": item.product.title,
-                        }
+                        },
                     },
                     "quantity": item.quantity,
-                }
+                },
             )
 
         # Create STRIPE checkout session
         session = stripe.checkout.Session.create(**session_data)
-        # session = stripe.checkout.Session.create()
 
         return redirect(session.url if session and session.url else "/")
 
-    return render(request, "shipping.html", locals())
+    return render(request, "shipping.html")
 
 
 @login_required(login_url="login/")
@@ -81,7 +80,7 @@ def payment_completed(request: HttpRequest):
         order_details_products = [
             product.name
             for product
-            in order.order_details.all()  # type: ignore
+            in order.order_details.all()   # type: ignore[attr-defined]
         ]
 
         # Sending Mail
@@ -91,7 +90,7 @@ def payment_completed(request: HttpRequest):
                 f"Thanks for your bough {client.user.first_name}\n"
                 f"Your order was completed successfully\n"
                 f"Your order num is {order.order_num}\n"
-                f"Order details: {', '.join(order_details_products)}\n"
+                f"Order products: {', '.join(order_details_products)}\n"
                 f"Total Price {order.total_price}\n"
             ),
             from_email=str(settings.EMAIL_HOST_USER),

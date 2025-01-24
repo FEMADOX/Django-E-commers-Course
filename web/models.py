@@ -4,7 +4,7 @@ from django.db import models
 
 
 def get_default_brand():
-    brand, created = Brand.objects.get_or_create(name="None")
+    brand, _ = Brand.objects.get_or_create(name="None")
     return brand.pk
 
 
@@ -29,8 +29,9 @@ class Brand(models.Model):
     fundator = models.CharField(max_length=100)
     image = models.ImageField(
         upload_to="brands",
-        blank=True, null=True,
-        default=""
+        blank=True,
+        null=True,
+        default="",
     )
     created = models.DateTimeField(auto_now_add=True)
 
@@ -54,21 +55,16 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     # Optionals
-    description = models.TextField(blank=True, null=True,
-                                   default="No description for this product")
-    image = models.ImageField(upload_to="products",
-                              blank=True, null=True,
-                              default="")
-    brand = models.ForeignKey(Brand, on_delete=models.RESTRICT,
-                              blank=True,
-                              default=get_default_brand)
+    description = models.TextField(
+        blank=True, default="No description for this product",
+    )
+    image = models.ImageField(upload_to="products", blank=True, null=True, default="")
+    brand = models.ForeignKey(
+        Brand, on_delete=models.RESTRICT, blank=True, default=get_default_brand,
+    )
     weight = models.PositiveIntegerField(blank=True, null=True, default=0)
-    dimension = models.CharField(max_length=50,
-                                 blank=True, null=True,
-                                 default="N/A")
-    color = models.CharField(max_length=50,
-                             blank=True, null=True,
-                             default="N/A")
+    dimension = models.CharField(max_length=50, blank=True, default="N/A")
+    color = models.CharField(max_length=50, blank=True, default="N/A")
 
     class Meta:
         ordering = ["-created"]

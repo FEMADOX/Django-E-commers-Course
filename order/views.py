@@ -1,5 +1,6 @@
 from decimal import Decimal
 from typing import Any
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpRequest
@@ -34,7 +35,7 @@ def create_order(request: HttpRequest):
         client_data = {
             "name": user.first_name,
             "last_name": user.last_name,
-            "email": user.email
+            "email": user.email,
         }
 
     client_form = ClientForm(client_data)
@@ -44,7 +45,7 @@ def create_order(request: HttpRequest):
         "order.html",
         {
             "client_form": client_form,
-        }
+        },
     )
 
 
@@ -83,27 +84,6 @@ def confirm_order(request: HttpRequest):
     # ORDER
     new_order = Order.objects.create(client=client)
 
-    # # Handle pending orders
-    # pending_orders = (
-    #     Order.objects
-    #     .filter(client=client, status="0")
-    #     .exclude(pk=new_order.pk)
-    # )
-    # for pending_order in pending_orders:
-    #     order_details = OrderDetail.objects.filter(order=pending_order)
-    #     for order_detail in order_details:
-    #         order_same_product_order_pending = (
-    #             OrderDetail.objects.filter(
-    #                 order=pending_order,
-    #                 product=order_detail.product
-    #             )
-    #         )
-    #         if order_same_product_order_pending.count() > 1:
-    #             order_detail.delete()
-    #         order_detail.order = new_order
-    #         order_detail.save()
-    #     pending_order.delete()
-
     # ORDER DETAIL
     for value in order_cart.values():
         cart_product = Product.objects.get(pk=value["product_id"])
@@ -113,17 +93,18 @@ def confirm_order(request: HttpRequest):
             defaults={
                 "quantity": int(value["quantity"]),
                 "subtotal": Decimal(value["subtotal"]),
-            }
+            },
         )
         if not created:
             order_detail.quantity = int(value["quantity"])
             order_detail.subtotal = Decimal(value["subtotal"])
             order_detail.save()
 
-    new_order.order_num = f"Order #{new_order.pk} - "\
-        f"Date {new_order.registration_date.strftime('%Y')}"
+    new_order.order_num = (
+        f"Order #{new_order.pk} - Date {new_order.registration_date.strftime('%Y')}"
+    )
     new_order.total_price = Decimal(
-        request.session.pop("cart_total_price", "0.00")
+        request.session.pop("cart_total_price", "0.00"),
     )
     new_order.save()
 
@@ -131,7 +112,6 @@ def confirm_order(request: HttpRequest):
     order_cart.clear()
 
     return redirect(reverse("order:order_summary", args=[new_order.pk]))
-    # return render(request, "shipping.html", {"order": new_order})
 
 
 @login_required(login_url="login/")

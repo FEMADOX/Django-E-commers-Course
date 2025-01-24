@@ -18,10 +18,7 @@ def cart(request: HttpRequest):
 @login_required(login_url="login/")
 def add_product_cart(request: HttpRequest, product_id):
 
-    if request.method == "POST":
-        quantity = int(request.POST["quantity"])
-    else:
-        quantity = 1
+    quantity = int(request.POST["quantity"]) if request.method == "POST" else 1
 
     product = Product.objects.get(id=product_id)
     cart = Cart(request)

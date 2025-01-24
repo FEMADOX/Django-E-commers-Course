@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from web.models import Category, Product, Brand
+from web.models import Brand, Category, Product
 
 # Register your models here.
 

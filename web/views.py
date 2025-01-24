@@ -26,7 +26,6 @@ def filter_by_category(request: HttpRequest, category_id):
     categories = Category.objects.all()
     category = Category.objects.get(id=category_id)
     brands = Brand.objects.all()
-    # products = category.product_set.all()
     products = Product.objects.filter(category=category)
 
     return render(

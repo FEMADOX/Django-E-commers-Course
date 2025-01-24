@@ -1,4 +1,5 @@
 from decimal import Decimal
+
 from django.http import HttpRequest
 
 from order.models import Order
@@ -23,13 +24,13 @@ class Cart:
 
     def get_total_price(self):
         total = 0
-        for _, value in self.cart.items():
+        for value in self.cart.values():
             total += Decimal(value["subtotal"])
         return total
 
     def add(self, product: Product, quantity: int):
 
-        if str(product.pk) not in self.cart.keys():
+        if str(product.pk) not in self.cart:
             self.cart[product.pk] = {
                 "product_id": product.pk,
                 "title": product.title,
@@ -72,7 +73,7 @@ class Cart:
 
     def restore_order_prending(self, order_id: int):
         order = Order.objects.get(pk=order_id, status="0")
-        for order_detail in order.order_details.all():  # type: ignore
+        for order_detail in order.order_details.all():   # type: ignore[attr-defined]
             self.add(order_detail.product, order_detail.quantity)
 
     def save(self):

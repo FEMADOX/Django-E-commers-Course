@@ -31,7 +31,7 @@ def user_account(request: HttpRequest):
         client_data = {
             "name": user.first_name,
             "last_name": user.last_name,
-            "email": user.email
+            "email": user.email,
         }
 
     client_form = ClientForm(client_data)
@@ -103,18 +103,14 @@ def create_user(request: HttpRequest):
 
         try:
             new_user = User.objects.create_user(
-                username=username, email=user_email, password=password_data
+                username=username, email=user_email, password=password_data,
             )
             login(request, new_user)
             return redirect("/account/")
         except IntegrityError:
-            raise IntegrityError("A user with that email already exists.")
-        except Exception as e:
-            raise Exception(str(e))
+            msg = "A user with that email already exists."
+            raise IntegrityError(msg) from None
 
-        # if new_user is not None:
-        #     login(request, new_user)
-        #     return redirect("/account/")
 
     return render(request, "signup.html")
 
@@ -131,7 +127,7 @@ def login_user(request: HttpRequest):
         user = authenticate(
             request,
             username=user_name,
-            password=user_password
+            password=user_password,
         )
 
         if user is not None:
@@ -141,8 +137,7 @@ def login_user(request: HttpRequest):
                 return redirect(data_destiny)
 
             return redirect("/account/")
-        else:
-            message = "The credencials aren't valid"
+        message = "The credencials aren't valid"
 
     return render(
         request,

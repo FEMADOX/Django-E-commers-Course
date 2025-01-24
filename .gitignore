@@ -11,6 +11,9 @@ edteam-cursodjango-main.zip
 venv/
 Recursos del curso/
 IMAGENES_TIENDA/
+run_tests.py
+run_ruff.py
+
 
 ### Django ###
 *.log
@@ -183,5 +186,3 @@ cython_debug/
 #.idea/
 
 # End of https://www.toptal.com/developers/gitignore/api/django
-api/migrations/0001_initial.pyrequirements-dev.txt
-run_tests.py
