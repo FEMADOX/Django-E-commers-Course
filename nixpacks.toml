@@ -1,18 +1,8 @@
-# Nixpacks Configuration File
-# Specify system packages to install
-
 [pkgs]
 apt = ["default-libmysqlclient-dev", "build-essential", "pkg-config"]
 
-# Optional configurations
 [env]
-NIXPACKS_PYTHON_VERSION = "3.11"
 NIXPACKS_UV_VERSION = "0.4.30"
 
-# Comandos de despliegue y compilación
 [deploy]
-command = "uv venv /opt/.venv && . /opt/.venv/bin/activate && uv run manage.py migrate && gunicorn edshop.wsgi:application"
-
-# Comando para ejecutar la aplicación usando `uv`
-[start]
-command = ". /opt/venv/bin/activate && uv run"
+command = "python -m venv --copies /opt/venv && . /opt/venv/bin/activate && pip install uv==$NIXPACKS_UV_VERSION && uv sync --no-dev --frozen"
