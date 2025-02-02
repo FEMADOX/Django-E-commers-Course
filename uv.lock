@@ -220,7 +220,7 @@ requires-dist = [
     { name = "jedi", specifier = "==0.19.2" },
     { name = "matplotlib-inline", specifier = "==0.1.7" },
     { name = "mccabe", specifier = "==0.7.0" },
-    { name = "mysqlclient", specifier = ">=2.2.7" },
+    { name = "mysqlclient" },
     { name = "nodeenv", specifier = "==1.9.1" },
     { name = "packaging", specifier = "==24.2" },
     { name = "parso", specifier = "==0.8.4" },
