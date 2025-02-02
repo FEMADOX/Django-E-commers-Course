@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 
-def get_default_brand():
+def get_default_brand() -> int:
     brand, _ = Brand.objects.get_or_create(name="None")
     return brand.pk
 

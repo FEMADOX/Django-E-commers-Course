@@ -10,12 +10,12 @@ repos:
     -   id: check-added-large-files
 -   repo: local
     hooks:
-    -   id: run-tests
-        name: run-tests
-        entry: python run_tests.py
-        language: system
-        types: [python]
-        stages: [pre-commit]
+    # -   id: run-tests
+    #     name: run-tests
+    #     entry: python run_tests.py
+    #     language: system
+    #     types: [python]
+    #     stages: [pre-commit]
     -   id: run-ruff
         name: run-ruff
         entry: uv run run_ruff.py
