@@ -24,7 +24,6 @@ dependencies = [
     "jedi==0.19.2",
     "matplotlib-inline==0.1.7",
     "mccabe==0.7.0",
-    "mysqlclient",
     "nodeenv==1.9.1",
     "packaging==24.2",
     "parso==0.8.4",
