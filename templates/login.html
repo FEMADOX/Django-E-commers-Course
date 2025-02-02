@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% comment %}{% block title %}Login/Sig Up{% endblock title %}{% endcomment %}
+
+{% block content %}
+  <h1 class="maincont-ttl">Registration</h1>
+  <ul class="b-crumbs">
+    <li><a href="{% url 'web:index' %}">Home</a></li>
+    <li>Login</li>
+  </ul>
+
+  <article class="page-cont">
+    <div class="page-styling">
+      <div class="auth-wrap">
+        <div class="auth-col">
+          <h2>Login</h2>
+          <form method="post" class="login" action="{% url 'login_user' %}">{% csrf_token %}
+            <input type="hidden" name="next" value="{{ destiny }}">
+            <p>
+              <label for="username">E-mail <span class="required">*</span></label>
+              <input type="email" id="username" name="email">
+            </p>
+            <p>
+              <label for="password">Password <span class="required">*</span></label>
+              <input type="password" id="password" name="password">
+            </p>
+            <p class="auth-submit">
+              <input type="submit" value="Login">
+              <input type="checkbox" id="rememberme" value="forever">
+              <label for="rememberme">Remember me</label>
+            </p>
+            <p>
+              <label for="alert-danger"> {{ message }}</label>
+            </p>
+            <p class="auth-lost_password">
+              <a href="#">Lost your password?</a>
+            </p>
+          </form>
+          <p>
+            Don't have an account?
+            <a href="{% url 'account:create_user' %}">SignUp</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+{% endblock content %}
