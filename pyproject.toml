@@ -57,6 +57,7 @@ dependencies = [
     "urllib3==2.3.0",
     "virtualenv==20.28.1",
     "wcwidth==0.2.13",
+    "whitenoise",
 ]
 
 [project.optional-dependencies]
