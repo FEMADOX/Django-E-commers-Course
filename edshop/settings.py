@@ -9,8 +9,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-import os
 
+import os
 from pathlib import Path
 
 from decouple import config
@@ -26,9 +26,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", default=True, cast=bool)
+DEBUG = config("DEBUG", cast=bool)
 
-ALLOWED_HOSTS = [config("ALLOWED_HOSTS")]
+ALLOWED_HOSTS: str = config("ALLOWED_HOSTS").split(",")  # type: ignore
+
+CORS_ORIGIN_WHITELIST: str = config("CORS_ORIGIN_WHITELIST").split(",")  # type: ignore
+
+CSRF_TRUSTED_ORIGINS: str = config("CSRF_TRUSTED_ORIGINS").split(",")  # type: ignore
 
 
 # Application definition
@@ -41,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "stripe",
+    "whitenoise",
     "web",
     "account",
     "cart",
@@ -60,6 +65,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "edshop.urls"
+
+# SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT")
+# SESSION_COOKIE_SECURE = config("SESSION_COOKIE_SECURE")
+# CSRF_COOKIE_SECURE = config("CSRF_COOKIE_SECURE")
+# SECURE_HSTS_SECONDS = config("SECURE_HSTS_SECONDS")
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = config("SECURE_HSTS_INCLUDE_SUBDOMAINS")
+# SECURE_HSTS_PRELOAD = config("SECURE_HSTS_PRELOAD")
 
 TEMPLATES = [
     {
@@ -104,16 +116,13 @@ AUTH_PASSWORD_VALIDATORS = [
         "UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation."
-        "MinimumLengthValidator",
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation."
-        "CommonPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation."
-        "NumericPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 

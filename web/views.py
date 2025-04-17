@@ -5,7 +5,6 @@ from django.shortcuts import render
 from web.models import Brand, Category, Product
 
 
-# Create your views here.
 def index(request: HttpRequest) -> HttpResponse:
     products = Product.objects.all()
     categories = Category.objects.all()
