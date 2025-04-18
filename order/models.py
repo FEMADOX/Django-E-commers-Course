@@ -46,8 +46,8 @@ class OrderDetail(models.Model):
     subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     class Meta:
-        verbose_name = "OrderDetail"
-        verbose_name_plural = "OrdersDetail"
+        verbose_name = "Order Detail"
+        verbose_name_plural = "Orders Detail"
         indexes = [
             models.Index(fields=["order"]),
         ]
