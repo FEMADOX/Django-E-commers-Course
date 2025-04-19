@@ -38,6 +38,7 @@ CSRF_TRUSTED_ORIGINS: str = config("CSRF_TRUSTED_ORIGINS").split(",")  # type: i
 # Application definition
 
 INSTALLED_APPS = [
+    "whitenoise.runserver_nostatic",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -45,7 +46,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "stripe",
-    #"whitenoise.runserver_nostatic",
     "web",
     "account",
     "cart",
@@ -55,7 +55,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    #"whitenoise.middleware.WhiteNoiseMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -141,14 +141,14 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-#STORAGES = {
-#    "default": {
-#        "BACKEND": "django.core.files.storage.FileSystemStorage",
-#    },
-#    "staticfiles": {
-#        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-#    },
-#}
+STORAGES = {
+   "default": {
+       "BACKEND": "django.core.files.storage.FileSystemStorage",
+   },
+   "staticfiles": {
+       "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+   },
+}
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
