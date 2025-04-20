@@ -148,6 +148,7 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+print(BASE_DIR)
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
