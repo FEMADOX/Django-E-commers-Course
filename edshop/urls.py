@@ -37,5 +37,5 @@ urlpatterns += static(
 )
 urlpatterns += static(
         settings.STATIC_URL,
-        document_root=settings.STATICFILES_DIRS,
+        document_root=settings.STATIC_ROOT,
 )
