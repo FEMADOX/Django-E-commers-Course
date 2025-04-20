@@ -144,9 +144,9 @@ WHITENOISE_USE_FINDERS = True
 WHITENOISE_ROOT = BASE_DIR
 
 STORAGES = {
-    # "default": {
-    #     "BACKEND": "django.core.files.storage.FileSystemStorage",
-    # },
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
