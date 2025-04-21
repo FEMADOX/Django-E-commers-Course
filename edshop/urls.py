@@ -30,9 +30,3 @@ urlpatterns = [
     path("payment/", include("payment.urls")),
     re_path(r".*login/$", login_user, name="login_user"),
 ]
-
-# )
-# urlpatterns += static(
-#         settings.STATIC_URL,
-#         document_root=settings.STATIC_ROOT,
-# )
