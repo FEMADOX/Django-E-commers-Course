@@ -13592,10 +13592,6 @@ form.register div textarea {
 	margin-bottom: 20px;
 }
 
-form.register div textarea {
-	border-radius: 0;
-}
-
 form.register p.auth-submit input[type=submit] {
 	margin-top: 10px;
 }
