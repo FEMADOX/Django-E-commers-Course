@@ -5,9 +5,12 @@
         <div class="prod-i-top">
           <a class="prod-i-img" href="{% url 'web:product_detail' product.id %}">
             <img src="
-              {% if product.image %}{{ product.image.url }}
-              {% else %}https://via.placeholder.com/250
-              {% endif %}" alt="">
+              {% if product.image %}
+                {{ product.image.url }}
+              {% else %}
+                https://via.placeholder.com/250
+              {% endif %}"
+              alt="" />
           </a>
           <div class="prod-i-actions">
             <div class="prod-i-actions-in">
@@ -21,22 +24,14 @@
           </div>
         </div>
         <div class="prod-i-bot" style="padding-top: 20px;">
-          <h3 class="prod-i-ttl" style="margin-bottom: 5px;">
-            <a href="{% url 'web:product_detail' product.id %}">
-              {{product.title}}
-            </a>
-          </h3>
+          <h3 class="prod-i-ttl" style="margin-bottom: 5px;"><a href="{% url 'web:product_detail' product.id %}">{{ product.title }}</a></h3>
           <div class="prod-i-info">
-            <p class="prod-i-price">${{product.price}}</p>
+            <p class="prod-i-price">${{ product.price }}</p>
             <p class="prod-i-categ">
-              <a href="{% url 'web:filter_by_category' product.category.id %}">
-                {{product.category}}
-              </a>
+              <a href="{% url 'web:filter_by_category' product.category.id %}">{{ product.category }}</a>
             </p>
             <p class="prod-i-categ">
-              <a href="{% url 'web:filter_by_brand' product.brand.id %}">
-                {{product.brand}}
-              </a>
+              <a href="{% url 'web:filter_by_brand' product.brand.id %}">{{ product.brand }}</a>
             </p>
           </div>
         </div>

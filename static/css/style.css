@@ -237,6 +237,7 @@ input[type=email],
 button,
 textarea {
 	-webkit-appearance: none;
+	appearance: none;
 }
 
 textarea,
@@ -1233,8 +1234,8 @@ body .header-sticky .site-header.header_sticky {
 
 .site-header .h-logo img {
 	display: block;
-	max-width: 100%;
-	max-height: 100%;
+	max-width: 40%;
+	max-height: 40%;
 	width: auto;
 	height: auto;
 }
@@ -1587,7 +1588,7 @@ body .widget_search .dgwt-wcas-si img {
 	z-index: 10;
 }
 
-.site-header .h-profile .h-profile-links li {}
+/* .site-header .h-profile .h-profile-links li {} */
 
 .site-header .h-profile .h-profile-links li a {
 	color: #283346;
@@ -2195,7 +2196,7 @@ body .widget_search .dgwt-wcas-si img {
 		width: 315px;
 	}
 
-	.site-header .h-shop-links {}
+	/* .site-header .h-shop-links {} */
 
 	.site-header .h-shop-links .h-shop-icon {
 		margin: 0 6px;
@@ -2275,8 +2276,8 @@ body .widget_search .dgwt-wcas-si img {
 		text-align: center;
 	}
 
-	.mainmenu nav.menu>ul>li>a,
-	.site-header .h-menu>ul>li>a {}
+	/* .mainmenu nav.menu>ul>li>a,
+	.site-header .h-menu>ul>li>a {} */
 
 	.mainmenu nav.menu>ul>li.active>a,
 	.mainmenu nav.menu>ul>li.current_page_parent>a,
@@ -3750,7 +3751,7 @@ p.link-pages,
 	transition: all 0.2s;
 }
 
-.section-filter .woof_products_top_panel li span:hover {}
+/* .section-filter .woof_products_top_panel li span:hover {} */
 
 .section-filter .woof_products_top_panel li span:after {
 	content: '';
@@ -4585,7 +4586,7 @@ div.woof_info_popup {
 }
 
 
-.blog-sb-widgets ul.brands-list-sb {}
+/* .blog-sb-widgets ul.brands-list-sb {} */
 
 .blog-sb-widgets ul.brands-list-sb li {
 	line-height: 1.42857143;
@@ -4747,12 +4748,12 @@ div.woof_info_popup {
 	color: #283346;
 }
 
-.prod-items .prod-i .prod-i-cart a:hover,
+/* .prod-items .prod-i .prod-i-cart a:hover,
 .prod-items .prod-i .prod-li-favorites a:hover,
 .prod-items .prod-i .prod-li-compare a:hover,
 .prod-items .prod-i .prod-quickview a:hover {
-	/* background-color: #f1f1fb; */
-}
+	background-color: #f1f1fb;
+} */
 
 .prod-items .prod-i .prod-li-favorites .ajax-loading,
 .prod-items .prod-i .prod-li-compare .prod-li-compare-loading,
@@ -4836,7 +4837,6 @@ div.woof_info_popup {
 	padding: 40px;
 	text-align: center;
 	font-size: 0;
-	border: none;
 }
 
 .prod-items .prod-i-top .prod-i-img:before {
@@ -5194,7 +5194,7 @@ span.badge-1 {
 	top: 0;
 	left: 0;
 	height: 100%;
-	vertical-align: middle;
+	/* vertical-align: middle; */
 	display: block;
 	border: none;
 	border-right: 1px solid #e0e4f6;
@@ -5252,7 +5252,7 @@ span.badge-1 {
 	display: inline-block;
 	vertical-align: middle;
 	width: 52%;
-	padding: 15px 10px 10px ;
+	padding: 15px 10px 10px;
 	text-transform: uppercase;
 	font-size: 12px;
 	color: #9292b4;
@@ -5431,8 +5431,8 @@ span.badge-1 {
 	background: #fff;
 }
 
-.prod-litems .prod-li-qnt-wrap input[type=number]:focus,
-.prod-litems .prod-li-qnt-wrap input[type=text]:focus {}
+/* .prod-litems .prod-li-qnt-wrap input[type=number]:focus,
+.prod-litems .prod-li-qnt-wrap input[type=text]:focus {} */
 
 .prod-litems .prod-li-info {
 	position: relative;
@@ -5652,7 +5652,7 @@ span.badge-1 {
 .prod-litems .prod-li .prod-li-favorites,
 .prod-litems .prod-li .prod-li-compare,
 .prod-litems .prod-li .prod-quickview {
-	float: right;
+	/* float: right; */
 	padding: 0;
 	text-align: center;
 	position: relative;
@@ -6664,7 +6664,7 @@ span.badge-1 {
 	padding-left: 80px;
 }
 
-.products-featured-wrap {}
+/* .products-featured-wrap {} */
 
 .products-featured-wrap .products-featured {
 	border-bottom: 1px solid #f2f2f2;
@@ -6853,7 +6853,7 @@ span.badge-1 {
 	height: 100%;
 	width: 100%;
 	display: block;
-	vertical-align: middle;
+	/* vertical-align: middle; */
 }
 
 .prod .prod-slider .slides li a:before {
@@ -10129,7 +10129,7 @@ ul.cont-sections li:after {
 
 .blog-i .blog-slider .slides li img {
 	display: block;
-	vertical-align: middle;
+	/* vertical-align: middle; */
 	max-width: 100%;
 	width: 100%;
 	height: auto;
@@ -13015,7 +13015,7 @@ body div .btn-multishop:hover {
 	color: #fff;
 }
 
-.add_to_cart_inline {}
+/* .add_to_cart_inline {} */
 
 .add_to_cart_inline .amount {
 	margin: 0 8px;
@@ -13570,9 +13570,32 @@ Compare List
 .site-footer .f-logo {
 	border: none;
 	display: block;
-	margin: 14px 0 0;
+}
+
+.site-footer .f-logo img {
+	max-width: 25%;
+	max-height: 20%;
+	margin-bottom: 1rem;
 }
 
 /*----------------------------------
 28 - Footer
 ----------------------------------*/
+
+ul.errorlist {
+	margin-bottom: 0px;
+}
+
+div input,
+div select,
+div textarea {
+	margin-bottom: 20px;
+}
+
+div textarea {
+	border-radius: 0;
+}
+
+p.auth-submit input[type=submit] {
+	margin-top: 10px;
+}
