@@ -13582,20 +13582,20 @@ Compare List
 28 - Footer
 ----------------------------------*/
 
-ul.errorlist {
+form.register ul.errorlist {
 	margin-bottom: 0px;
 }
 
-div input,
-div select,
-div textarea {
+form.register div input,
+form.register div select,
+form.register div textarea {
 	margin-bottom: 20px;
 }
 
-div textarea {
+form.register div textarea {
 	border-radius: 0;
 }
 
-p.auth-submit input[type=submit] {
+form.register p.auth-submit input[type=submit] {
 	margin-top: 10px;
 }

@@ -10,6 +10,7 @@ class ClientForm(forms.Form):
     SEX_CHOICES = (
         ("M", "Male"),
         ("F", "Female"),
+        ("N", "Null"),
     )
 
     dni = forms.CharField(label="DNI", max_length=8, required=True)
