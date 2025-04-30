@@ -2,10 +2,12 @@ import stripe
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.http import HttpRequest
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from account.models import Client
+from cart.views import HttpResponse
 from edshop import settings
 from edshop.settings import STRIPE_API
 from order.models import Order, OrderDetail
@@ -16,7 +18,7 @@ stripe.api_key = STRIPE_API
 
 
 @login_required(login_url="login/")
-def payment_process(request: HttpRequest):
+def payment_process(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
     client = Client.objects.get(user=request.user)
     order_id = request.session["order_id"]
     order = Order.objects.get(pk=order_id)
@@ -66,8 +68,7 @@ def payment_process(request: HttpRequest):
 
 
 @login_required(login_url="login/")
-def payment_completed(request: HttpRequest):
-
+def payment_completed(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
     if request.session.get("order_id"):
         client = Client.objects.get(user=request.user)
         order_id = request.session.pop("order_id", "")
@@ -78,9 +79,8 @@ def payment_completed(request: HttpRequest):
         order.save()
 
         order_details_products = [
-            product.name
-            for product
-            in order.order_details.all()   # type: ignore[attr-defined]
+            product.title
+            for product in order.order_details.all()  # type: ignore[attr-defined]
         ]
 
         # Sending Mail
@@ -104,5 +104,5 @@ def payment_completed(request: HttpRequest):
 
 
 @login_required(login_url="login/")
-def payment_canceled(request: HttpRequest):
+def payment_canceled(request: HttpRequest) -> HttpResponse:
     return render(request, "payment_canceled.html")
