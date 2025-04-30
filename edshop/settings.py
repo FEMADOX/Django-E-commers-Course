@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
+import cloudinary
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,7 +31,6 @@ DEBUG = config("DEBUG", cast=bool)
 ALLOWED_HOSTS: str = config("ALLOWED_HOSTS").split(",")  # type: ignore
 
 CORS_ORIGIN_WHITELIST: str = config("CORS_ORIGIN_WHITELIST").split(",")  # type: ignore
-
 CSRF_TRUSTED_ORIGINS: str = config("CSRF_TRUSTED_ORIGINS").split(",")  # type: ignore
 
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "cloudinary",
     "stripe",
     "web",
     "account",
@@ -66,7 +67,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = "edshop.urls"
 
 # DEPLOY SECURITY SETTINGS
-#_________________________________________________________________________________
+# _________________________________________________________________________________
 # SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT")
 # SESSION_COOKIE_SECURE = config("SESSION_COOKIE_SECURE")
 # CSRF_COOKIE_SECURE = config("CSRF_COOKIE_SECURE")
@@ -95,17 +96,26 @@ WSGI_APPLICATION = "edshop.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+LOCAL_DATABASE = config("LOCAL_DATABASE", cast=bool)
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
-        "HOST": config("DB_HOST"),
-        "PORT": config("DB_PORT"),
-    },
-}
+if LOCAL_DATABASE:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        },
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": config("DB_NAME"),
+            "USER": config("DB_USER"),
+            "PASSWORD": config("DB_PASSWORD"),
+            "HOST": config("DB_HOST"),
+            "PORT": config("DB_PORT"),
+        },
+    }
 
 
 # Password validation
@@ -143,6 +153,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 WHITENOISE_USE_FINDERS = True
+
 STORAGES = {
     "default": {
         "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
@@ -158,6 +169,13 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+cloudinary.config(
+    cloud_name=config("CLOUD_NAME", cast=str),
+    api_key=config("CLOUD_API_KEY", cast=str),
+    api_secret=config("CLOUD_API_SECRET", cast=str),
+    secure=True,
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

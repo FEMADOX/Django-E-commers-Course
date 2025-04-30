@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from django.db import models
 
 # Create your models here.
@@ -27,11 +28,18 @@ class Category(models.Model):
 class Brand(models.Model):
     name = models.CharField(max_length=50)
     fundator = models.CharField(max_length=100)
-    image = models.ImageField(
-        upload_to="brands",
+    image = CloudinaryField(
+        "image",
         blank=True,
-        null=True,
-        default="",
+        folder="Django-E-commers/media/brands/",
+        default="https://res.cloudinary.com/dd1qoripz/image/upload/v1745813449/No_Image_Available_wvog0c.jpg",
+        transformation={
+            "width": 300,
+            "height": 300,
+            "crop": "fill",
+            "quality": "auto",
+            "fetch_format": "auto",
+        },
     )
     created = models.DateTimeField(auto_now_add=True)
 
@@ -58,7 +66,19 @@ class Product(models.Model):
     description = models.TextField(
         blank=True, default="No description for this product",
     )
-    image = models.ImageField(upload_to="products", blank=True, null=True, default="")
+    image = CloudinaryField(
+        "image",
+        blank=True,
+        folder="Django-E-commers/media/products/",
+        default="https://res.cloudinary.com/dd1qoripz/image/upload/v1745813449/No_Image_Available_wvog0c.jpg",
+        transformation={
+            "width": 300,
+            "height": 300,
+            "crop": "fill",
+            "quality": "auto",
+            "fetch_format": "auto",
+        },
+    )
     brand = models.ForeignKey(
         Brand, on_delete=models.RESTRICT, blank=True, default=get_default_brand,
     )
