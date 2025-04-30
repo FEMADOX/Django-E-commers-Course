@@ -10,21 +10,22 @@
   </a>
   <div class="widget_shopping_cart">
     <div class="widget_shopping_cart_content">
-      {% for key,value in request.session.cart.items %}
+      {% for key, value in request.session.cart.items %}
         <ul class="cart_list">
           <li>
-            <a href="{% url 'cart:delete_product_cart' value.product_id %}"
-             class="remove">&times;</a>
+            <a href="{% url 'cart:delete_product_cart' value.product_id %}" class="remove">&times;</a>
             <a href="{% url 'web:product_detail' value.product_id %}">
-              <img src="{{ value.image }}" alt="">
+              <img src="{{ value.image }}" alt="" />
               {{ value.title }}
             </a>
-            <span class="quantity">{{value.quantity}} &times; ${{ value.subtotal }}</span>
+            <span class="quantity">{{ value.quantity }} &times; ${{ value.subtotal }}</span>
           </li>
         </ul>
       {% endfor %}
       {% if request.session.cart.items|length > 0 %}
-        <p class="total"><b>Total:</b> ${{ request.session.cart_total_price }}</p>
+        <p class="total">
+          <b>Total:</b> ${{ request.session.cart_total_price }}
+        </p>
       {% endif %}
       <p class="buttons">
         <a href="{% url 'cart:cart' %}" class="button">Show Cart</a>

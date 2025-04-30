@@ -1,9 +1,11 @@
 {% extends 'layout.html' %}
 {% comment %} {% load crispy_forms_tags %} {% endcomment %}
 {% block content %}
-  <h1 class="maincont-ttl">Welcom - {{ user.username }} </h1>
+  <h1 class="maincont-ttl">Welcom - {{ user.username }}</h1>
   <ul class="b-crumbs">
-    <li><a href="{% url 'web:index' %}">Home</a></li>
+    <li>
+      <a href="{% url 'web:index' %}">Home</a>
+    </li>
     <li>My Account</li>
   </ul>
   <h2>{{ message }}</h2>
@@ -12,11 +14,12 @@
       <div class="auth-wrap">
         <div class="auth-col">
           <h2>Personal Information</h2>
-          <form method="post" action="{% url 'account:update_account' %}" class="register">{% csrf_token %}
+          <form method="post" action="{% url 'account:update_account' %}" class="register">
+            {% csrf_token %}
             {{ client_form }}
             <!-- |crispy -->
             <p class="auth-submit">
-              <input type="submit" value="Update Information">
+              <input type="submit" value="Update Information" />
             </p>
           </form>
         </div>

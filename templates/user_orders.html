@@ -8,7 +8,7 @@
           <div style="padding: 30px 50px;">
             <h5>Order ID: {{ pending_order.id }}</h5>
             <h5>Order Date: {{ pending_order.registration_date }}</h5>
-            <h5 style="margin-bottom: 0px;">Details: </h5>
+            <h5 style="margin-bottom: 0px;">Details:</h5>
             <div style="padding-left: 30px;">
               {% for order_detail in pending_order.order_details.all %}
                 <ul>
@@ -20,9 +20,7 @@
               {% endfor %}
             </div>
             <h5>Total Amount: $ {{ pending_order.total_price }}</h5>
-            <a href="{% url 'cart:restore_order_pending_cart' pending_order.id  %}">
-              Add all this order to the cart again
-            </a>
+            <a href="{% url 'cart:restore_order_pending_cart' pending_order.id %}">Add all this order to the cart again</a>
           </div>
         {% endfor %}
       </article>

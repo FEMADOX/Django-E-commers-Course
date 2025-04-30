@@ -5,7 +5,8 @@
       {% for brand in brands %}
         <li>
           <a href="{% url 'web:filter_by_brand' brand.id %}">
-            <span class="section-sb-label">{{ brand.name }}
+            <span class="section-sb-label">
+              {{ brand.name }}
               <span class="count">{{ brand.product_set.count }}</span>
             </span>
           </a>

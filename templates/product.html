@@ -1,8 +1,12 @@
 {% extends 'layout.html' %}
 {% block content %}
   <ul class="b-crumbs">
-    <li><a href="{% url 'web:index' %}">Home</a></li>
-    <li><a href="{% url 'web:index' %}">Catalog</a></li>
+    <li>
+      <a href="{% url 'web:index' %}">Home</a>
+    </li>
+    <li>
+      <a href="{% url 'web:index' %}">Catalog</a>
+    </li>
     <li>Product</li>
   </ul>
   <article>
@@ -11,23 +15,29 @@
         <div class="flexslider prod-slider" id="prod-slider">
           <ul class="slides">
             <li>
-              <a data-fancybox-group="prod" class="fancy-img" href="#"><!--------->
+              <a data-fancybox-group="prod" class="fancy-img" href="#">
+                <!-- --- -->
+                ---->
                 <img src="
-                  {% if product.image %}{{ product.image.url }}
-                  {% else %}https://via.placeholder.com/250
-                  {% endif %}" alt="">
+                  {% if product.image %}
+                    {{ product.image.url }}
+                  {% else %}
+                    https://via.placeholder.com/250
+
+                  {% endif %}"
+                  alt="" />
               </a>
             </li>
-            <!-- <li>
+            <!--  <li>
               <a data-fancybox-group="prod" class="fancy-img" href="#">
                 <img src="
                   {% if product.image %}{{ product.image.url }}
                   {% else %}https://via.placeholder.com/250
                   {% endif %}" alt="">
               </a>
-            </li> -->
+            </li>  -->
           </ul>
-          <!-- <div class="prod-slider-count">
+          <!--  <div class="prod-slider-count">
             <p>
               <span class="count-cur">1</span> / <span class="count-all">2</span>
             </p>
@@ -35,22 +45,26 @@
               <i class="icon ion-search"></i>
               <span>Zoom In</span>
             </p>
-          </div> -->
+          </div>  -->
         </div>
         <div class="flexslider prod-thumbs" id="prod-thumbs">
           <ul class="slides">
             <li>
               <img src="
-                {% if product.image %}{{ product.image.url }}
-                {% else %}https://via.placeholder.com/250
-                {% endif %}" alt="">
+                {% if product.image %}
+                  {{ product.image.url }}
+                {% else %}
+                  https://via.placeholder.com/250
+
+                {% endif %}"
+                alt="" />
             </li>
-            <!-- <li>
+            <!--  <li>
               <img src="
                 {% if product.image %}{{ product.image.url }}
                 {% else %}https://via.placeholder.com/250
                 {% endif %}" alt="">
-            </li> -->
+            </li>  -->
           </ul>
         </div>
       </div>
@@ -67,49 +81,49 @@
           <p class="prod-rating-count">7</p>
         </div>
         <p class="prod-categs">
-          <a href="{% url 'web:filter_by_category' product.category.id %}">
-            {{ product.category }}
-          </a>
+          <a href="{% url 'web:filter_by_category' product.category.id %}">{{ product.category }}</a>
         </p>
         <h1>{{ product.title }}</h1>
         <div class="variations_form cart">
           <p class="prod-price">${{ product.price }}</p>
-          <p class="prod-excerpt">{{ product.description }}
+          <p class="prod-excerpt">
+            {{ product.description }}
             <a id="prod-showdesc" class="prod-excerpt-more" href="#">read more</a>
           </p>
           <div class="prod-add">
-            <form action="{% url 'cart:add_product_cart' product.id %}"
-             method="post">{% csrf_token %}
+            <form action="{% url 'cart:add_product_cart' product.id %}" method="post">
+              {% csrf_token %}
               <div class="variations">
                 <div class="variations-row">
-                  <div class="label"><label>Color</label></div>
+                  <div class="label">
+                    <label>Color</label>
+                  </div>
                   <div class="value">
                     <select>
                       <option value="">Choose an option</option>
                       <option value="blue">{{ product.color }}</option>
-                      <!-- <option value="green">Green</option>
-                      <option value="yellow">Yellow</option> -->
+                      <!--  <option value="green">Green</option>
+                      <option value="yellow">Yellow</option>  -->
                     </select>
                   </div>
                 </div>
               </div>
-              <button type="submit" class="button"><i class="icon ion-android-cart"></i>
+              <button type="submit" class="button">
+                <i class="icon ion-android-cart"></i>
                 Add to Card
               </button>
               <p class="qnt-wrap prod-li-qnt">
                 <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
-                <input type="text" name="quantity" value="1">
+                <input type="text" name="quantity" value="1" />
                 <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
               </p>
             </form>
           </div>
         </div>
         <div class="prod-props">
-          <dl class="product_meta">
-          </dl>
+          <dl class="product_meta"></dl>
         </div>
       </div>
     </div>
-
   </article>
 {% endblock content %}

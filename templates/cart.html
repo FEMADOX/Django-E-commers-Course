@@ -2,21 +2,21 @@
 {% block content %}
   <h1 class="maincont-ttl">Cart</h1>
   <ul class="b-crumbs">
-    <li><a href="/">Home</a></li>
+    <li>
+      <a href="/">Home</a>
+    </li>
     <li>Cart</li>
   </ul>
   <div class="page-styling">
     <div class="woocommerce prod-litems section-list">
-      {% for key,value in request.session.cart.items %}
+      {% for key, value in request.session.cart.items %}
         <article class="prod-li sectls">
           <div class="prod-li-inner">
-            <a href="{% url 'web:product_detail' value.product_id %}" class="prod-li-img">
-              <img src="{{ value.image }}" alt="">
-            </a>
+            <a href="{% url 'web:product_detail' value.product_id %}" class="prod-li-img"><img src="{{ value.image }}" alt="" /></a>
             <div class="prod-li-cont">
               <div class="prod-li-ttl-wrap">
                 <p>
-                  <a href="{% url 'web:filter_by_category' value.category.id %}">{{ value.category.name }}</a><!------------->
+                  <a href="{% url 'web:filter_by_category' value.category.id %}">{{ value.category.name }}</a>
                 </p>
                 <h3><a href="{% url 'web:product_detail' value.product_id %}">{{ value.title }}</a></h3>
               </div>
@@ -28,7 +28,7 @@
                 <div class="prod-li-qnt-wrap">
                   <p class="qnt-wrap prod-li-qnt">
                     <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
-                    <input type="text" value="{{ value.quantity }}">
+                    <input type="text" value="{{ value.quantity }}" />
                     <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
                   </p>
                 </div>
@@ -50,9 +50,7 @@
                 <p class="prod-li-rating-count">12</p>
               </div>
               <p class="prod-li-add">
-                <a href="{% url 'cart:delete_product_cart' value.product_id %}" class="button hover-label prod-addbtn">
-                  <i class="icon ion-close-round"></i><span>Delete</span>
-                </a>
+                <a href="{% url 'cart:delete_product_cart' value.product_id %}" class="button hover-label prod-addbtn"><i class="icon ion-close-round"></i><span>Delete</span></a>
               </p>
               <p class="prod-li-information">
                 <a href="#" class="hover-label"><i class="icon ion-more"></i><span>Show Information</span></a>
@@ -76,8 +74,8 @@
     </div>
     <div class="cart-actions">
       <div class="coupon">
-        <input type="text" placeholder="Coupon code">
-        <input type="submit" class="button" value="Apply">
+        <input type="text" placeholder="Coupon code" />
+        <input type="submit" class="button" value="Apply" />
       </div>
       <div class="cart-collaterals">
         <a href="{% url 'cart:clear_cart' %}" class="checkout-button button">Clear Cart</a>
@@ -98,7 +96,7 @@
             <div style="padding: 30px 50px;">
               <h5>Order ID: {{ pending_order.id }}</h5>
               <h5>Order Date: {{ pending_order.registration_date }}</h5>
-              <h5 style="margin-bottom: 0px;">Details: </h5>
+              <h5 style="margin-bottom: 0px;">Details:</h5>
               <div style="padding-left: 30px;">
                 {% for order_detail in pending_order.order_details.all %}
                   <ul>
@@ -111,14 +109,10 @@
               </div>
               <h5>Total Amount: $ {{ pending_order.total_price }}</h5>
               <div style="padding-bottom: 15px;">
-                <a href="{% url 'cart:restore_order_pending_cart' pending_order.id  %}">
-                  Add all this order to the CART again
-                </a>
+                <a href="{% url 'cart:restore_order_pending_cart' pending_order.id %}">Add all this order to the CART again</a>
               </div>
               <div style="padding-bottom: 15px;">
-                <a href="{% url 'order:order_summary' pending_order.id  %}">
-                  Add all the order to the SUMMARY
-                </a>
+                <a href="{% url 'order:order_summary' pending_order.id %}">Add all the order to the SUMMARY</a>
               </div>
             </div>
           {% endfor %}
