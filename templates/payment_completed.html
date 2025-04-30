@@ -6,6 +6,6 @@
     <li><a href="{% url 'web:index' %}">Buy</a></li>
   </ul>
   <h2>THANKS FOR YOUR BOUGHT</h2>
-  <h3>Order #: {{ order.order_num }}</h3>
+  <h3>{{ order.order_num }}</h3>
   <p>We'll send you an email to confirm you order {{ request.user.first_name }}</p>
 {% endblock content %}

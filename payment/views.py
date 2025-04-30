@@ -79,8 +79,8 @@ def payment_completed(request: HttpRequest) -> HttpResponseRedirect | HttpRespon
         order.save()
 
         order_details_products = [
-            product.title
-            for product in order.order_details.all()  # type: ignore[attr-defined]
+            order_detail.product.title
+            for order_detail in order.order_details.all()  # type: ignore[attr-defined]
         ]
 
         # Sending Mail
