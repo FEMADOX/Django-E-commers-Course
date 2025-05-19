@@ -7,12 +7,14 @@ from django.shortcuts import redirect, render
 
 from account.forms import ClientForm
 from account.models import Client
+from cart.views import HttpResponse
+from payment.views import HttpResponseRedirect
 
 # Create your views here.
 
 
 @login_required(login_url="login/")
-def user_account(request: HttpRequest):
+def user_account(request: HttpRequest) -> HttpResponse:
     user = User.objects.get(pk=request.user.pk)
 
     try:
@@ -44,7 +46,7 @@ def user_account(request: HttpRequest):
 
 
 @login_required(login_url="login/")
-def update_account(request: HttpRequest):
+def update_account(request: HttpRequest) -> HttpResponse:
     message = ""
     client_form = ClientForm()
 
@@ -94,8 +96,7 @@ def update_account(request: HttpRequest):
     )
 
 
-def create_user(request: HttpRequest):
-
+def create_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
     if request.method == "POST":
         username = request.POST["new_user_email"].split("@")[0].lower()
         user_email = request.POST["new_user_email"]
@@ -103,7 +104,9 @@ def create_user(request: HttpRequest):
 
         try:
             new_user = User.objects.create_user(
-                username=username, email=user_email, password=password_data,
+                username=username,
+                email=user_email,
+                password=password_data,
             )
             login(request, new_user)
             return redirect("/account/")
@@ -111,11 +114,10 @@ def create_user(request: HttpRequest):
             msg = "A user with that email already exists."
             raise IntegrityError(msg) from None
 
-
     return render(request, "signup.html")
 
 
-def login_user(request: HttpRequest):
+def login_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
     message = ""
     destiny_page = request.GET.get("next", None)
 
@@ -149,8 +151,7 @@ def login_user(request: HttpRequest):
     )
 
 
-def logout_user(request: HttpRequest):
-
+def logout_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
     if request.method == "POST":
         logout(request)
         return redirect("login/")
