@@ -20,7 +20,7 @@
       <div class="auth-wrap">
         <div class="auth-col">
           <h2>Sign Up</h2>
-          <form method="post" class="register" action="{% url 'order:create_order' %}">
+          <form method="post" class="register" action="{% url 'account:create_user' %}">
             {% csrf_token %}
             <p>
               <label for="reg_email">Email <span class="required">*</span></label>
@@ -30,6 +30,7 @@
               <label for="reg_password">Password <span class="required">*</span></label>
               <input type="password" id="reg_password" name="new_user_password" />
             </p>
+            <label for="alert-danger">{{ message }}</label>
             <p class="auth-submit">
               <input type="submit" value="Create Account" />
             </p>

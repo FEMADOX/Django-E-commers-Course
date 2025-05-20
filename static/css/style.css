@@ -1195,6 +1195,8 @@ body i.icon {
   }
 }
 
+
+
 .site-header-before {
   padding: 13px 2.7% 3px;
   background-color: #2a2c3d;
@@ -1244,6 +1246,8 @@ body .header-sticky .site-header.header_sticky {
 
 .site-header .h-logo a {
   display: block;
+  width: 65px;
+  /* cursor: pointer; */
 }
 
 .site-header .h-logo img {
@@ -1601,6 +1605,7 @@ body .widget_search .dgwt-wcas-si img {
   transition: opacity 0.3s;
   text-align: left;
   z-index: 10;
+  border-radius: 0px 10px 10px 10px;
 }
 
 /* .site-header .h-profile .h-profile-links li {} */
@@ -1635,6 +1640,7 @@ body .widget_search .dgwt-wcas-si img {
   border: none;
   background-color: #fff;
   /* margin-bottom: 1%; */
+  border-radius: 0 10px 10px 10px;
 }
 
 .site-header .h-profile .h-profile-links li:first-child a {
@@ -1643,7 +1649,8 @@ body .widget_search .dgwt-wcas-si img {
 
 .site-header .h-profile .h-profile-links li a:hover {
   text-decoration: none;
-  background-color: #f1f1fb;
+  background-color: #dedee6;
+  border-radius: 10px;
 }
 
 .site-header .h-profile .h-profile-links li form input:hover {
@@ -1728,6 +1735,7 @@ body .widget_search .dgwt-wcas-si img {
   z-index: 10;
   border-radius: 30px 0 30px 30px;
 }
+
 
 .h-cart .widget_shopping_cart .widget_shopping_cart_content {
   border: 1px solid #e9e9ef;
@@ -1864,6 +1872,16 @@ body .widget_search .dgwt-wcas-si img {
   vertical-align: middle;
   font-family: FontAwesome;
   margin: -2px 0 0 7px;
+}
+
+@media only screen and (min-width : 1200px) {
+  .h-cart:hover .widget_shopping_cart {
+    border-radius: 0 30px 30px 30px;
+  }
+
+  .h-cart .widget_shopping_cart .widget_shopping_cart_content {
+    border-radius: 0 30px 30px 30px;
+  }
 }
 
 .site-header .h-menu-btn {
@@ -13633,7 +13651,7 @@ article#pending-orders h2 {
   padding: 30px 30px 10px;
 }
 
-div#product-details h1{
+div#product-details h1 {
   margin: 30px 0;
 }
 
@@ -13643,4 +13661,11 @@ div#product-details h1{
 
 div#product-details form {
   padding: 60px 0 0;
+}
+
+label[for="alert-danger"] {
+  color: red;
+  font-size: 1.2rem;
+  font-weight: bold;
+  /* display: none; */
 }
