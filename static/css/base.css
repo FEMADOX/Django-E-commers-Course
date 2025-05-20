@@ -1,0 +1,59 @@
+:root {
+  --base-color: #f1f1fb;
+  --secondary-color: white;
+  --third-color: #1291ee;
+  --base-text-color: black;
+  /* --secondary-text-color: #0e924c; */
+  /* --secondary-text-hover-color: #00a74f; */
+  --image-invert-color: invert(0);
+  color-scheme: light;
+}
+
+.darkmode {
+  --base-color: #2d2c36;
+  --secondary-color: black;
+  /* --third-color: #1cdf78; */
+  --base-text-color: white;
+  /* --secondary-text-color: #0e924c; */
+  /* --secondary-text-hover-color: #00a74f; */
+  --image-invert-color: invert(1);
+  color-scheme: dark;
+}
+
+#theme-switch {
+  height: 2.25rem;
+  width: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  cursor: pointer;
+  background-color: transparent;
+  margin: 0 10px;
+}
+
+#theme-switch svg {
+  fill: var(--base-text-color);
+  transition: color 0.2s ease-in;
+}
+
+#theme-switch svg:hover {
+  color: #1291ee;
+}
+
+#theme-switch svg:first-child {
+  display: none;
+}
+
+.darkmode #theme-switch svg:last-child {
+  display: none;
+}
+
+.darkmode #theme-switch svg:first-child {
+  display: block;
+}

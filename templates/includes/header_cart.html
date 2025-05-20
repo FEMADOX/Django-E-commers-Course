@@ -4,9 +4,9 @@
       <i class="ion-android-cart"></i>
       <span>{{ request.session.cart.items|length }}</span>
     </p>
-    {% if request.session.cart.items|length > 0 %}
+    {% comment %} {% if request.session.cart.items|length > 0 %}
       <p class="h-cart-total">${{ request.session.cart_total_price }}</p>
-    {% endif %}
+    {% endif %} {% endcomment %}
   </a>
   <div class="widget_shopping_cart">
     <div class="widget_shopping_cart_content">

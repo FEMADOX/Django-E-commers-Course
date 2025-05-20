@@ -1,32 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-  <ul class="b-crumbs">
-    <li>
-      <a href="{% url 'web:index' %}">Home</a>
-    </li>
-    <li>
-      <a href="{% url 'web:index' %}">Catalog</a>
-    </li>
-    <li>Product</li>
-  </ul>
-  <article>
-    <div class="prod">
-      <div class="prod-slider-wrap prod-slider-shown">
-        <div class="flexslider prod-slider" id="prod-slider">
-          <ul class="slides">
-            <li>
-              <a data-fancybox-group="prod" class="fancy-img" href="#">
-                <img src="
+<ul class="b-crumbs">
+  <li>
+    <a href="{% url 'web:index' %}">Home</a>
+  </li>
+  <li>
+    <a href="{% url 'web:index' %}">Catalog</a>
+  </li>
+  <li>Product</li>
+</ul>
+<article>
+  <div class="prod">
+    <div class="prod-slider-wrap prod-slider-shown">
+      <div class="flexslider prod-slider" id="prod-slider">
+        <ul class="slides">
+          <li>
+            <a data-fancybox-group="prod" class="fancy-img" href="#">
+              <img src="
                   {% if product.image %}
                     {{ product.image.url }}
                   {% else %}
                     https://via.placeholder.com/250
 
-                  {% endif %}"
-                  alt="" />
-              </a>
-            </li>
-            <!--  <li>
+                  {% endif %}" alt="" />
+            </a>
+          </li>
+          <!--  <li>
               <a data-fancybox-group="prod" class="fancy-img" href="#">
                 <img src="
                   {% if product.image %}{{ product.image.url }}
@@ -34,8 +33,8 @@
                   {% endif %}" alt="">
               </a>
             </li>  -->
-          </ul>
-          <!--  <div class="prod-slider-count">
+        </ul>
+        <!--  <div class="prod-slider-count">
             <p>
               <span class="count-cur">1</span> / <span class="count-all">2</span>
             </p>
@@ -44,43 +43,58 @@
               <span>Zoom In</span>
             </p>
           </div>  -->
-        </div>
-        <div class="flexslider prod-thumbs" id="prod-thumbs">
-          <ul class="slides">
-            <li>
-              <img src="
+      </div>
+      <div class="flexslider prod-thumbs" id="prod-thumbs">
+        <ul class="slides">
+          <li>
+            <img src="
                 {% if product.image %}
                   {{ product.image.url }}
                 {% else %}
                   https://via.placeholder.com/250
 
-                {% endif %}"
-                alt="" />
-            </li>
-            <!--  <li>
+                {% endif %}" alt="" />
+          </li>
+          <!--  <li>
               <img src="
                 {% if product.image %}{{ product.image.url }}
                 {% else %}https://via.placeholder.com/250
                 {% endif %}" alt="">
             </li>  -->
-          </ul>
-        </div>
+        </ul>
       </div>
+    </div>
 
-      <div class="prod-cont">
-        <div class="prod-rating-wrap">
-          <p data-rating="4" class="prod-rating">
-            <i class="rating-ico" title="1"></i>
-            <i class="rating-ico" title="2"></i>
-            <i class="rating-ico" title="3"></i>
-            <i class="rating-ico" title="4"></i>
-            <i class="rating-ico" title="5"></i>
-          </p>
-          <p class="prod-rating-count">7</p>
-        </div>
-        <p class="prod-categs">
-          <a href="{% url 'web:filter_by_category' product.category.id %}">{{ product.category }}</a>
+    <div class="prod-cont">
+      <div class="prod-rating-wrap">
+        <p data-rating="4" class="prod-rating">
+          <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+            <path
+              d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
+          </svg>
+          <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+            <path
+              d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
+          </svg>
+          <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+            <path
+              d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
+          </svg>
+          <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+            <path
+              d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
+          </svg>
+          <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+            <path
+              d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
+          </svg>
         </p>
+        <p class="prod-rating-count">7</p>
+      </div>
+      <p class="prod-categs">
+        <a href="{% url 'web:filter_by_category' product.category.id %}">{{ product.category }}</a>
+      </p>
+      <div id="product-details">
         <h1>{{ product.title }}</h1>
         <div class="variations_form cart">
           <p class="prod-price">${{ product.price }}</p>
@@ -123,5 +137,6 @@
         </div>
       </div>
     </div>
-  </article>
+  </div>
+</article>
 {% endblock content %}

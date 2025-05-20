@@ -1,6 +1,9 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+  {% load static %}
+  {% load livereload_tags %}
+  {% livereload_script %}
+
   <head>
     <meta charset="UTF-8" />
     <title>Django E-commers</title>
@@ -8,8 +11,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no" />
 
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900%7COpen+Sans:300,300i,400,400i,600,600i,700,700i&amp;subset=cyrillic" rel="stylesheet" />
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
 
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900%7COpen+Sans:300,300i,400,400i,600,600i,700,700i&amp;subset=cyrillic"
+      rel="stylesheet" />
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}" />
 
@@ -27,9 +35,10 @@
     <link rel="stylesheet" href="{% static 'css/elements-media.css' %}" />
   </head>
 
-  <body>
+  <body class="">
     <div id="page" class="site">
-      {% include 'includes/navbar.html' %} {% include 'includes/header.html' %}
+      {% include 'includes/navbar.html' %}
+      {% include 'includes/header.html' %}
       <div id="content" class="site-content">
         <div id="primary" class="content-area">
           <main id="main" class="site-main">
@@ -44,5 +53,7 @@
     <script src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
     <script src="{% static 'js/jquery-plugins.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/darkmode.js' %}"></script>
   </body>
+
 </html>

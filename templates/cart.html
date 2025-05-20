@@ -41,11 +41,31 @@
             <div class="prod-li-info">
               <div class="prod-li-rating-wrap">
                 <p data-rating="5" class="prod-li-rating">
-                  <i class="rating-ico" title="1"></i>
+                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+                    <path
+                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
+                  </svg>
+                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+                    <path
+                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
+                  </svg>
+                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+                    <path
+                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
+                  </svg>
+                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+                    <path
+                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
+                  </svg>
+                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+                    <path
+                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
+                    </svg>
+                  <!-- <i class="rating-ico" title="1"></i>
                   <i class="rating-ico" title="2"></i>
                   <i class="rating-ico" title="3"></i>
                   <i class="rating-ico" title="4"></i>
-                  <i class="rating-ico" title="5"></i>
+                  <i class="rating-ico" title="5"></i> -->
                 </p>
                 <p class="prod-li-rating-count">12</p>
               </div>
@@ -90,8 +110,8 @@
   {% if pending_orders %}
     <div class="page-styling">
       <div class="woocommerce prod-litems section-list">
-        <article class="prod-li sectls">
-          <h2 style="padding: 30px 30px 10px;">Pending Orders:</h2>
+        <article class="prod-li sectls" id="pending-orders">
+          <h2>Pending Orders:</h2>
           {% for pending_order in pending_orders %}
             <div style="padding: 30px 50px;">
               <h5>Order ID: {{ pending_order.id }}</h5>
@@ -103,7 +123,7 @@
                     <li>Product: {{ order_detail.product.title }}</li>
                     <li>Price: $ {{ order_detail.product.price }}</li>
                     <li>Quantity: {{ order_detail.quantity }}</li>
-                    <li>Subtotal: {{ order_detail.subtotal }}</li>
+                    <li>Subtotal: $ {{ order_detail.subtotal }}</li>
                   </ul>
                 {% endfor %}
               </div>

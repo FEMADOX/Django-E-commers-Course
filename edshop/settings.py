@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "livereload",
     "django.contrib.staticfiles",
     "cloudinary",
     "stripe",
@@ -62,6 +63,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "livereload.middleware.LiveReloadScript",
 ]
 
 ROOT_URLCONF = "edshop.urls"
@@ -189,8 +191,8 @@ STRIPE_API = config("STRIPE_API")
 # EMAIL
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = config("EMAIL_PORT")
-EMAIL_USE_TLS = config("EMAIL_USE_TLS")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

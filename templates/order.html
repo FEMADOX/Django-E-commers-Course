@@ -42,7 +42,7 @@
       </div>
     </article>
     {% if request.session.cart.items|length > 0 %}
-      <article class="page-cont" style="padding-top: 20px;">
+      <article class="page-cont-confirm" style="padding-top: 20px;">
         <div class="page-styling">
           <h2>Product Confirmation</h2>
           <div class="woocommerce prod-litems section-list" style="padding-top: 10px;">
@@ -98,7 +98,7 @@
         </div>
       </article>
       <div class="page-styling">
-        <div class="cart-actions" style="padding-top: 15px;">
+        <div class="cart-actions-confirm" style="padding-top: 15px;">
           <div class="cart-collaterals">
             <div class="order-total">
               <p class="cart-totals-ttl">Total</p>
@@ -113,7 +113,7 @@
         </div>
       </div>
     {% else %}
-      <article class="page-cont" style="padding-top: 20px;">
+      <article class="cart-actions-confirm" style="padding-top: 20px;">
         <div class="page-styling">
           <h2>Please add some product to the cart to continue</h2>
           <article class="page-cont" style="padding-top: 0px; margin-top: 0px;">
