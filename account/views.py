@@ -1,10 +1,11 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
 
+from account.backends import AccountBackend
 from account.forms import ClientForm
 from account.models import Client
 from cart.views import HttpResponse
@@ -98,21 +99,32 @@ def update_account(request: HttpRequest) -> HttpResponse:
 
 def create_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
     if request.method == "POST":
-        username = request.POST["new_user_email"].split("@")[0].lower()
         user_email = request.POST["new_user_email"]
+        user_name = user_email.split("@")[0].lower()
         password_data = request.POST["new_user_password"]
 
         try:
-            new_user = User.objects.create_user(
-                username=username,
+            user = User.objects.get(
                 email=user_email,
-                password=password_data,
             )
+            if user.check_password(password_data):
+                login(request, user)
+                return redirect("/account/")
+            message = "The account password isn't valid."
+            return render(request, "signup.html", {"message": message})
+        except User.DoesNotExist:
+            new_user = User.objects.create_user(
+                username=user_name,
+                email=user_email,
+            )
+            new_user.set_password(password_data)
+            new_user.save()
             login(request, new_user)
             return redirect("/account/")
-        except IntegrityError:
+
+        except IntegrityError as error:
             msg = "A user with that email already exists."
-            raise IntegrityError(msg) from None
+            raise IntegrityError(msg) from error
 
     return render(request, "signup.html")
 
@@ -122,24 +134,24 @@ def login_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
     destiny_page = request.GET.get("next", None)
 
     if request.method == "POST":
-        user_name = request.POST["email"].split("@")[0].lower()
+        user_email = request.POST["email"]
         user_password = request.POST["password"]
         data_destiny = request.POST["next"]
 
-        user = authenticate(
+        user = AccountBackend().authenticate(
             request,
-            username=user_name,
+            email=user_email,
             password=user_password,
         )
 
-        if user is not None:
+        if user:
             login(request, user)
 
             if data_destiny != "None":
                 return redirect(data_destiny)
 
             return redirect("/account/")
-        message = "The credencials aren't valid"
+        message = "The credencials aren't valid."
 
     return render(
         request,
