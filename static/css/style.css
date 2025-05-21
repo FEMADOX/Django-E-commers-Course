@@ -13669,3 +13669,87 @@ label[for="alert-danger"] {
   font-weight: bold;
   /* display: none; */
 }
+
+/* MESSAGES */
+ul.messages {
+  margin: 10px 100px;
+  padding: 0;
+  list-style-type:
+    none;
+}
+
+ul.messages li.success,
+ul.messages li.warning,
+ul.messages li.error,
+ul.messages li.info {
+  display: flex;
+  padding: 9px 20px;
+  color: white;
+  position: absolute;
+  top: 40px;
+  right: 100px;
+  border-radius: 10px;
+}
+
+ul.messages li.success {
+  background: #81ce81;
+}
+
+ul.messages li.success a {
+  color: #0ac33e;
+}
+
+ul.messages li.error {
+  background: #a30029;
+  color: #e9828e;
+}
+
+ul.messages li.error a {
+  color: #e9828e;
+}
+
+ul.messages li.info {
+  background: #faffae;
+  color: #696b4e;
+}
+
+ul.messages li.info a {
+  color: #1586de;
+}
+
+ul.messages li.warning {
+  background: #de9404;
+}
+
+ul.messages li.warning a {
+  color: #f49000;
+}
+
+ul.messages li a.close {
+  margin: 0 0 0 15px;
+  float: right;
+  opacity: 1;
+  border: 0;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+@media only screen and (min-width : 1000px) {
+  ul.messages li.success,
+  ul.messages li.warning,
+  ul.messages li.error,
+  ul.messages li.info {
+    position: static;
+    right: auto;
+    top: auto;
+    margin: 10px 0 0 0;
+    border-radius: 10px;
+    display: block;
+  }
+  ul.messages {
+    margin: 0 0 10px 0;   /* Solo margen arriba, sin margen lateral */
+    padding: 0;
+    list-style-type: none;
+    position: static;
+  }
+}

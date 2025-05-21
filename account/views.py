@@ -1,9 +1,14 @@
+import hashlib
+
+from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db import IntegrityError
+from django.core.exceptions import ValidationError
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 
 from account.backends import AccountBackend
 from account.forms import ClientForm
@@ -109,24 +114,60 @@ def create_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
             )
             if user.check_password(password_data):
                 login(request, user)
-                return redirect("/account/")
+                # return redirect(reverse("account:update_account"))
+                return redirect("account:update_account")
             message = "The account password isn't valid."
             return render(request, "signup.html", {"message": message})
-        except User.DoesNotExist:
-            new_user = User.objects.create_user(
-                username=user_name,
-                email=user_email,
-            )
-            new_user.set_password(password_data)
-            new_user.save()
-            login(request, new_user)
-            return redirect("/account/")
 
-        except IntegrityError as error:
-            msg = "A user with that email already exists."
-            raise IntegrityError(msg) from error
+        except User.DoesNotExist:
+            request.session["pending_registration"] = {
+                "username": user_name,
+                "email": user_email,
+                "password": password_data,
+            }
+            AccountBackend().send_mail(request, user_email)
+            messages.success(request, "We have sent an email to your address")
 
     return render(request, "signup.html")
+
+
+def account_activation(
+    request: HttpRequest,
+    uidb64: str,
+    token: str,
+) -> HttpResponseRedirect:
+    try:
+        email = force_str(urlsafe_base64_decode(uidb64))
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist, ValidationError):
+        email = None
+
+    if not email:
+        messages.error(request, "Activation link is invalid! (Invalid Email)")
+        return redirect("account:login_user")
+
+    expected_token = hashlib.sha256(email.encode()).hexdigest()
+    if token != expected_token:
+        messages.error(request, "Activation link is invalid!")
+        return redirect("account:login_user")
+
+    pending_registration = request.session.get("pending_registration")
+    if not pending_registration or pending_registration["email"] != email:
+        messages.error(
+            request,
+            "Activation link is invalid! (Pending Registration)",
+        )
+        return redirect("account:login_user")
+
+    user = User.objects.create_user(
+        username=pending_registration.get("username"),
+        email=pending_registration.get("email"),
+        is_active=True,
+    )
+    user.set_password(pending_registration.get("password"))
+    user.save()
+    login(request, user, "django.contrib.auth.backends.ModelBackend")
+    # messages.success(request, "Account activated successfully!")
+    return redirect("account:update_account")
 
 
 def login_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
@@ -150,7 +191,7 @@ def login_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
             if data_destiny != "None":
                 return redirect(data_destiny)
 
-            return redirect("/account/")
+            return redirect("/")
         message = "The credencials aren't valid."
 
     return render(

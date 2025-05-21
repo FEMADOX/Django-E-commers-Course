@@ -20,7 +20,17 @@
       <div class="auth-wrap">
         <div class="auth-col">
           <h2>Login</h2>
-          <form method="post" class="login" action="{% url 'login_user' %}">
+            {% if messages %}
+              <ul class="messages">
+                {% for message in messages %}
+                  <li class="{{message.tags}}">
+                    {{message|safe}}
+                    <a href="#" class="close">x</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          <form method="post" class="login" action="{% url 'account:login_user' %}">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ destiny }}" />
             <p>
