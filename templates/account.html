@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% comment %} {% load crispy_forms_tags %} {% endcomment %}
 {% block content %}
-  <h1 class="maincont-ttl">Welcom - {{ user.username }}</h1>
+  <h1 class="main-cont-ttl">Welcome - {{ user.username }}</h1>
   <ul class="b-crumbs">
     <li>
       <a href="{% url 'web:index' %}">Home</a>

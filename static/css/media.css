@@ -598,7 +598,7 @@
 
 
     /* POST */
-    .maincont .post-comment p.comment-meta {
+    .main-cont .post-comment p.comment-meta {
         position: relative;
         top: auto;
         margin: 0 0 5px;
@@ -646,30 +646,30 @@
 
 
     /* CART */
-    .maincont table.cart-table tbody tr td.product-remove {
+    .main-cont table.cart-table tbody tr td.product-remove {
         width: auto;
         padding: 10px 12px;
     }
 
-    .maincont table.cart-table tbody tr td.product-remove a.remove {
+    .main-cont table.cart-table tbody tr td.product-remove a.remove {
         display: inline-block;
     }
 
-    .maincont .section-list.cart-list .actions {
+    .main-cont .section-list.cart-list .actions {
         text-align: center;
         overflow: hidden;
     }
 
-    .maincont .section-list.cart-list .coupon .input-text {
+    .main-cont .section-list.cart-list .coupon .input-text {
         margin: 0 2% 0 0;
         width: 49%;
     }
 
-    .maincont .section-list.cart-list .coupon input.button {
+    .main-cont .section-list.cart-list .coupon input.button {
         width: 49%;
     }
 
-    .maincont .section-list.cart-list .update_cart {
+    .main-cont .section-list.cart-list .update_cart {
         display: block;
         margin: 5px 0 0;
         float: right;
@@ -677,21 +677,21 @@
         width: 49%;
     }
 
-    .maincont table.cart-table tr td.actions {
+    .main-cont table.cart-table tr td.actions {
         text-align: center;
         overflow: hidden;
     }
 
-    .maincont table.cart-table td.actions .coupon .input-text {
+    .main-cont table.cart-table td.actions .coupon .input-text {
         margin: 0 2% 0 0;
         width: 49%;
     }
 
-    .maincont table.cart-table td.actions .coupon input.button {
+    .main-cont table.cart-table td.actions .coupon input.button {
         width: 49%;
     }
 
-    .maincont table.cart-table td.actions .update_cart {
+    .main-cont table.cart-table td.actions .update_cart {
         display: block;
         margin: 5px 0 0;
         float: right;
@@ -944,12 +944,12 @@
     }
 
     body .site-content .heading-multishop,
-    body .site-content .maincont-ttl {
+    body .site-content .main-cont-ttl {
         padding: 0;
     }
 
     body .site-content .heading-multishop:after,
-    body .maincont-ttl:after {
+    body .main-cont-ttl:after {
         display: none;
     }
 
@@ -1044,32 +1044,32 @@
         margin-top: 0;
     }
 
-    .maincont .post-comment {
+    .main-cont .post-comment {
         padding: 4px 0 0 70px;
     }
 
-    .maincont .post-comment-img {
+    .main-cont .post-comment-img {
         width: 60px;
     }
 
-    .maincont .post-comments {
+    .main-cont .post-comments {
         padding: 15px 0px 0;
     }
 
-    .maincont .post-comment-reply {
+    .main-cont .post-comment-reply {
         padding-left: 0;
     }
 
-    .maincont .post-comment-reply:after {
+    .main-cont .post-comment-reply:after {
         margin: 0;
     }
 
-    .maincont .post-comment .children {
+    .main-cont .post-comment .children {
         padding-left: 0;
         margin: 30px 0 0 -70px;
     }
 
-    .maincont .post-comment .children:after {
+    .main-cont .post-comment .children:after {
         margin: 0;
     }
 
@@ -1138,29 +1138,29 @@
 @media only screen and (max-width : 380px) {
 
     /* CART */
-    .maincont .section-list.cart-list .coupon .input-text {
+    .main-cont .section-list.cart-list .coupon .input-text {
         margin: 0 0 13px;
         width: 100%;
     }
 
-    .maincont .section-list.cart-list .coupon input.button {
+    .main-cont .section-list.cart-list .coupon input.button {
         width: 100%;
     }
 
-    .maincont .section-list.cart-list .update_cart {
+    .main-cont .section-list.cart-list .update_cart {
         width: 100%;
     }
 
-    .maincont table.cart-table td.actions .coupon .input-text {
+    .main-cont table.cart-table td.actions .coupon .input-text {
         margin: 0 0 13px;
         width: 100%;
     }
 
-    .maincont table.cart-table td.actions .coupon input.button {
+    .main-cont table.cart-table td.actions .coupon input.button {
         width: 100%;
     }
 
-    .maincont table.cart-table td.actions .update_cart {
+    .main-cont table.cart-table td.actions .update_cart {
         width: 100%;
     }
 

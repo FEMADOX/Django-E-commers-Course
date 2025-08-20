@@ -117,7 +117,7 @@ TABLE OF CONTENTS:
 2 - Pricing Tables
 ----------------------------------*/
 
-.maincont .pricing-tables {
+.main-cont .pricing-tables {
 	margin-bottom: 30px;
 }
 
@@ -588,8 +588,6 @@ TABLE OF CONTENTS:
 	background: none;
 	font-size: 0;
 }
-
-.iconbox-i .iconbox-i-img .fa {}
 
 .iconbox-i .iconbox-i-img img {
 	vertical-align: middle;
@@ -1442,8 +1440,6 @@ ul.links_list li {
 	line-height: 1.4;
 }
 
-.links_list li p .fa {}
-
 .links_list li img {
 	display: inline-block;
 	vertical-align: middle;
@@ -1466,8 +1462,6 @@ ul.links_list li {
 .links_list .links_list-label {
 	margin-right: 5px;
 }
-
-.links_list .links_list-value {}
 
 .links_list.links_list-align-left {
 	text-align: left;

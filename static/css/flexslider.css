@@ -96,7 +96,7 @@ html[xmlns] .flexslider .slides {
 }
 
 .flex-direction-nav {
-  *height: 0;
+  height: 0;
 }
 
 .flex-direction-nav a {
