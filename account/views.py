@@ -19,7 +19,7 @@ from payment.views import HttpResponseRedirect
 # Create your views here.
 
 
-@login_required(login_url="login/")
+@login_required(login_url="/account/login/")
 def user_account(request: HttpRequest) -> HttpResponse:
     user = User.objects.get(pk=request.user.pk)
 
@@ -51,7 +51,7 @@ def user_account(request: HttpRequest) -> HttpResponse:
     )
 
 
-@login_required(login_url="login/")
+@login_required(login_url="/account/login/")
 def update_account(request: HttpRequest) -> HttpResponse:
     message = ""
     client_form = ClientForm()
@@ -192,7 +192,7 @@ def login_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
                 return redirect(data_destiny)
 
             return redirect("/")
-        message = "The credencials aren't valid."
+        message = "The credentials aren't valid."
 
     return render(
         request,
@@ -207,6 +207,6 @@ def login_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
 def logout_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
     if request.method == "POST":
         logout(request)
-        return redirect("login/")
+        return redirect("/account/login/")
 
     return render(request, "catalog.html")

@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
+
+{% block head %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/media.css' %}" />
+{% endblock head %}
+
+
 {% block content %}
   <div class="section-top">
     <h1 class="maincont-ttl">Catalog</h1>

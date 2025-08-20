@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING, Any, cast
+
 import stripe
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -12,17 +14,26 @@ from edshop import settings
 from edshop.settings import STRIPE_API
 from order.models import Order, OrderDetail
 
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
+
+    from common.account.stubs import StubsClient
+    from common.order.stubs import StubsOrder, StubsOrderDetail
+
 # # Create your views here.
 
 stripe.api_key = STRIPE_API
 
 
-@login_required(login_url="login/")
+@login_required(login_url="/account/login/")
 def payment_process(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
-    client = Client.objects.get(user=request.user)
+    client = cast("StubsClient", Client.objects.get(user=request.user))
     order_id = request.session["order_id"]
-    order = Order.objects.get(pk=order_id)
-    order_detail = OrderDetail.objects.filter(order=order)
+    order = cast("StubsOrder", Order.objects.get(pk=order_id))
+    order_detail = cast(
+        "QuerySet[StubsOrderDetail]",
+        OrderDetail.objects.filter(order=order),
+    )
 
     if request.method == "POST":
         success_url = request.build_absolute_uri(
@@ -33,7 +44,7 @@ def payment_process(request: HttpRequest) -> HttpResponseRedirect | HttpResponse
         )
 
         # STRIPE checkout session data
-        session_data = {
+        session_data: dict[str, Any] = {
             "mode": "payment",
             "client_reference_id": order.order_num,
             "customer_email": client.user.email,
@@ -67,20 +78,19 @@ def payment_process(request: HttpRequest) -> HttpResponseRedirect | HttpResponse
     return render(request, "shipping.html")
 
 
-@login_required(login_url="login/")
+@login_required(login_url="/account/login/")
 def payment_completed(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
     if request.session.get("order_id"):
-        client = Client.objects.get(user=request.user)
+        client = cast("StubsClient", Client.objects.get(user=request.user))
         order_id = request.session.pop("order_id", "")
-        order = Order.objects.get(pk=order_id)
+        order = cast("StubsOrder", Order.objects.get(pk=order_id))
 
         # Changing the status of the order
         order.status = "1"  # PAID
         order.save()
 
         order_details_products = [
-            order_detail.product.title
-            for order_detail in order.order_details.all()  # type: ignore[attr-defined]
+            order_detail.product.title for order_detail in order.order_details.all()
         ]
 
         # Sending Mail
@@ -103,6 +113,6 @@ def payment_completed(request: HttpRequest) -> HttpResponseRedirect | HttpRespon
     return render(request, "payment_completed.html", {"order": order})
 
 
-@login_required(login_url="login/")
+@login_required(login_url="/account/login/")
 def payment_canceled(request: HttpRequest) -> HttpResponse:
     return render(request, "payment_canceled.html")

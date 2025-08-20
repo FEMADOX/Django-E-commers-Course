@@ -64,7 +64,8 @@ class Product(models.Model):
 
     # Optionals
     description = models.TextField(
-        blank=True, default="No description for this product",
+        blank=True,
+        default="No description for this product",
     )
     image = CloudinaryField(
         "image",
@@ -80,7 +81,10 @@ class Product(models.Model):
         },
     )
     brand = models.ForeignKey(
-        Brand, on_delete=models.RESTRICT, blank=True, default=get_default_brand,
+        Brand,
+        on_delete=models.RESTRICT,
+        blank=True,
+        default=get_default_brand,
     )
     weight = models.PositiveIntegerField(blank=True, null=True, default=0)
     dimension = models.CharField(max_length=50, blank=True, default="N/A")

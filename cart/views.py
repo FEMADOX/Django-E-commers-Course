@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING, cast
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
@@ -6,6 +8,9 @@ from cart.cart import Cart
 from order.models import Order
 from web.models import Product
 
+if TYPE_CHECKING:
+    from common.web.stubs import StubsProduct
+
 
 def cart(request: HttpRequest) -> HttpResponse:
     pending_orders = Order.objects.filter(client=request.user.pk, status="0")
@@ -13,11 +18,11 @@ def cart(request: HttpRequest) -> HttpResponse:
     return render(request, "cart.html", {"pending_orders": pending_orders})
 
 
-@login_required(login_url="login/")
+@login_required(login_url="/account/login/")
 def add_product_cart(request: HttpRequest, product_id: int) -> HttpResponse:
     quantity = int(request.POST["quantity"]) if request.method == "POST" else 1
 
-    product = Product.objects.get(id=product_id)
+    product = cast("StubsProduct", Product.objects.get(id=product_id))
     cart = Cart(request)
     cart.add(product, quantity)
 
@@ -28,7 +33,7 @@ def add_product_cart(request: HttpRequest, product_id: int) -> HttpResponse:
 
 
 def delete_product_cart(request: HttpRequest, product_id: int) -> HttpResponse:
-    product = Product.objects.get(id=product_id)
+    product = cast("StubsProduct", Product.objects.get(id=product_id))
     cart = Cart(request)
     cart.delete(product)
 
@@ -43,7 +48,8 @@ def clear_cart(request: HttpRequest) -> HttpResponse:
 
 
 def restore_order_pending_cart(
-    request: HttpRequest, order_pending_id: int,
+    request: HttpRequest,
+    order_pending_id: int,
 ) -> HttpResponse:
     cart = Cart(request)
     cart.restore_order_prending(order_pending_id)

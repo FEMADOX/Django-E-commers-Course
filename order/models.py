@@ -57,10 +57,16 @@ class OrderDetail(models.Model):
 
     def save(
         self,
+        *,
         force_insert: bool | tuple[ModelBase, ...] = False,
         force_update: bool = False,
         using: str | None = None,
         update_fields: Iterable[str] | None = None,
     ) -> None:
         self.subtotal = self.product.price * self.quantity
-        return super().save(force_insert, force_update, using, update_fields)
+        return super().save(
+            force_insert=force_insert,
+            force_update=force_update,
+            using=using,
+            update_fields=update_fields,
+        )
