@@ -1,5 +1,5 @@
 // Obtaining the darkmode status
-var darkmode = localStorage.getItem("darkmode")
+let darkmode = localStorage.getItem("darkmode")
 // Obtaining the theme switch button
 const themeSwitch = document.getElementById("theme-switch")
 
