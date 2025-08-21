@@ -189,3 +189,5 @@ cython_debug/
 logo_old.png
 .idea/
 .ruff_cache/
+optimized.css
+optimiced.css
