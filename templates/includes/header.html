@@ -1,7 +1,7 @@
 {% load static %}
 <div class="site-header">
   <p class="h-logo">
-    <a href="{% url 'web:index' %}"><img src="{% static 'img/svg/logo.svg' %}" alt="E-commers Shop" /></a>
+    <a href="{% url 'web:index' %}"><img src="{% static 'assets/svg/logo.svg' %}" alt="E-commers Shop" /></a>
   </p>
   <div class="h-shop">
     <form method="post" action="{% url 'web:search_product_title' %}" class="h-search" id="h-search">
