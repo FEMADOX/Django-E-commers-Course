@@ -12,7 +12,7 @@ def index(request: HttpRequest) -> HttpResponse:
 
     return render(
         request,
-        "index.html",
+        "web/index.html",
         {
             "products": products,
             "categories": categories,
@@ -29,7 +29,7 @@ def filter_by_category(request: HttpRequest, category_id: int) -> HttpResponse:
 
     return render(
         request,
-        "index.html",
+        "web/index.html",
         {
             "products": products,
             "categories": categories,
@@ -46,7 +46,7 @@ def filter_by_brand(request: HttpRequest, brand_id: int) -> HttpResponse:
 
     return render(
         request,
-        "index.html",
+        "web/index.html",
         {
             "products": products,
             "brands": brands,
@@ -63,16 +63,16 @@ def search_product_title(request: HttpRequest) -> HttpResponse:
 
         return render(
             request,
-            "index.html",
+            "web/index.html",
             {
                 "products": products,
                 "categories": categories,
             },
         )
-    return render(request, "index.html")
+    return render(request, "web/index.html")
 
 
 def product_detail(request: HttpRequest, product_id: int) -> HttpResponse:
     product = Product.objects.get(id=product_id)
 
-    return render(request, "product.html", {"product": product})
+    return render(request, "web/product.html", {"product": product})

@@ -30,7 +30,7 @@
                 {% endfor %}
               </ul>
             {% endif %}
-          <form method="post" class="login" action="{% url 'account:login_user' %}">
+          <form method="post" class="login" action="{% url 'account:login' %}">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ destiny }}" />
             <p>
@@ -55,7 +55,7 @@
           </form>
           <p>
             Don't have an account?
-            <a href="{% url 'account:create_user' %}">SignUp</a>
+            <a href="{% url 'account:signup' %}">SignUp</a>
           </p>
         </div>
       </div>

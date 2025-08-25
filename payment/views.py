@@ -17,8 +17,7 @@ from order.models import Order, OrderDetail
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 
-    from common.account.stubs import StubsClient
-    from common.order.stubs import StubsOrder, StubsOrderDetail
+    from common.order.stubs import StubsClient, StubsOrder, StubsOrderDetail
 
 # # Create your views here.
 
@@ -75,7 +74,7 @@ def payment_process(request: HttpRequest) -> HttpResponseRedirect | HttpResponse
 
         return redirect(session.url if session and session.url else "/")
 
-    return render(request, "shipping.html")
+    return render(request, "order/shipping.html")
 
 
 @login_required(login_url="/account/login/")
@@ -110,9 +109,9 @@ def payment_completed(request: HttpRequest) -> HttpResponseRedirect | HttpRespon
     else:
         return redirect(reverse("web:index"))
 
-    return render(request, "payment_completed.html", {"order": order})
+    return render(request, "payment/payment_completed.html", {"order": order})
 
 
 @login_required(login_url="/account/login/")
 def payment_canceled(request: HttpRequest) -> HttpResponse:
-    return render(request, "payment_canceled.html")
+    return render(request, "payment/payment_canceled.html")

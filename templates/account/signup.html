@@ -30,15 +30,15 @@
                   {% endfor %}
                 </ul>
               {% endif %}
-          <form method="post" class="register" action="{% url 'account:create_user' %}">
+          <form method="post" class="register" action="{% url 'account:signup' %}">
             {% csrf_token %}
             <p>
               <label for="reg_email">Email <span class="required">*</span></label>
-              <input type="email" id="reg_email" name="new_user_email" />
+              <input type="email" id="reg_email" name="email" />
             </p>
             <p>
               <label for="reg_password">Password <span class="required">*</span></label>
-              <input type="password" id="reg_password" name="new_user_password" />
+              <input type="password" id="reg_password" name="password" />
             </p>
             <label for="alert-danger">{{ message }}</label>
             <p class="auth-submit">
@@ -47,7 +47,7 @@
           </form>
           <p>
             Already have an account?
-            <a href="{% url 'account:login_user' %}">LogIn</a>
+            <a href="{% url 'account:login' %}">LogIn</a>
           </p>
         </div>
       </div>

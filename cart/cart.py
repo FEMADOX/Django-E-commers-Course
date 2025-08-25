@@ -8,6 +8,7 @@ from order.models import Order
 from web.models import Product
 
 
+# noinspection PyTypeChecker
 class Cart:
     def __init__(self, request: HttpRequest) -> None:
         self.request = request

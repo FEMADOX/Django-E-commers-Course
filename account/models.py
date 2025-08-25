@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-
-# Create your models here.
+from django.urls import reverse
 
 
 class Client(models.Model):
@@ -16,9 +15,10 @@ class Client(models.Model):
 
     class Meta:
         ordering = ["-created"]
-        verbose_name = "Client"
-        verbose_name_plural = "Clients"
         indexes = [models.Index(fields=["user", "dni"])]
 
     def __str__(self) -> str:
         return f"DNI: {self.dni} - User: {self.user}"
+
+    def get_absolute_url(self) -> str:
+        return reverse("client_detail", kwargs={"pk": self.pk})

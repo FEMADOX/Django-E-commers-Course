@@ -13,8 +13,8 @@ from order.models import Order, OrderDetail
 from web.models import Product
 
 if TYPE_CHECKING:
-    from common.account.stubs import StubsClient
-    from common.order.stubs import StubsOrder, StubsOrderDetail
+    from common.order.stubs import StubsClient, StubsOrder, StubsOrderDetail
+
 
 # Create your views here.
 
@@ -46,7 +46,7 @@ def create_order(request: HttpRequest) -> HttpResponse:
 
     return render(
         request,
-        "order.html",
+        "order/order.html",
         {
             "client_form": client_form,
         },
@@ -126,4 +126,4 @@ def confirm_order(request: HttpRequest) -> HttpResponseRedirect:
 def order_summary(request: HttpRequest, order_id: int) -> HttpResponse:
     order = Order.objects.get(pk=order_id)
     request.session["order_id"] = order.pk
-    return render(request, "shipping.html", {"order": order})
+    return render(request, "order/shipping.html", {"order": order})

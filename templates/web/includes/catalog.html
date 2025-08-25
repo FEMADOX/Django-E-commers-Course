@@ -23,8 +23,8 @@
             </div>
           </div>
         </div>
-        <div class="prod-i-bot" style="padding-top: 20px;">
-          <h3 class="prod-i-ttl" style="margin-bottom: 5px;"><a href="{% url 'web:product_detail' product.id %}">{{ product.title }}</a></h3>
+        <div class="prod-i-bot">
+          <h3 class="prod-i-ttl"><a href="{% url 'web:product_detail' product.id %}">{{ product.title }}</a></h3>
           <div class="prod-i-info">
             <p class="prod-i-price">${{ product.price }}</p>
             <p class="prod-i-categ">

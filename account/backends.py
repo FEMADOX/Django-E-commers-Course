@@ -22,23 +22,23 @@ class AccountBackend(ModelBackend):
         password: str | None = None,
         **kwargs: Any,  # noqa: ANN401
     ) -> AbstractBaseUser | None:
-        User = get_user_model()  # noqa: N806
+        user = get_user_model()
 
         if request and request.method == "POST":
             email = request.POST.get("email")
             if email and username:
                 try:
-                    user = User.objects.get(email=email, username=username)
-                except User.DoesNotExist:
+                    user.objects.get(email=email, username=username)
+                except user.DoesNotExist:
                     return None
             if email or username:
                 try:
                     user = (
-                        User.objects.get(email=email)
+                        user.objects.get(email=email)
                         if email
-                        else User.objects.get(username=username)
+                        else user.objects.get(username=username)
                     )
-                except User.DoesNotExist:
+                except user.DoesNotExist:
                     return None
                 if password and user.check_password(password):
                     return user
@@ -46,8 +46,8 @@ class AccountBackend(ModelBackend):
             return None
         return None
 
-    def send_mail(  # noqa: PLR0913, PLR0917
-        self,
+    @staticmethod
+    def send_mail(
         request: HttpRequest,
         email: str,
     ) -> None:
@@ -63,7 +63,7 @@ class AccountBackend(ModelBackend):
             ),
         )
         html_email_template_name = render_to_string(
-            "email_validation.html",
+            "account/email.html",
             {
                 "activation_link": activation_link,
             },
@@ -79,4 +79,5 @@ class AccountBackend(ModelBackend):
             )
         except Exception as error:
             logger = logging.getLogger(__name__)
-            logger.exception(f"SMTP error occurred while sending email {error}")  # noqa: G004, TRY401
+            msg = f"SMTP error occurred while sending email {error}"
+            logger.exception(msg)
