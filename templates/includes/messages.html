@@ -1,0 +1,13 @@
+{% load static %}
+<script type="text/javascript" src="{% static 'js/close_button.js' %}" defer></script>
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">
+        {{ message|safe }}
+        <a href="#" class="close">x</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

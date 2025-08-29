@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Email Validation
+{% endblock title %}
+
+{% block head %}
+  {% load static %}
+{% endblock head %}
+
+{% block content %}
+  <h1 class="main-cont-ttl">Email Validation</h1>
+  <ul class="b-crumbs">
+    <li>
+      <a href="{% url 'web:index' %}">Home</a>
+    </li>
+    <li>
+      <a href="{% url 'account:user_account' %}">Account</a>
+    </li>
+    <li>Validation</li>
+  </ul>
+  <div class="email-validation-wrapper">
+    {% include 'includes/messages.html' %}
+    <div class="email-validation-container">
+      <p class="email-validation">Please check your email for the activation link.</p>
+      <p class="email-validation">If you did not receive the email</p>
+      <form class="email-validation" action="{% url 'account:email_validation' %}" method="post">
+        {% csrf_token %}
+        <input id="resend-button" class="resend-button" type="submit" value="Resend Email" />
+      </form>
+    </div>
+  </div>
+  <script type="text/javascript" src="{% static 'js/emailValidation.js' %}" defer></script>
+{% endblock content %}

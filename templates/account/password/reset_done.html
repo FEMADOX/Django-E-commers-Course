@@ -1,0 +1,35 @@
+{% extends '../../base.html' %}
+
+{% block title %}Reset your password{% endblock title %}
+
+{% block head %}
+  {% load static %}
+{% endblock head %}
+
+{% block content %}
+  <h1 class="main-cont-ttl">Forgot your password?</h1>
+  <ul class="b-crumbs">
+    <li>
+      <a href="{% url 'web:index' %}">Home</a>
+    </li>
+    <li>
+      <a href="{% url 'account:user_account' %}">Account</a>
+    </li>
+    <li>Reset Password</li>
+  </ul>
+  <div class="email-reset-wrapper">
+    {% include 'includes/messages.html' %}
+    <div class="email-reset">
+      <h2 class="email-reset">We've emailed you with instructions for setting your password</h2>
+      <p class="email-reset">
+        If you don't receive an email, please make sure you've entered a correct email.
+      </p>
+      <p class="email-reset">If you continue to have issues</p>
+      <form class="email-validation" action="{% url 'account:password_reset_done' %}" method="post">
+        {% csrf_token %}
+        <input id="resend-button" class="resend-button" type="submit" value="Resend Email" />
+      </form>
+    </div>
+  </div>
+  <script type="text/javascript" src="{% static 'js/emailValidation.js' %}"></script>
+{% endblock content %}

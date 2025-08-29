@@ -20,16 +20,7 @@
       <div class="auth-wrap">
         <div class="auth-col">
           <h2>Sign Up</h2>
-              {% if messages %}
-                <ul class="messages">
-                  {% for message in messages %}
-                    <li class="{{message.tags}}">
-                      {{message|safe}}
-                      <a href="#" class="close">x</a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
+          {% include 'includes/messages.html' %}
           <form method="post" class="register" action="{% url 'account:signup' %}">
             {% csrf_token %}
             <p>

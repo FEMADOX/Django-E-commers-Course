@@ -8,22 +8,13 @@
     </li>
     <li>My Account</li>
   </ul>
-  <h2>{{ message }}</h2>
+  <!-- <h2>{{ message }}</h2> -->
   <article class="page-cont">
     <div class="page-styling">
       <div class="auth-wrap">
         <div class="auth-col">
           <h2>Personal Information</h2>
-          {% if messages %}
-            <ul class="messages">
-              {% for message in messages %}
-                <li class="{{message.tags}}">
-                  {{message|safe}}
-                  <a href="#" class="close">x</a>
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
+          {% include 'includes/messages.html' %}
           <form method="post" action="{% url 'account:update_account' %}" class="register">
             {% csrf_token %}
             {{ client_form }}

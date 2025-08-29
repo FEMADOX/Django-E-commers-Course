@@ -6,6 +6,7 @@
     /* --secondary-text-color: #0e924c; */
     /* --secondary-text-hover-color: #00a74f; */
     --image-invert-color: invert(0);
+    --base-color-body: #212529;
     color-scheme: light;
 }
 
@@ -434,11 +435,10 @@ hr {
 }
 
 .col-xs-offset-0 {
-    margin-left: 0%;
+    margin-left: 0;
 }
 
 @media (min-width: 768px) {
-
     .col-sm-1,
     .col-sm-2,
     .col-sm-3,
@@ -655,7 +655,7 @@ hr {
     }
 
     .col-sm-offset-0 {
-        margin-left: 0%;
+        margin-left: 0;
     }
 }
 
@@ -877,7 +877,7 @@ hr {
     }
 
     .col-md-offset-0 {
-        margin-left: 0%;
+        margin-left: 0;
     }
 }
 
@@ -1099,7 +1099,7 @@ hr {
     }
 
     .col-lg-offset-0 {
-        margin-left: 0%;
+        margin-left: 0;
     }
 }
 
@@ -1190,13 +1190,14 @@ hr {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 60px;
-    padding: 20px 0;
+    gap: 40px;
+    padding: 40px 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    min-width: 200px;
 }
 
 .email-validation-wrapper {
-    padding: 0px 12rem;
+    padding: 0 10rem;
 }
 
 #resend-button {
@@ -1220,4 +1221,104 @@ hr {
 button:disabled,
 input[type=submit]:disabled {
     background-color: grey !important;
+}
+
+div.email-reset {
+    background-color: white;
+    color: black;
+    border-radius: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    gap: 30px;
+    align-items: center;
+}
+
+div.email-reset-wrapper {
+    padding: 0 60px;
+}
+
+h2.email-reset {
+    font-size: 1.5rem;
+}
+
+form.email-reset {
+    display: flex;
+    justify-content: center;
+}
+
+div.email-reset > form.email-validation > #resend-button {
+    width: 100%;
+    height: 3rem;
+    font-size: 24px;
+}
+
+input.form-control.email-reset {
+    border-radius: 10px 0 0 10px;
+}
+
+input[type=submit].email-reset {
+    border-radius: 0 10px 10px 0;
+    transition: background-color 0.2s ease-out;
+    border: 0;
+    color: white;
+    background-color: var(--base-color-body);
+}
+
+input[type=submit].email-reset:hover {
+    background-color: var(--third-color);
+}
+
+p.email-reset {
+    font-size: 1.35rem;
+}
+
+div.email-reset-confirm {
+    background-color: white;
+    color: black;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    gap: 20px;
+    align-items: center;
+}
+
+h2.email-reset-confirm {
+    font-size: 1.5rem;
+}
+
+form.email-reset-confirm {
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+div.email-reset-confirm-form {
+    text-align: left;
+}
+
+input.email-reset-confirm {
+    background-color: var(--third-color);
+    border-radius: 15px;
+    padding: 8px 10px;
+    color: white;
+    transition: background-color 0.2s ease-in;
+    border: 0;
+    margin: 25px 0 5px;
+    font-size: 1.3rem;
+}
+
+input.email-reset-confirm:hover {
+    background-color: #7dcd8c;
+}
+
+div.email-reset-confirm-form > p {
+    margin-top: 20px;
+    color: gray;
+    min-width: 912px;
+}
+
+div.email-reset-confirm-form > .errorlist {
+    color: red;
 }

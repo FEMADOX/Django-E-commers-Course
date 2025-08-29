@@ -1,9 +1,15 @@
 import hashlib
+from typing import Any
 
 from django.contrib import messages
-from django.contrib.auth import login, logout
+from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser, User
+from django.contrib.auth.views import (
+    PasswordResetConfirmView,
+    PasswordResetDoneView,
+    PasswordResetView,
+)
 from django.core.exceptions import ValidationError
 from django.db.models import QuerySet
 from django.forms.models import BaseModelForm
@@ -16,7 +22,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, TemplateView, UpdateView
 
 from account.backends import AccountBackend
-from account.forms import ClientForm
+from account.emails import send_account_activation_email, send_password_reset_email
+from account.forms import ClientForm, CustomPasswordResetForm, CustomSetPasswordForm
 from account.models import Client
 from cart.views import HttpResponse
 from payment.views import HttpResponseRedirect
@@ -53,7 +60,7 @@ class UserAccountView(LoginRequiredMixin, TemplateView):
 
 
 # noinspection PyTypeHints
-class UserUpdateAccountView(LoginRequiredMixin, UpdateView):
+class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = Client
     form_class = ClientForm
     template_name = "account/account.html"
@@ -73,7 +80,7 @@ class UserUpdateAccountView(LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class UserCreateAccountView(CreateView):
+class UserSignupView(CreateView):
     model = User
     fields = ["email", "password"]
     template_name = "account/signup.html"
@@ -104,41 +111,13 @@ class UserCreateAccountView(CreateView):
                 "email": user_email,
                 "password": password_data,
             }
-            AccountBackend().send_mail(self.request, user_email)
+            send_account_activation_email(self.request, user_email)
             messages.success(self.request, "We have sent an email to your address")
             return redirect("account:email_validation")
 
     def form_invalid(self, form: BaseModelForm) -> HttpResponse:
         messages.error(self.request, message=str(form.errors))
         return super().form_invalid(form)
-
-
-# def create_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
-#     if request.method == "POST":
-#         user_email = request.POST["new_user_email"]
-#         user_name = user_email.split("@")[0].lower()
-#         password_data = request.POST["new_user_password"]
-#
-#         try:
-#             user = User.objects.get(
-#                 email=user_email,
-#             )
-#             if user.check_password(password_data):
-#                 login(request, user)
-#                 return redirect("account:update_account")
-#             message = "The account password isn't valid."
-#             return render(request, "account/signup.html", {"message": message})
-#
-#         except User.DoesNotExist:
-#             request.session["pending_registration"] = {
-#                 "username": user_name,
-#                 "email": user_email,
-#                 "password": password_data,
-#             }
-#             AccountBackend().send_mail(request, user_email)
-#             messages.success(request, "We have sent an email to your address")
-#
-#     return render(request, "account/signup.html")
 
 
 def account_activation(
@@ -182,38 +161,38 @@ def account_activation(
     return redirect("account:user_account")
 
 
-def my_login(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
-    message = ""
-    destiny_page = request.GET.get("next", None)
+class UserLoginView(TemplateView):
+    template_name = "account/login.html"
 
-    if request.method == "POST":
-        user_email = request.POST["email"]
-        user_password = request.POST["password"]
-        data_destiny = request.POST["next"]
+    def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["destiny"] = self.request.GET.get("next", "")
+        return context
+
+    def post(self, request: HttpRequest, *args: tuple, **kwargs: dict) -> HttpResponse:
+        try:
+            user_email = request.POST["email"]
+            user_password = request.POST["password"]
+        except KeyError:
+            messages.error(request, "Email and password are required.")
+            return render(request, self.template_name)
+        data_destiny = request.POST.get("next", "")
 
         user = AccountBackend().authenticate(
             request,
-            email=user_email,
             password=user_password,
+            email=user_email,
         )
 
         if user:
             login(request, user)
+            messages.success(request, "Login successfully!")
+            if not data_destiny:
+                return redirect("/")
+            return redirect(data_destiny)
 
-            if data_destiny != "None":
-                return redirect(data_destiny)
-
-            return redirect("/")
-        message = "The credentials aren't valid."
-
-    return render(
-        request,
-        "account/login.html",
-        {
-            "message": message,
-            "destiny": destiny_page,
-        },
-    )
+        messages.error(request, "Login failed!")
+        return render(request, self.template_name, context=self.get_context_data())
 
 
 def logout_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
@@ -226,7 +205,7 @@ def logout_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
 
 @method_decorator(csrf_protect, "dispatch")
 class EmailValidationView(TemplateView):
-    template_name = "account/email_validation.html"
+    template_name = "account/activation/account_activation.html"
 
     def post(self, request: HttpRequest) -> HttpResponse:
         if (
@@ -236,9 +215,78 @@ class EmailValidationView(TemplateView):
             messages.error(request, "Please start the registration process.")
             return redirect("account:signup")
         email = request.session["pending_registration"]["email"]
-        AccountBackend().send_mail(request, email)
+        send_account_activation_email(request, email)
         messages.success(
             request,
             "Email re-sent successfully. Please check your inbox.",
         )
         return render(request, self.template_name)
+
+
+class CustomPasswordResetView(PasswordResetView):
+    email_template_name = "account/password/reset_email.html"
+    form_class = CustomPasswordResetForm
+    template_name = "account/password/reset.html"
+    success_url = "/account/password-reset/done/"
+
+    def post(self, request: HttpRequest, *args: tuple, **kwargs: dict) -> HttpResponse:
+        form = self.get_form()
+
+        if form.is_valid():
+            try:
+                _ = get_user_model().objects.get(email=form.cleaned_data["email"])
+            except get_user_model().DoesNotExist:
+                messages.error(request, "No user found with this email address.")
+                return super().form_invalid(form)
+            request.session["password_reset_email"] = form.cleaned_data["email"]
+            return super().form_valid(form)
+        return super().form_invalid(form)
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = "account/password/reset_done.html"
+
+    def post(
+        self,
+        request: HttpRequest,
+        *args: tuple,
+        **kwargs: dict,
+    ) -> HttpResponseRedirect | HttpResponse:
+        if "password_reset_email" not in request.session:
+            messages.error(request, "Please initiate the password reset process.")
+            return redirect("account:password_reset")
+        send_password_reset_email(
+            self.request,
+            email=request.session["password_reset_email"],
+        )
+        return super().get(request, *args, **kwargs)
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = "account/password/reset_confirm.html"
+    success_url = "/account/login/"
+    form_class = CustomSetPasswordForm
+
+    def get_user(self, uidb64: str) -> AbstractBaseUser | None:
+        user = get_user_model()
+        try:
+            email = force_str(urlsafe_base64_decode(uidb64))
+            return user.objects.get(email=email)
+        except (
+            TypeError,
+            ValueError,
+            OverflowError,
+            ValidationError,
+            user.DoesNotExist,
+        ):
+            return None
+
+    def post(self, request: HttpRequest, *args: tuple, **kwargs: dict) -> HttpResponse:
+        form = self.get_form()
+        if request.session.get("password_reset_email"):
+            del request.session["password_reset_email"]
+        if form.is_valid():
+            messages.success(self.request, "Password has been reset successfully.")
+            return super().form_valid(form)
+        messages.error(request, "Error resetting password. Please try again.")
+        return super().form_invalid(form)
