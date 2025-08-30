@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
 
-{% comment %}
 {% block title %}
   Login/Sig Up
 {% endblock %}
-{% endcomment %}
 
 {% block content %}
   <h1 class="main-cont-ttl">Registration</h1>
@@ -21,17 +20,19 @@
         <div class="auth-col">
           <h2>Sign Up</h2>
           {% include 'includes/messages.html' %}
-          <form method="post" class="register" action="{% url 'account:signup' %}">
+          <form class="register" method="post" action="{% url 'account:signup' %}">
             {% csrf_token %}
-            <p>
-              <label for="reg_email">Email <span class="required">*</span></label>
-              <input type="email" id="reg_email" name="email" />
-            </p>
-            <p>
-              <label for="reg_password">Password <span class="required">*</span></label>
-              <input type="password" id="reg_password" name="password" />
-            </p>
-            <label for="alert-danger">{{ message }}</label>
+            {{ form|crispy }}
+{#            <p>#}
+{#              <label for="reg_email">Email:</label><span class="required">*</span>#}
+{#              {{ form.email }}#}
+{#              <span class="form-errors">{{ form.errors.email|striptags }}</span>#}
+{#            </p>#}
+{#            <p>#}
+{#              {{ form.password.label_tag }}<span class="required">*</span>#}
+{#              {{ form.password }}#}
+{#              <span class="form-errors">{{ form.errors.email|striptags }}</span>#}
+{#            </p>#}
             <p class="auth-submit">
               <input type="submit" value="Create Account" />
             </p>

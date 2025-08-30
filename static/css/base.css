@@ -1322,3 +1322,15 @@ div.email-reset-confirm-form > p {
 div.email-reset-confirm-form > .errorlist {
     color: red;
 }
+
+form.login {
+    margin-left: 5px;
+}
+
+.invalid-feedback > p > strong {
+    color: red;
+}
+
+form.register {
+    margin-left: 5px;
+}

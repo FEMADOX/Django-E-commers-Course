@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "cloudinary",
     "stripe",
+    "crispy_forms",
+    "crispy_bootstrap5",
     "web",
     "account",
     "cart",
@@ -197,3 +199,13 @@ EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+AUTHENTICATION_BACKENDS = ["account.backends.AccountBackend"]
+
+LOGIN_REDIRECT_URL = "account:user_account"
+LOGOUT_REDIRECT_URL = "account:login"
+
+LOGIN_URL = "account:login"
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

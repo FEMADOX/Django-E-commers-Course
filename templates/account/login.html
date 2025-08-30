@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
 
-{% comment %}
 {% block title %}
   Login/Sig Up
-{% endblock %}
-{% endcomment %}
+{% endblock title %}
 
 {% block content %}
   <h1 class="main-cont-ttl">Registration</h1>
@@ -21,29 +20,29 @@
         <div class="auth-col">
           <h2>Login</h2>
           {% include 'includes/messages.html' %}
-          <form method="post" class="login" action="{% url 'account:login' %}">
+          <form class="register" method="post"  action="{% url 'account:login' %}">
             {% csrf_token %}
-            <input type="hidden" name="next" value="{{ destiny }}" />
-            <p>
-              <label for="username">E-mail <span class="required">*</span></label>
-              <input type="email" id="username" name="email" />
-            </p>
-            <p>
-              <label for="password">Password <span class="required">*</span></label>
-              <input type="password" id="password" name="password" />
-            </p>
-            <!-- <label for="alert-danger">{{ message }}</label> -->
+            <input type="hidden" name="next" value="{{ next }}" />
+            {{ form|crispy }}
+{#            <p>#}
+{#              {{ form.email.label_tag }}<span class="required">*</span>#}
+{#              {{ form.email }}#}
+{#              <span class="form-errors">{{ form.errors.email|striptags }}</span>#}
+{#            </p>#}
+{#            <p>#}
+{#              {{ form.password.label_tag }}<span class="required">*</span>#}
+{#              {{ form.password }}#}
+{#              <span class="form-errors">{{ form.errors.password|striptags }}</span>#}
+{#            </p>#}
             <p class="auth-submit">
-              <input type="submit" value="Login" />
               <input type="checkbox" id="rememberme" value="forever" />
               <label for="rememberme">Remember me</label>
-            </p>
-            <p>
-            </p>
-            <p class="auth-lost_password">
-              <a href="{% url 'account:password_reset' %}">Lost your password?</a>
+              <input type="submit" value="Login" />
             </p>
           </form>
+          <p class="auth-lost_password">
+            <a href="{% url 'account:password_reset' %}">Lost your password?</a>
+          </p>
           <p>
             Don't have an account?
             <a href="{% url 'account:signup' %}">SignUp</a>

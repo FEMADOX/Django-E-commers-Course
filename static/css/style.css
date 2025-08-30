@@ -158,12 +158,6 @@ table {
 
 @font-face {
     font-family: 'MontserratBlack';
-    src: url('../fonts/MontserratBlack.eot');
-    src: url('../fonts/MontserratBlack.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/MontserratBlack.otf') format('opentype'),
-    url('../fonts/MontserratBlack.woff2') format('woff2'),
-    url('../fonts/MontserratBlack.woff') format('woff'),
-    url('../fonts/MontserratBlack.svg#MontserratBlack') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -557,7 +551,7 @@ body .page-styling h1 {
 }
 
 .page-styling ul {
-    list-style-type: disc;
+    /*list-style-type: disc;*/
     margin: 0 0 24px 18px;
     padding: 0;
 }
@@ -2583,7 +2577,6 @@ p.link-pages,
 .section-filter .irs-bar,
 .section-filter .irs-bar-edge,
 .section-filter .irs-slider {
-    background-image: url(../img/sprite-skin-flat.png);
     background-repeat: repeat-x;
 }
 
@@ -2885,7 +2878,6 @@ p.link-pages,
     width: 16px;
     height: 14px;
     content: '';
-    background: url(../img/added.png) no-repeat left top;
 }
 
 .woocommerce #respond input#submit.loading::after,
@@ -3708,7 +3700,6 @@ img {
     margin-left: .53em;
     height: 14px;
     content: '';
-    background: url(../img/added.png) no-repeat left top;
 }
 
 .prod-litems .prod-li .prod-li-information,
@@ -3814,7 +3805,6 @@ img {
     width: 16px;
     height: 14px;
     content: '';
-    background: url(../img/added.png) no-repeat left top;
 }
 
 .prod-litems .prod-li .prod-i-cart .added_to_cart {
@@ -5502,7 +5492,6 @@ body div.prod .prod-add .button .icon {
     width: 16px;
     height: 14px;
     content: '';
-    background: url(../img/added.png) no-repeat left top;
 }
 
 .prod .prod-li-favorites .feedback {
@@ -5954,7 +5943,6 @@ div.product.prod .prod-add form.cart .group_table .button {
 }
 
 .prod-litems.cart-list .prod-li-add a:after {
-    background: url(../img/remove.png) no-repeat top left;
 }
 
 .prod-litems.cart-list .prod-li-add a:hover:after {
@@ -5974,7 +5962,6 @@ div.product.prod .prod-add form.cart .group_table .button {
 }
 
 .prod-litems.orders-list .prod-li-add a:after {
-    background: url(../img/remove.png) no-repeat top left;
 }
 
 .prod-litems.orders-list .prod-li-add a:hover:after {
@@ -6265,7 +6252,6 @@ div.product.prod .prod-add form.cart .group_table .button {
     top: 4px;
     left: 0;
     content: '';
-    background: url(../img/radio1.png) no-repeat left top;
 }
 
 .cart-actions .shipping ul#shipping_method li input[type=radio]:checked + label:after {
@@ -7158,7 +7144,7 @@ img.aligncenter {
 ----------------------------------*/
 
 form.register ul.errorlist {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 form.register div input,
@@ -7168,7 +7154,7 @@ form.register div textarea {
 }
 
 form.register p.auth-submit input[type=submit] {
-    margin-top: 0;
+    margin-top: 10px;
 }
 
 article#pending-orders {
@@ -7216,6 +7202,7 @@ ul.messages li.info {
 
 ul.messages li.success {
     background: #81ce81;
+    color: white;
 }
 
 ul.messages li.success a {
@@ -7224,7 +7211,7 @@ ul.messages li.success a {
 
 ul.messages li.error {
     background: #a30029;
-    color: #e9828e;
+    color: white;
 }
 
 ul.messages li.error a {
@@ -7237,7 +7224,7 @@ ul.messages li.info {
 }
 
 ul.messages li.info a {
-    color: #1586de;
+    color: #696b4e;
 }
 
 ul.messages li.warning {
@@ -7282,5 +7269,4 @@ ul.messages li.error,
 ul.messages li.info {
     display: flex;
     justify-content: space-between;
-    color: white;
 }

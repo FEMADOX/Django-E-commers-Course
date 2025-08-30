@@ -1,17 +1,19 @@
 import hashlib
-from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import AbstractBaseUser, User
 from django.contrib.auth.views import (
+    LoginView,
     PasswordResetConfirmView,
     PasswordResetDoneView,
     PasswordResetView,
 )
 from django.core.exceptions import ValidationError
 from django.db.models import QuerySet
+from django.forms import Form
 from django.forms.models import BaseModelForm
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
@@ -21,9 +23,13 @@ from django.utils.http import urlsafe_base64_decode
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, TemplateView, UpdateView
 
-from account.backends import AccountBackend
 from account.emails import send_account_activation_email, send_password_reset_email
-from account.forms import ClientForm, CustomPasswordResetForm, CustomSetPasswordForm
+from account.forms import (
+    ClientForm,
+    CustomAuthenticationForm,
+    CustomPasswordResetForm,
+    CustomSetPasswordForm,
+)
 from account.models import Client
 from cart.views import HttpResponse
 from payment.views import HttpResponseRedirect
@@ -31,7 +37,6 @@ from payment.views import HttpResponseRedirect
 
 class UserAccountView(LoginRequiredMixin, TemplateView):
     template_name = "account/account.html"
-    login_url = "/account/login/"
 
     def get_context_data(self, **kwargs: dict) -> dict:
         context = super().get_context_data(**kwargs)
@@ -55,7 +60,7 @@ class UserAccountView(LoginRequiredMixin, TemplateView):
                 "email": user.email,
             }
 
-        context["client_form"] = ClientForm(client_data)
+        context["form"] = ClientForm(client_data)
         return context
 
 
@@ -65,7 +70,6 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ClientForm
     template_name = "account/account.html"
     success_url = "/account/"
-    login_url = "/account/login/"
 
     def get_object(self, queryset: QuerySet[Client] | None = None) -> Client:
         client, _ = Client.objects.get_or_create(user=self.request.user)
@@ -85,6 +89,7 @@ class UserSignupView(CreateView):
     fields = ["email", "password"]
     template_name = "account/signup.html"
     success_url = "/account/"
+    # form_class = CustomSignupForm
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         user_email = form.cleaned_data["email"]
@@ -161,38 +166,18 @@ def account_activation(
     return redirect("account:user_account")
 
 
-class UserLoginView(TemplateView):
+class UserLoginView(LoginView):
     template_name = "account/login.html"
+    redirect_authenticated_user = True
+    form_class: type[Form] = CustomAuthenticationForm  # type: ignore
 
-    def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context["destiny"] = self.request.GET.get("next", "")
-        return context
+    def form_valid(self, form: AuthenticationForm) -> HttpResponse:
+        messages.success(self.request, "Login successfully!")
+        return super().form_valid(form)
 
-    def post(self, request: HttpRequest, *args: tuple, **kwargs: dict) -> HttpResponse:
-        try:
-            user_email = request.POST["email"]
-            user_password = request.POST["password"]
-        except KeyError:
-            messages.error(request, "Email and password are required.")
-            return render(request, self.template_name)
-        data_destiny = request.POST.get("next", "")
-
-        user = AccountBackend().authenticate(
-            request,
-            password=user_password,
-            email=user_email,
-        )
-
-        if user:
-            login(request, user)
-            messages.success(request, "Login successfully!")
-            if not data_destiny:
-                return redirect("/")
-            return redirect(data_destiny)
-
-        messages.error(request, "Login failed!")
-        return render(request, self.template_name, context=self.get_context_data())
+    def form_invalid(self, form: AuthenticationForm) -> HttpResponse:
+        messages.error(self.request, "Login failed!")
+        return super().form_invalid(form)
 
 
 def logout_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:

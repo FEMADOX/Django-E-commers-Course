@@ -16,21 +16,13 @@ class AccountBackend(ModelBackend):
         email: str | None = None,
         **kwargs: Any,  # noqa: ANN401
     ) -> AbstractBaseUser | None:
-        if not (request and request.method == "POST"):
-            return None
-
         user_model = get_user_model()
 
         if not email or not password:
             return None
 
         try:
-            if email and username:
-                user = user_model.objects.get(email=email, username=username)
-            elif email:
-                user = user_model.objects.get(email=email)
-            else:
-                user = user_model.objects.get(username=username)
+            user = user_model.objects.get(email=email)
         except user_model.DoesNotExist:
             return None
 
