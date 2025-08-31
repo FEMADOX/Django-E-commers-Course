@@ -30,6 +30,32 @@ def regex_validation(
     form_field: str,
     password: str,
 ) -> Match[str] | None:
+    """
+    Validates password strength using regex patterns and
+    adds errors to form if validation fails.
+
+    Checks that the password contains at least:
+      one lowercase letter
+      one uppercase letter
+      one digit
+      one punctuation character
+    If any requirement is not met,
+    adds specific error messages to the specified form field.
+
+    Args:
+        form (ModelForm | forms.Form): The Django form instance to add errors to
+        form_field (str): The name of the form field to associate errors with
+        password (str): The password string to validate
+
+    Returns:
+        Match[str] | None: Returns the result of the regex validation (truthy if all
+                          patterns match, falsy otherwise)
+
+    Note:
+        Requires 'punctuation' to be imported from string module and 're' module
+        for regex operations. Adds multiple error messages to the form field if
+        validation fails.
+    """
     validation = (
         re.search(r"[a-z]", password)
         and re.search(r"[A-Z]", password)
@@ -37,6 +63,7 @@ def regex_validation(
         and re.search(rf"[{punctuation}]", password)
     )
     if not validation:
+        form.add_error(form_field, "Invalid password.")
         form.add_error(form_field, "Password must contain:")
         errors = []
         if not re.search(r"[a-z]", password):
@@ -185,7 +212,7 @@ class CustomSetPasswordForm(SetPasswordForm):
         return cleaned_data
 
 
-class CustomAuthenticationForm(forms.Form):
+class SmartAuthenticationForm(forms.Form):
     email = forms.EmailField(
         label="E-mail",
         min_length=10,
@@ -219,29 +246,97 @@ class CustomAuthenticationForm(forms.Form):
             "Please enter a correct %(email)s and password. Note that both "
             "fields may be case-sensitive."
         ),
+        "invalid_signup": "Email already registered. Please use another email.",
         "inactive": "This account is inactive.",
+        "invalid_field": "invalid %(field)s",
     }
 
     def __init__(
         self,
+        is_signup: bool,
         request: HttpRequest | None = None,
-        *args: tuple,
+        *arg: Any,  # noqa: ANN401
         **kwargs: dict,
     ) -> None:
-        """
-        The 'request' parameter is set for custom auth use by subclasses.
-        The form data comes in via the standard 'data' kwarg.
-        """
+        kwargs.pop("instance", None)
+        super().__init__(*arg, **kwargs)
         self.request = request
+        self.is_signup = is_signup
         self.user_cache = None
-        super().__init__(*args, **kwargs)  # type: ignore
-        self.email_field = get_user_model()._meta.get_field("email")  # noqa: SLF001
+        self.email_field = self.fields["email"]
+
+    def clean_email(self) -> str | None:
+        """
+        Validate that the email address is not already registered.
+
+        This method checks if the provided email address already exists in the
+        User model. If an email is found to be already registered, it raises
+        a ValidationError with the 'invalid_signup' error message.
+
+        Returns:
+            str | None: The cleaned email address if validation passes, or None
+                        if no email was provided.
+
+        Raises:
+            ValidationError: If the email address is already registered in the system.
+        """
+        if self.is_signup:
+            email = self.cleaned_data.get("email")
+            if email and get_user_model().objects.filter(email=email).exists():
+                raise ValidationError(
+                    self.error_messages["invalid_signup"],
+                    code="invalid_signup",
+                )
+            return email
+
+        return self.cleaned_data["email"]
+
+    def clean_password(self) -> str | None:
+        """
+        Validate and clean the password field.
+
+        Retrieves the password from cleaned_data and performs regex validation
+        on it. If no password is provided, returns None.
+
+        Returns:
+            str | None: The cleaned password string if valid, None if not provided.
+
+        Raises:
+            ValidationError: If the password fails regex validation
+            (raised by regex_validation).
+        """
+        password = self.cleaned_data.get("password")
+        if not password:
+            return None
+        regex_validation(self, "password", password)
+        return password
 
     @sensitive_variables()
-    def clean(self) -> dict[str, Any]:
-        email = self.cleaned_data.get("email")
-        password = self.cleaned_data.get("password")
-        regex_validation(self, "password", password or "")
+    def clean(self) -> dict[str, Any] | None:
+        """
+        Validate the form data by authenticating the user with email and password.
+
+        This method performs the following validations:
+        1. Retrieves email and password from cleaned data
+        2. Attempts to authenticate the user using AccountBackend
+        3. Raises validation error if authentication fails
+        4. Confirms that the authenticated user is allowed to login
+
+        Returns:
+            dict[str, Any]: The cleaned form data if validation passes
+
+        Raises:
+            ValidationError: If authentication fails or login is not allowed
+        """
+        if self.is_signup:
+            return super().clean()
+
+        cleaned_data = super().clean()
+        if not cleaned_data:
+            return cleaned_data
+
+        email = cleaned_data.get("email")
+        password = cleaned_data.get("password")
 
         if email and password:
             self.user_cache = AccountBackend().authenticate(
@@ -253,7 +348,7 @@ class CustomAuthenticationForm(forms.Form):
                 raise self.get_invalid_login_error()
             self.confirm_login_allowed(self.user_cache)
 
-        return self.cleaned_data
+        return cleaned_data
 
     def confirm_login_allowed(self, user: AbstractBaseUser) -> None:
         """
@@ -276,133 +371,23 @@ class CustomAuthenticationForm(forms.Form):
         return self.user_cache
 
     def get_invalid_login_error(self) -> ValidationError:
+        """
+        Generate a ValidationError for invalid login attempts.
+
+        Creates a standardized validation error with the 'invalid_login' message
+        and code, including the email field label in lowercase as a parameter
+        for error message formatting.
+
+        Returns:
+            ValidationError: A validation error object with the invalid login
+                            message, code, and email field label parameter.
+        """
         return ValidationError(
             self.error_messages["invalid_login"],
             code="invalid_login",
-            params={"email": self.email_field.verbose_name},  # type: ignore
+            params={
+                "email": self.email_field.label.lower()
+                if self.email_field.label
+                else "email",
+            },
         )
-
-
-# class BaseAuthenticationForm(forms.Form):
-#     email = forms.EmailField(
-#         label="E-mail",
-#         min_length=10,
-#         max_length=100,
-#         widget=forms.EmailInput(
-#             attrs={
-#                 "class": "form-control email-login",
-#                 "placeholder": "email@gmail.com",
-#                 "autocomplete": "email",
-#             },
-#         ),
-#         required=True,
-#     )
-#     password = forms.CharField(
-#         label="Password",
-#         min_length=8,
-#         widget=forms.PasswordInput(
-#             attrs={
-#                 "class": "form-control password-login",
-#                 "placeholder": (
-#                     "1 uppercase, 1 lowercase, 1 number, 1 special character"
-#                 ),
-#                 "autocomplete": "current-password",
-#             },
-#         ),
-#         required=True,
-#     )
-#     error_messages = {
-#         "invalid_login": (
-#             "Please enter a correct %(email)s and password. Note that both "
-#             "fields may be case-sensitive."
-#         ),
-#         "inactive": "This account is inactive.",
-#     }
-
-#     def __init__(
-#         self,
-#         request: HttpRequest | None = None,
-#         *args: tuple,
-#         **kwargs: dict,
-#     ) -> None:
-#         """
-#         The 'request' parameter is set for custom auth use by subclasses.
-#         The form data comes in via the standard 'data' kwarg.
-#         """
-#         self.request = request
-#         self.user_cache = None
-#         super().__init__(*args, **kwargs)  # type: ignore
-#         self.email_field = get_user_model()._meta.get_field("email")  # noqa: SLF001
-
-#     def clean_password(self) -> str | None:
-#         password = self.cleaned_data.get("password")
-#         if not password:
-#             return None
-#         if not regex_validation(self, "password", password):
-#             msg = "Invalid password"
-#             raise ValidationError(msg)
-#         return password
-
-#     @sensitive_variables()
-#     def clean(self) -> dict[str, Any]:
-#         email = self.cleaned_data.get("email")
-#         password = self.clean_password()
-
-#         if email and password:
-#             self.user_cache = AccountBackend().authenticate(
-#                 self.request,
-#                 email=email,
-#                 password=password,
-#             )
-#             if not self.user_cache:
-#                 raise self.get_invalid_login_error()
-#             self.confirm_login_allowed(self.user_cache)
-
-#         return self.cleaned_data
-
-#     def confirm_login_allowed(self, user: AbstractBaseUser) -> None:
-#         """
-#         Controls whether the given User may log in. This is a policy setting,
-#         independent of end-user authentication. This default behavior is to
-#         allow login by active users, and reject login by inactive users.
-
-#         If the given user cannot log in, this method should raise a
-#         ``ValidationError``.
-
-#         If the given user may log in, this method should return None.
-#         """
-#         if not user.is_active:
-#             raise ValidationError(
-#                 self.error_messages["inactive"],
-#                 code="inactive",
-#             )
-
-#     def get_user(self) -> AbstractBaseUser | None:
-#         return self.user_cache
-
-#     def get_invalid_login_error(self) -> ValidationError:
-#         return ValidationError(
-#             self.error_messages["invalid_login"],
-#             code="invalid_login",
-#             params={"email": self.email_field.verbose_name},  # type: ignore
-#         )
-
-
-# class CustomAuthenticationForm(BaseAuthenticationForm):
-#     def __init__(
-#         self,
-#         request: HttpRequest | None = None,
-#         *args: tuple,
-#         **kwargs: dict,
-#     ) -> None:
-#         kwargs.pop("instance", None)
-#         super().__init__(request, *args, **kwargs)
-
-
-# class CustomSignupForm(CustomAuthenticationForm):
-#     @sensitive_variables()
-#     def clean(self) -> dict[str, Any]:
-#         super().clean()
-#         email = self.cleaned_data.get("email")
-#         if email and get_user_model().objects.filter(email=email).exists():
-#             raise ValidationError("A user with that email already exists.")

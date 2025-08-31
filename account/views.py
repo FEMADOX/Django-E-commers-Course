@@ -1,4 +1,5 @@
 import hashlib
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, logout
@@ -15,8 +16,8 @@ from django.core.exceptions import ValidationError
 from django.db.models import QuerySet
 from django.forms import Form
 from django.forms.models import BaseModelForm
-from django.http import HttpRequest
-from django.shortcuts import redirect, render
+from django.http import HttpRequest, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
@@ -26,13 +27,13 @@ from django.views.generic import CreateView, TemplateView, UpdateView
 from account.emails import send_account_activation_email, send_password_reset_email
 from account.forms import (
     ClientForm,
-    CustomAuthenticationForm,
     CustomPasswordResetForm,
     CustomSetPasswordForm,
+    SmartAuthenticationForm,
 )
+from account.mixins import AnonymousRequiredMixin
 from account.models import Client
 from cart.views import HttpResponse
-from payment.views import HttpResponseRedirect
 
 
 class UserAccountView(LoginRequiredMixin, TemplateView):
@@ -64,7 +65,6 @@ class UserAccountView(LoginRequiredMixin, TemplateView):
         return context
 
 
-# noinspection PyTypeHints
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = Client
     form_class = ClientForm
@@ -72,56 +72,51 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     success_url = "/account/"
 
     def get_object(self, queryset: QuerySet[Client] | None = None) -> Client:
-        client, _ = Client.objects.get_or_create(user=self.request.user)
-        return client
+        return get_object_or_404(Client, user=self.request.user)
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         messages.success(self.request, "The data has been updated.")
         return super().form_valid(form)
 
     def form_invalid(self, form: BaseModelForm) -> HttpResponse:
-        messages.error(self.request, message=str(form.errors))
+        messages.error(self.request, "Update failed!")
         return super().form_invalid(form)
 
 
-class UserSignupView(CreateView):
+class UserSignupView(AnonymousRequiredMixin, CreateView):
     model = User
-    fields = ["email", "password"]
     template_name = "account/signup.html"
     success_url = "/account/"
-    # form_class = CustomSignupForm
+    form_class = SmartAuthenticationForm
+
+    def get_form_kwargs(self) -> dict[str, Any]:
+        kwargs = super().get_form_kwargs()
+        kwargs["is_signup"] = True
+        return kwargs
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         user_email = form.cleaned_data["email"]
         user_name = user_email.split("@")[0]
         password_data = form.cleaned_data["password"]
 
-        try:
-            user = User.objects.get(email=user_email, username=user_name)
+        User.objects.create_user(
+            email=user_email,
+            password=password_data,
+            username=user_name,
+            is_active=False,
+        )
 
-            if not user.check_password(password_data):
-                messages.error(self.request, "The account password isn't valid.")
-                return super().form_invalid(form)
-
-            login(self.request, user)
-            messages.info(
-                self.request,
-                "The account already exists. You have been logged in.",
-            )
-            return super().form_valid(form)
-
-        except User.DoesNotExist:
-            self.request.session["pending_registration"] = {
-                "username": user_name,
-                "email": user_email,
-                "password": password_data,
-            }
-            send_account_activation_email(self.request, user_email)
-            messages.success(self.request, "We have sent an email to your address")
-            return redirect("account:email_validation")
+        self.request.session["pending_registration"] = {
+            "username": user_name,
+            "email": user_email,
+            "password": password_data,
+        }
+        send_account_activation_email(self.request, user_email)
+        messages.success(self.request, "We have sent an email to your address")
+        return redirect("account:email_validation")
 
     def form_invalid(self, form: BaseModelForm) -> HttpResponse:
-        messages.error(self.request, message=str(form.errors))
+        messages.error(self.request, "SignUp Failed!")
         return super().form_invalid(form)
 
 
@@ -169,7 +164,12 @@ def account_activation(
 class UserLoginView(LoginView):
     template_name = "account/login.html"
     redirect_authenticated_user = True
-    form_class: type[Form] = CustomAuthenticationForm  # type: ignore
+    form_class: type[Form] = SmartAuthenticationForm  # type: ignore
+
+    def get_form_kwargs(self) -> dict[str, Any]:
+        kwargs = super().get_form_kwargs()
+        kwargs["is_signup"] = False
+        return kwargs
 
     def form_valid(self, form: AuthenticationForm) -> HttpResponse:
         messages.success(self.request, "Login successfully!")
@@ -205,7 +205,7 @@ class EmailValidationView(TemplateView):
             request,
             "Email re-sent successfully. Please check your inbox.",
         )
-        return render(request, self.template_name)
+        return render(request, self.template_name)  # type: ignore
 
 
 class CustomPasswordResetView(PasswordResetView):
