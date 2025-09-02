@@ -26,7 +26,12 @@ class AccountBackend(ModelBackend):
         except user_model.DoesNotExist:
             return None
 
-        if password and user.check_password(password):
+        if (
+            password
+            and user.check_password(password)
+            and self.user_can_authenticate(user)
+        ):
+            user.backend = "account.backends.AccountBackend"  # type: ignore
             return user
 
         return None

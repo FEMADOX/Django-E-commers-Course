@@ -12,21 +12,6 @@ from django.utils.http import urlsafe_base64_encode
 from account.backends import get_user_model
 from edshop.settings import EMAIL_HOST_USER
 
-# class EmailService:
-#     def __init__(
-#         self,
-#         subject: str,
-#         message: str | None,
-#         recipient: str,
-#         sender: str | None,
-#         html_email_template_name: str | None,
-#     ) -> None:
-#         self.subject = subject
-#         self.message = message or ""
-#         self.sender = sender or EMAIL_HOST_USER
-#         self.recipient = recipient
-#         self.html_email_template_name = html_email_template_name or None
-
 
 def my_send_email(
     subject: str,
@@ -78,13 +63,10 @@ def send_account_activation_email(
         html_email_template_name=html_email_template_name,
     )
 
-    # class PasswordResetEmailService(EmailService):
-
 
 def send_password_reset_email(
     request: HttpRequest,
     email: str,
-    context: dict | None = None,
 ) -> None:
     subject = "Password Reset"
     recipient = email

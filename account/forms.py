@@ -1,4 +1,5 @@
 import re
+from datetime import UTC, datetime
 from re import Match
 from string import punctuation
 from typing import Any
@@ -88,6 +89,7 @@ class ClientForm(forms.ModelForm):
         ("F", "Female"),
         ("N", "Null"),
     )
+    MAX_BIRTH_DATE = datetime.now(tz=UTC).date().isoformat()
 
     dni = forms.CharField(label="DNI", max_length=8, required=False)
     name = forms.CharField(label="Name/s", max_length=100, required=True)
@@ -96,11 +98,18 @@ class ClientForm(forms.ModelForm):
     email = forms.EmailField(label="Email", required=True)
     address = forms.CharField(label="Address", required=False, widget=forms.Textarea)
     phone = forms.CharField(label="Phone", max_length=20, required=False)
+
     birth = forms.DateField(
         label="Birth Date",
         required=False,
         input_formats=["%Y-%m-%d"],
-        widget=DateInput(),
+        widget=DateInput(
+            #     No Future Dates
+            attrs={
+                "min": "1900-01-01",
+                "max": MAX_BIRTH_DATE,
+            },
+        ),
     )
 
     class Meta:

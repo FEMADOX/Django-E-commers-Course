@@ -1,4 +1,5 @@
 {% extends "../../base.html" %}
+{% load crispy_forms_filters %}
 {% load static %}
 
 {% block title %}
@@ -22,7 +23,7 @@
       <form class="email-reset-confirm" method="post">
         {% csrf_token %}
         <div class="email-reset-confirm-form">
-          {{ form.as_p }}
+          {{ form|crispy }}
         </div>
         <input class="email-reset-confirm" type="submit" value="Change my password" />
       </form>

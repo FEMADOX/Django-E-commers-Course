@@ -27,7 +27,9 @@
   <div class="h-shop">
     <form method="post" action="{% url 'web:search_product_title' %}" class="h-search" id="h-search">
       {% csrf_token %}
-      <input type="text" name="title" placeholder="Search..." />
+      <label>
+        <input type="text" name="title" placeholder="Search..." />
+      </label>
       <button type="submit"><i class="ion-search"></i></button>
     </form>
     <ul class="h-shop-links">
@@ -39,14 +41,14 @@
         <ul class="h-profile-links">
           {% if request.user.is_authenticated %}
             <li>
-              <form action="{% url 'account:logout_user' %}" method="post">
+              <form action="{% url 'account:logout' %}" method="post">
                 {% csrf_token %}
                 <input type="submit" class="" value="LogOut" />
               </form>
             </li>
           {% else %}
             <li>
-              <a href="{% url 'account:login' %}">LogIn / SignUp</a>
+              <a href="{% url 'account:user_account' %}">LogIn / SignUp</a>
             </li>
           {% endif %}
         </ul>

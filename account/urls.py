@@ -1,7 +1,8 @@
+from django.contrib.auth.views import LogoutView
 from django.urls import path
 
-from account import views
 from account.views import (
+    AccountActivationView,
     CustomPasswordResetConfirmView,
     CustomPasswordResetDoneView,
     CustomPasswordResetView,
@@ -19,10 +20,10 @@ urlpatterns = [
     path("update/", UserUpdateView.as_view(), name="update_account"),
     path("login/", UserLoginView.as_view(), name="login"),
     path("signup/", UserSignupView.as_view(), name="signup"),
-    path("logout/", views.logout_user, name="logout_user"),
+    path("logout/", LogoutView.as_view(), name="logout"),
     path(
-        "activate/<uidb64>/<token>/",
-        views.account_activation,
+        "activate/<str:uidb64>/<str:token>/",
+        AccountActivationView.as_view(),
         name="account_activation",
     ),
     path("email-validation/", EmailValidationView.as_view(), name="email_validation"),

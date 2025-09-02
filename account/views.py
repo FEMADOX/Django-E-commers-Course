@@ -1,8 +1,9 @@
 import hashlib
+import time
 from typing import Any
 
 from django.contrib import messages
-from django.contrib.auth import get_user_model, login, logout
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import AbstractBaseUser, User
@@ -21,6 +22,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
+from django.views import View
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, TemplateView, UpdateView
 
@@ -46,7 +48,7 @@ class UserAccountView(LoginRequiredMixin, TemplateView):
         try:
             client = Client.objects.get(user=user)
             client_data = {
-                "name": user.first_name,
+                "name": user.first_name or user.username,
                 "last_name": user.last_name,
                 "email": user.email,
                 "dni": client.dni,
@@ -75,6 +77,16 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         return get_object_or_404(Client, user=self.request.user)
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        form = self.get_form()
+        super().form_valid(form)
+        cleaned_data = form.clean()
+
+        user = User.objects.get(pk=self.request.user.pk)
+        user.username = cleaned_data["name"]
+        user.last_name = cleaned_data["last_name"]
+        user.email = cleaned_data["email"]
+        user.save()
+
         messages.success(self.request, "The data has been updated.")
         return super().form_valid(form)
 
@@ -99,17 +111,11 @@ class UserSignupView(AnonymousRequiredMixin, CreateView):
         user_name = user_email.split("@")[0]
         password_data = form.cleaned_data["password"]
 
-        User.objects.create_user(
-            email=user_email,
-            password=password_data,
-            username=user_name,
-            is_active=False,
-        )
-
         self.request.session["pending_registration"] = {
             "username": user_name,
             "email": user_email,
             "password": password_data,
+            "timestamp": int(time.time()),
         }
         send_account_activation_email(self.request, user_email)
         messages.success(self.request, "We have sent an email to your address")
@@ -120,45 +126,119 @@ class UserSignupView(AnonymousRequiredMixin, CreateView):
         return super().form_invalid(form)
 
 
-def account_activation(
-    request: HttpRequest,
-    uidb64: str,
-    token: str,
-) -> HttpResponseRedirect:
-    try:
-        email = force_str(urlsafe_base64_decode(uidb64))
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist, ValidationError):
-        email = None
+class AccountActivationView(View):
+    http_method_names = ["get"]
+    backend = "django.contrib.auth.backends.ModelBackend"
+    success_url = "account:user_account"
+    failed_url = "account:login"
+    token_expiration = 24 * 60 * 60
 
-    if not email:
-        messages.error(request, "Activation link is invalid! (Invalid Email)")
-        return redirect("account:login")
+    def get_pending_registration(self) -> dict[str, str] | None:
+        return self.request.session.get("pending_registration")
 
-    expected_token = hashlib.sha256(email.encode()).hexdigest()
-    if token != expected_token:
-        messages.error(request, "Activation link is invalid!")
-        return redirect("account:login")
+    def get(self, request: HttpRequest, uidb64: str, token: str) -> HttpResponse:
+        validation = self._validate_activation_data(uidb64, token)
+        if not validation["valid"] and isinstance(validation["details"], str):
+            return self._error_response(validation["details"])
 
-    pending_registration = request.session.get("pending_registration")
-    if not pending_registration or pending_registration["email"] != email:
-        messages.error(
-            request,
-            "Activation link is invalid! (Pending Registration)",
+        pending_registration = validation["pending_data"]
+        if not isinstance(pending_registration, dict):
+            return self._error_response("Invalid Pending Data")
+
+        user = User.objects.create_user(
+            username=pending_registration["username"],
+            email=pending_registration["email"],
+            password=pending_registration["password"],
+            is_active=True,
         )
-        return redirect("account:login")
+        Client.objects.create(user=user)
 
-    user, created = User.objects.get_or_create(
-        username=pending_registration.get("username"),
-        email=pending_registration.get("email"),
-        is_active=True,
-    )
-    if created:
-        user.set_password(pending_registration.get("password"))
-        user.save()
-    del request.session["pending_registration"]
-    login(request, user, "django.contrib.auth.backends.ModelBackend")
-    messages.success(request, "Account activated successfully!")
-    return redirect("account:user_account")
+        del request.session["pending_registration"]
+        login(request, user, self.backend)
+
+        messages.success(request, "Account activated successfully!")
+        return redirect(self.success_url)
+
+    def _error_response(
+        self,
+        detail: str | None = None,
+    ) -> HttpResponseRedirect:
+        if detail:
+            detail += f"({detail})"
+        messages.error(self.request, f"Activation link is invalid! {detail}")
+        return redirect(self.failed_url)
+
+    def _validate_activation_data(
+        self,
+        uidb64: str,
+        token: str,
+    ) -> dict[str, bool | str | dict[str, str]]:
+        result: dict[str, bool | str | dict[str, str]] = {"valid": False, "details": ""}
+
+        # Email Validation
+        email = self._decode_email(uidb64)
+        if not email:
+            result["details"] = "Invalid Email"
+            return result
+
+        # Token Validation
+        if not self._validate_token(email, token):
+            result["details"] = "Token Mismatch"
+            return result
+
+        # Pending Registration Validation
+        pending_registration = self.get_pending_registration()
+        if not pending_registration:
+            result["details"] = "Pending Registration Not Found"
+            return result
+
+        # Validate email consistency
+        if pending_registration.get("email") != email:
+            result["details"] = "Pending Registration Email Mismatch"
+            return result
+
+        # Validate expiration
+        timestamp = pending_registration.get("timestamp")
+        if not timestamp:
+            result["details"] = "Pending Registration Timestamp Not Found"
+            return result
+
+        current_time = int(time.time())
+        if current_time - int(timestamp) > self.token_expiration:
+            result["details"] = "Activation link has expired"
+            return result
+
+        # Setting result
+        result["valid"] = True
+        result["email"] = email
+        result["pending_data"] = pending_registration
+        return result
+
+    def _validate_token(self, email: str, token: str) -> bool:
+        pending_registration = self.get_pending_registration()
+        if not pending_registration:
+            return False
+
+        timestamp = pending_registration.get("timestamp")
+        if timestamp:
+            current_time = int(time.time())
+            if current_time - int(timestamp) > self.token_expiration:
+                return False
+
+        return token == hashlib.sha256(email.encode()).hexdigest()
+
+    @staticmethod
+    def _decode_email(uidb64: str) -> str | None:
+        try:
+            return force_str(urlsafe_base64_decode(uidb64))
+        except (
+            TypeError,
+            ValueError,
+            OverflowError,
+            User.DoesNotExist,
+            ValidationError,
+        ):
+            return None
 
 
 class UserLoginView(LoginView):
@@ -178,14 +258,6 @@ class UserLoginView(LoginView):
     def form_invalid(self, form: AuthenticationForm) -> HttpResponse:
         messages.error(self.request, "Login failed!")
         return super().form_invalid(form)
-
-
-def logout_user(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
-    if request.method == "POST":
-        logout(request)
-        return redirect("/account/login/")
-
-    return render(request, "web/includes/catalog.html")
 
 
 @method_decorator(csrf_protect, "dispatch")
