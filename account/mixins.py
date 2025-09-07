@@ -15,5 +15,7 @@ class AnonymousRequiredMixin(UserPassesTestMixin):
     def test_func(self) -> bool:
         return not self.request.user.is_authenticated
 
-    def handle_no_permission(self) -> HttpResponseRedirect:
-        return redirect(self.login_redirect_url)
+    def handle_no_permission(
+        self,
+    ) -> HttpResponseRedirect:
+        return redirect(self.login_redirect_url, permanent=False)

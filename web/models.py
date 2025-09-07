@@ -4,9 +4,9 @@ from django.db import models
 # Create your models here.
 
 
-def get_default_brand() -> int:
+def get_default_brand() -> "Brand":
     brand, _ = Brand.objects.get_or_create(name="None")
-    return brand.pk
+    return brand
 
 
 class Category(models.Model):

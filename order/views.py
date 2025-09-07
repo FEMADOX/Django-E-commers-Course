@@ -1,9 +1,13 @@
 from decimal import Decimal
-from typing import TYPE_CHECKING, Any, cast
+from typing import Any
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import (
+    HttpRequest,
+    HttpResponse,
+    HttpResponseRedirect,
+)
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
@@ -11,10 +15,6 @@ from account.forms import ClientForm
 from account.models import Client
 from order.models import Order, OrderDetail
 from web.models import Product
-
-if TYPE_CHECKING:
-    from common.order.stubs import StubsClient, StubsOrder, StubsOrderDetail
-
 
 # Create your views here.
 
@@ -24,7 +24,7 @@ def create_order(request: HttpRequest) -> HttpResponse:
     user = User.objects.get(pk=request.user.pk)
 
     try:
-        client = cast("StubsClient", Client.objects.get(user=user))
+        client = Client.objects.get(user=user)
         client_data = {
             "name": user.first_name,
             "last_name": user.last_name,
@@ -54,7 +54,9 @@ def create_order(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url="/account/login/")
-def confirm_order(request: HttpRequest) -> HttpResponseRedirect:
+def confirm_order(
+    request: HttpRequest,
+) -> HttpResponseRedirect:
     user = User.objects.get(pk=request.user.pk)
 
     if request.method == "POST":
@@ -69,18 +71,15 @@ def confirm_order(request: HttpRequest) -> HttpResponseRedirect:
             "address": request.POST.get("address", ""),
         }
     try:
-        client = cast("StubsClient", Client.objects.get(user=user))
+        client = Client.objects.get(user=user)
         client.phone = request.session["client_data"].pop("phone", "")
         client.address = request.session["client_data"].pop("address", "")
         client.save()
     except Client.DoesNotExist:
-        client = cast(
-            "StubsClient",
-            Client.objects.create(
-                user=user,
-                address=request.session["client_data"]["address"],
-                phone=request.session["client_data"]["phone"],
-            ),
+        client = Client.objects.create(
+            user=user,
+            address=request.session["client_data"]["address"],
+            phone=request.session["client_data"]["phone"],
         )
 
     # Check the cart
@@ -89,7 +88,7 @@ def confirm_order(request: HttpRequest) -> HttpResponseRedirect:
         return redirect("cart:cart")
 
     # ORDER
-    new_order = cast("StubsOrder", Order.objects.create(client=client))
+    new_order = Order.objects.create(client=client)
 
     # ORDER DETAIL
     for value in order_cart.values():
@@ -102,7 +101,6 @@ def confirm_order(request: HttpRequest) -> HttpResponseRedirect:
                 "subtotal": Decimal(value["subtotal"]),
             },
         )
-        order_detail = cast("StubsOrderDetail", order_detail)
         if not created:
             order_detail.quantity = int(value["quantity"])
             order_detail.subtotal = Decimal(value["subtotal"])

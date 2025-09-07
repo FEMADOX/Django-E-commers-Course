@@ -17,7 +17,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import QuerySet
 from django.forms import Form
 from django.forms.models import BaseModelForm
-from django.http import HttpRequest, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_str
@@ -35,7 +35,6 @@ from account.forms import (
 )
 from account.mixins import AnonymousRequiredMixin
 from account.models import Client
-from cart.views import HttpResponse
 
 
 class UserAccountView(LoginRequiredMixin, TemplateView):
@@ -79,7 +78,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         form = self.get_form()
         super().form_valid(form)
-        cleaned_data = form.clean()
+        cleaned_data = form.cleaned_data
 
         user = User.objects.get(pk=self.request.user.pk)
         user.username = cleaned_data["name"]
@@ -145,13 +144,7 @@ class AccountActivationView(View):
         if not isinstance(pending_registration, dict):
             return self._error_response("Invalid Pending Data")
 
-        user = User.objects.create_user(
-            username=pending_registration["username"],
-            email=pending_registration["email"],
-            password=pending_registration["password"],
-            is_active=True,
-        )
-        Client.objects.create(user=user)
+        user = self._create_user(pending_registration)
 
         del request.session["pending_registration"]
         login(request, user, self.backend)
@@ -168,7 +161,7 @@ class AccountActivationView(View):
         messages.error(self.request, f"Activation link is invalid! {detail}")
         return redirect(self.failed_url)
 
-    def _validate_activation_data(
+    def _validate_activation_data(  # noqa: PLR0911
         self,
         uidb64: str,
         token: str,
@@ -228,6 +221,17 @@ class AccountActivationView(View):
         return token == hashlib.sha256(email.encode()).hexdigest()
 
     @staticmethod
+    def _create_user(pending_data: dict[str, str]) -> User:
+        user = User.objects.create_user(
+            username=pending_data["username"],
+            email=pending_data["email"],
+            password=pending_data["password"],
+            is_active=True,
+        )
+        Client.objects.create(user=user)
+        return user
+
+    @staticmethod
     def _decode_email(uidb64: str) -> str | None:
         try:
             return force_str(urlsafe_base64_decode(uidb64))
@@ -261,14 +265,13 @@ class UserLoginView(LoginView):
 
 
 @method_decorator(csrf_protect, "dispatch")
-class EmailValidationView(TemplateView):
+class EmailActivationView(TemplateView):
     template_name = "account/activation/account_activation.html"
 
     def post(self, request: HttpRequest) -> HttpResponse:
-        if (
-            not request.session.get("pending_registration")
-            or request.session["pending_registration"].get("email") is None
-        ):
+        if not request.session.get("pending_registration") or not request.session[
+            "pending_registration"
+        ].get("email"):
             messages.error(request, "Please start the registration process.")
             return redirect("account:signup")
         email = request.session["pending_registration"]["email"]
@@ -277,7 +280,7 @@ class EmailValidationView(TemplateView):
             request,
             "Email re-sent successfully. Please check your inbox.",
         )
-        return render(request, self.template_name)  # type: ignore
+        return render(request, self.template_name or "")
 
 
 class CustomPasswordResetView(PasswordResetView):
@@ -286,7 +289,7 @@ class CustomPasswordResetView(PasswordResetView):
     template_name = "account/password/reset.html"
     success_url = "/account/password-reset/done/"
 
-    def post(self, request: HttpRequest, *args: tuple, **kwargs: dict) -> HttpResponse:
+    def post(self, request: HttpRequest, *args: str, **kwargs: dict) -> HttpResponse:
         form = self.get_form()
 
         if form.is_valid():
@@ -338,7 +341,7 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
         ):
             return None
 
-    def post(self, request: HttpRequest, *args: tuple, **kwargs: dict) -> HttpResponse:
+    def post(self, request: HttpRequest, *args: str, **kwargs: dict) -> HttpResponse:
         form = self.get_form()
         if request.session.get("password_reset_email"):
             del request.session["password_reset_email"]

@@ -1495,7 +1495,7 @@ body .header-sticky .site-header.header_sticky {
     padding: 0 0 4px 18px;
 }
 
-.h-cart .widget_shopping_cart .cart_list li a.remove {
+.h-cart .widget_shopping_cart .cart_list li button.remove {
     display: block;
     font-size: 1.5em;
     height: 1em;
@@ -1506,15 +1506,15 @@ body .header-sticky .site-header.header_sticky {
     text-decoration: none;
     font-weight: 700;
     border: 0;
-
     position: absolute;
     top: 0;
     left: 0;
-
     width: auto;
+    background-color: transparent;
+    padding: 0;
 }
 
-.h-cart .widget_shopping_cart .cart_list li a.remove:hover {
+.h-cart .widget_shopping_cart .cart_list li button.remove:hover {
     color: #ff2424 !important;
     background: #fff;
 }
@@ -1556,7 +1556,7 @@ body .header-sticky .site-header.header_sticky {
     cursor: pointer;
     text-decoration: none;
     overflow: visible;
-    padding: .618em 1em;
+    padding: .618em 2em;
     border-radius: 3px;
     left: auto;
     border: 0;
@@ -1572,6 +1572,7 @@ body .header-sticky .site-header.header_sticky {
     position: relative;
     letter-spacing: 0.03em;
     margin: 0 0 5px;
+    font-size: .9rem;
 }
 
 .h-cart .widget_shopping_cart .buttons a.button:hover {
@@ -2904,6 +2905,7 @@ p.link-pages,
     opacity: 0;
     transition: opacity 0.2s;
     z-index: 2;
+    border-radius: 10px 10px 0 0;
 }
 
 .prod-items .prod-i .prod-i-img img {
@@ -6268,7 +6270,11 @@ div.product.prod .prod-add form.cart .group_table .button {
     font-weight: normal;
 }
 
-.cart-actions a.checkout-button {
+.cart-actions a.checkout-button:hover {
+    background: #7dcd8c;
+}
+
+form.cart-actions input.checkout-button {
     background-color: transparent;
     background: var(--third-color);
     transition: all 0.2s;
@@ -6288,11 +6294,7 @@ div.product.prod .prod-add form.cart .group_table .button {
     border-radius: 5px;
 }
 
-.cart-actions a.checkout-button:hover {
-    background: #7dcd8c;
-}
-
-.cart-actions a.checkout-button.disabled {
+form.cart-actions input.checkout-button.disabled {
     background-color: transparent !important;
     background: var(--third-color) !important;
     opacity: 0.5;

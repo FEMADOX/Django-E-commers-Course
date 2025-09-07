@@ -24,16 +24,6 @@
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ next }}" />
             {{ form|crispy }}
-{#            <p>#}
-{#              {{ form.email.label_tag }}<span class="required">*</span>#}
-{#              {{ form.email }}#}
-{#              <span class="form-errors">{{ form.errors.email|striptags }}</span>#}
-{#            </p>#}
-{#            <p>#}
-{#              {{ form.password.label_tag }}<span class="required">*</span>#}
-{#              {{ form.password }}#}
-{#              <span class="form-errors">{{ form.errors.password|striptags }}</span>#}
-{#            </p>#}
             <p class="auth-submit">
               <input type="checkbox" id="rememberme" value="forever" />
               <label for="rememberme">Remember me</label>

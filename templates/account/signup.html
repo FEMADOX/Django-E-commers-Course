@@ -23,16 +23,6 @@
           <form class="register" method="post" action="{% url 'account:signup' %}">
             {% csrf_token %}
             {{ form|crispy }}
-{#            <p>#}
-{#              <label for="reg_email">Email:</label><span class="required">*</span>#}
-{#              {{ form.email }}#}
-{#              <span class="form-errors">{{ form.errors.email|striptags }}</span>#}
-{#            </p>#}
-{#            <p>#}
-{#              {{ form.password.label_tag }}<span class="required">*</span>#}
-{#              {{ form.password }}#}
-{#              <span class="form-errors">{{ form.errors.email|striptags }}</span>#}
-{#            </p>#}
             <p class="auth-submit">
               <input type="submit" value="Create Account" />
             </p>

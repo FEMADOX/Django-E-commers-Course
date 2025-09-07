@@ -6,7 +6,7 @@ from account.views import (
     CustomPasswordResetConfirmView,
     CustomPasswordResetDoneView,
     CustomPasswordResetView,
-    EmailValidationView,
+    EmailActivationView,
     UserAccountView,
     UserLoginView,
     UserSignupView,
@@ -26,7 +26,7 @@ urlpatterns = [
         AccountActivationView.as_view(),
         name="account_activation",
     ),
-    path("email-validation/", EmailValidationView.as_view(), name="email_validation"),
+    path("email-validation/", EmailActivationView.as_view(), name="email_validation"),
     path(
         "password-reset/",
         CustomPasswordResetView.as_view(),
@@ -39,7 +39,6 @@ urlpatterns = [
     ),
     path(
         "password-reset/confirm/<uidb64>/<token>/",
-        # auth_views.PasswordResetConfirmView.as_view(),
         CustomPasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
     ),

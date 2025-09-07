@@ -1,43 +1,35 @@
-from typing import TYPE_CHECKING, Any, cast
+from typing import Any
 
 import stripe
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from account.models import Client
-from cart.views import HttpResponse
 from edshop import settings
 from edshop.settings import STRIPE_API
 from order.models import Order, OrderDetail
 
-if TYPE_CHECKING:
-    from django.db.models import QuerySet
-
-    from common.order.stubs import StubsClient, StubsOrder, StubsOrderDetail
-
-# # Create your views here.
+# Create your views here.
 
 stripe.api_key = STRIPE_API
 
 
 @login_required(login_url="/account/login/")
 def payment_process(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
-    client = cast("StubsClient", Client.objects.get(user=request.user))
+    client = Client.objects.get(user=request.user)
     order_id = request.session["order_id"]
-    order = cast("StubsOrder", Order.objects.get(pk=order_id))
-    order_detail = cast(
-        "QuerySet[StubsOrderDetail]",
-        OrderDetail.objects.filter(order=order),
-    )
+    order = Order.objects.get(pk=order_id)
+    order_detail = OrderDetail.objects.filter(order=order)
 
     if request.method == "POST":
         success_url = request.build_absolute_uri(
             reverse("payment:payment_completed"),
         )
+
         cancel_url = request.build_absolute_uri(
             reverse("payment:payment_canceled"),
         )
@@ -80,16 +72,17 @@ def payment_process(request: HttpRequest) -> HttpResponseRedirect | HttpResponse
 @login_required(login_url="/account/login/")
 def payment_completed(request: HttpRequest) -> HttpResponseRedirect | HttpResponse:
     if request.session.get("order_id"):
-        client = cast("StubsClient", Client.objects.get(user=request.user))
+        client = Client.objects.get(user=request.user)
         order_id = request.session.pop("order_id", "")
-        order = cast("StubsOrder", Order.objects.get(pk=order_id))
+        order = Order.objects.get(pk=order_id)
 
         # Changing the status of the order
         order.status = "1"  # PAID
         order.save()
 
         order_details_products = [
-            order_detail.product.title for order_detail in order.order_details.all()
+            order_detail.product.title
+            for order_detail in order.order_details.all()  # type: ignore
         ]
 
         # Sending Mail

@@ -440,6 +440,7 @@ hr {
 }
 
 @media (min-width: 768px) {
+
     .col-sm-1,
     .col-sm-2,
     .col-sm-3,
@@ -1249,7 +1250,7 @@ form.email-reset {
     justify-content: center;
 }
 
-div.email-reset > form.email-validation > #resend-button {
+div.email-reset>form.email-validation>#resend-button {
     width: 100%;
     height: 3rem;
     font-size: 24px;
@@ -1314,7 +1315,7 @@ input.email-reset-confirm:hover {
     background-color: #7dcd8c;
 }
 
-div.email-reset-confirm-form > .errorlist {
+div.email-reset-confirm-form>.errorlist {
     color: red;
 }
 
@@ -1322,10 +1323,58 @@ form.login {
     margin-left: 5px;
 }
 
-.invalid-feedback > p > strong {
+.invalid-feedback>p>strong {
     color: red;
 }
 
 form.register {
     margin-left: 5px;
+}
+
+form.cart-actions {
+    display: contents;
+}
+
+form.cart-actions.cart {
+    display: block;
+    float: right;
+    padding: 0;
+}
+
+button.hover-label.prod-addbtn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    color: black;
+    font: inherit;
+    text-align: left;
+}
+
+i.icon.ion-android-cart {
+    font-size: 20px;
+}
+
+i.icon.ion-android-cart:hover {
+    color: var(--third-color)
+}
+
+.pending-data .restore,
+.pending-data .order-summary {
+    padding-bottom: 15px;
+}
+
+div.pending-data-container {
+    padding: 30px 50px;
+}
+
+h5.pending-data-h5 {
+    margin-bottom: 0;
+}
+
+div.pending-data-details {
+    padding-left: 30px;
 }

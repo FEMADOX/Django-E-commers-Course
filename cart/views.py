@@ -1,57 +1,124 @@
-from typing import TYPE_CHECKING, cast
+from typing import Any
 
-from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpRequest, HttpResponseRedirect
+from django.http.response import HttpResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import TemplateView, View
 
 from cart.cart import Cart
 from order.models import Order
 from web.models import Product
 
-if TYPE_CHECKING:
-    from common.web.stubs import StubsProduct
+
+class CartIndexView(TemplateView):
+    template_name = "cart.html"
+
+    def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["pending_orders"] = Order.objects.filter(
+            client=self.request.user.pk,
+            status="0",
+        )
+        return context
+
+    def get(
+        self,
+        request: HttpRequest,
+        *args: tuple,
+        **kwargs: dict,
+    ) -> HttpResponse | HttpResponseRedirect:
+        cart = Cart(request)
+
+        if not cart.cart:
+            return redirect("/")
+
+        return super().get(request, *args, **kwargs)
 
 
-def cart(request: HttpRequest) -> HttpResponse:
-    pending_orders = Order.objects.filter(client=request.user.pk, status="0")
+class AddProductCartView(LoginRequiredMixin, View):
+    """View to add products to the cart"""
 
-    return render(request, "cart.html", {"pending_orders": pending_orders})
+    http_method_names = ["post"]
+    login_url = "/account/login/"
 
+    @staticmethod
+    def post(
+        request: HttpRequest,
+        product_id: int,
+    ) -> HttpResponseRedirect:
+        """Add product with specified quantity and show cart"""
 
-@login_required(login_url="/account/login/")
-def add_product_cart(request: HttpRequest, product_id: int) -> HttpResponse:
-    quantity = int(request.POST["quantity"]) if request.method == "POST" else 1
+        quantity = int(request.POST["quantity"])
+        product = get_object_or_404(Product, id=product_id)
+        cart = Cart(request)
+        cart.add(product, quantity)  # type: ignore
 
-    product = cast("StubsProduct", Product.objects.get(id=product_id))
-    cart = Cart(request)
-    cart.add(product, quantity)
+        actual_location = request.POST.get("location-url")
+        if actual_location:
+            return redirect(actual_location)
 
-    if request.method == "GET":
         return redirect("/")
 
-    return render(request, "cart.html")
+
+class DeleteProductCartView(LoginRequiredMixin, View):
+    """View to remove products from the cart"""
+
+    http_method_names = ["post"]
+    login_url = "/account/login/"
+
+    @staticmethod
+    def post(
+        request: HttpRequest,
+        product_id: int,
+    ) -> HttpResponseRedirect:
+        product = get_object_or_404(Product, id=product_id)
+        cart = Cart(request)
+        cart.delete(product)
+
+        actual_location = request.POST.get("location-url")
+        if actual_location:
+            return redirect(actual_location)
+
+        return redirect("/")
 
 
-def delete_product_cart(request: HttpRequest, product_id: int) -> HttpResponse:
-    product = cast("StubsProduct", Product.objects.get(id=product_id))
-    cart = Cart(request)
-    cart.delete(product)
+class ClearCartView(LoginRequiredMixin, View):
+    """View to clear the entire cart"""
 
-    return render(request, "cart.html")
+    http_method_names = ["post"]
+    login_url = "/account/login/"
+
+    @staticmethod
+    def post(
+        request: HttpRequest,
+    ) -> HttpResponseRedirect:
+        cart = Cart(request)
+        cart.clear()
+
+        actual_location = request.POST.get("location-url")
+        if actual_location:
+            return redirect(actual_location)
+
+        return redirect("/cart/")
 
 
-def clear_cart(request: HttpRequest) -> HttpResponse:
-    cart = Cart(request)
-    cart.clear()
+class RestoreOrderPendingCartView(LoginRequiredMixin, View):
+    """View to restore a pending order to the cart"""
 
-    return render(request, "cart.html")
+    http_method_names = ["post"]
+    login_url = "/account/login/"
 
+    @staticmethod
+    def post(
+        request: HttpRequest,
+        order_pending_id: int,
+    ) -> HttpResponseRedirect:
+        cart = Cart(request)
+        cart.restore_order_pending(order_pending_id)
+        actual_location = request.POST.get("location-url")
 
-def restore_order_pending_cart(
-    request: HttpRequest,
-    order_pending_id: int,
-) -> HttpResponse:
-    cart = Cart(request)
-    cart.restore_order_prending(order_pending_id)
+        if actual_location:
+            return redirect(actual_location)
 
-    return render(request, "cart.html")
+        return redirect("/cart/")

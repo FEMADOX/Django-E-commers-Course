@@ -209,11 +209,11 @@ class CustomSetPasswordForm(SetPasswordForm):
         help_text="Enter the same password as before, for verification.",
     )
 
-    def clean(self) -> dict[str, Any] | None:
+    def clean(self) -> dict[str, Any]:
         cleaned_data = super().clean()
 
         if not cleaned_data:
-            return None
+            return {}
 
         password = cleaned_data.get("new_password1")
         if password:
@@ -321,7 +321,7 @@ class SmartAuthenticationForm(forms.Form):
         return password
 
     @sensitive_variables()
-    def clean(self) -> dict[str, Any] | None:
+    def clean(self) -> dict[str, Any]:
         """
         Validate the form data by authenticating the user with email and password.
 
@@ -338,11 +338,11 @@ class SmartAuthenticationForm(forms.Form):
             ValidationError: If authentication fails or login is not allowed
         """
         if self.is_signup:
-            return super().clean()
+            return super().clean() or {}
 
         cleaned_data = super().clean()
         if not cleaned_data:
-            return cleaned_data
+            return cleaned_data or {}
 
         email = cleaned_data.get("email")
         password = cleaned_data.get("password")

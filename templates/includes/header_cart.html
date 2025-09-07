@@ -4,32 +4,33 @@
       <i class="ion-android-cart"></i>
       <span>{{ request.session.cart.items|length }}</span>
     </p>
-    {% comment %} {% if request.session.cart.items|length > 0 %}
-      <p class="h-cart-total">${{ request.session.cart_total_price }}</p>
-    {% endif %} {% endcomment %}
   </a>
   <div class="widget_shopping_cart">
     <div class="widget_shopping_cart_content">
       {% for key, value in request.session.cart.items %}
-        <ul class="cart_list">
-          <li>
-            <a href="{% url 'cart:delete_product_cart' value.product_id %}" class="remove">&times;</a>
-            <a href="{% url 'web:product_detail' value.product_id %}">
-              <img src="{{ value.image }}" alt="" />
-              {{ value.title }}
-            </a>
-            <span class="quantity">{{ value.quantity }} &times; ${{ value.subtotal }}</span>
-          </li>
-        </ul>
+        <form action="{% url 'cart:delete_product_cart' value.product_id %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="location-url" value="{{ request.get_full_path }}"/>
+          <ul class="cart_list">
+            <li>
+              <button type="submit" class="remove">x</button>
+              <a href="{% url 'web:product_detail' value.product_id %}">
+                <img src="{{ value.image }}" alt=""/>
+                {{ value.title }}
+              </a>
+              <span class="quantity">{{ value.quantity }} &times; ${{ value.subtotal }}</span>
+            </li>
+          </ul>
+        </form>
       {% endfor %}
       {% if request.session.cart.items|length > 0 %}
         <p class="total">
           <b>Total:</b> ${{ request.session.cart_total_price }}
         </p>
       {% endif %}
+      <!-- TODO -->
       <p class="buttons">
-        <a href="{% url 'cart:cart' %}" class="button">Show Cart</a>
-        <a href="{% url 'order:create_order' %}" class="button">Order</a>
+        <a href="{% url 'order:create_order' %}" class="button">Place Order</a>
       </p>
     </div>
   </div>

@@ -10,96 +10,126 @@
   <div class="page-styling">
     <div class="woocommerce prod-litems section-list">
       {% for key, value in request.session.cart.items %}
-        <article class="prod-li sectls">
-          <div class="prod-li-inner">
-            <a href="{% url 'web:product_detail' value.product_id %}" class="prod-li-img"><img src="{{ value.image }}" alt="" /></a>
-            <div class="prod-li-cont">
-              <div class="prod-li-ttl-wrap">
-                <p>
-                  <a href="{% url 'web:filter_by_category' value.category.id %}">{{ value.category.name }}</a>
-                </p>
-                <h3><a href="{% url 'web:product_detail' value.product_id %}">{{ value.title }}</a></h3>
+      <article class="prod-li sectls">
+        <div class="prod-li-inner">
+          <a href="{% url 'web:product_detail' value.product_id %}" class="prod-li-img">
+            <img
+                src="{{ value.image }}"
+                alt=""
+            />
+          </a>
+          <div class="prod-li-cont">
+            <div class="prod-li-ttl-wrap">
+              <p>
+                <a href="{% url 'web:filter_by_category' value.category.id %}">{{ value.category.name }}</a>
+              </p>
+              <h3>
+                <a href="{% url 'web:product_detail' value.product_id %}">{{ value.title }}</a>
+              </h3>
+            </div>
+            <div class="prod-li-prices">
+              <div class="prod-li-price-wrap">
+                <p>Price</p>
+                <p class="prod-li-price">${{ value.price }}</p>
               </div>
-              <div class="prod-li-prices">
-                <div class="prod-li-price-wrap">
-                  <p>Price</p>
-                  <p class="prod-li-price">${{ value.price }}</p>
-                </div>
-                <div class="prod-li-qnt-wrap">
-                  <p class="qnt-wrap prod-li-qnt">
-                    <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
-                    <input type="text" value="{{ value.quantity }}" />
-                    <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
-                  </p>
-                </div>
-                <div class="prod-li-total-wrap">
-                  <p>Total</p>
-                  <p class="prod-li-total">${{ value.subtotal }}</p>
-                </div>
+              <div class="prod-li-qnt-wrap">
+                <p class="qnt-wrap prod-li-qnt">
+                  <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
+                  <input type="text" value="{{ value.quantity }}" />
+                  <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
+                </p>
+              </div>
+              <div class="prod-li-total-wrap">
+                <p>Total</p>
+                <p class="prod-li-total">${{ value.subtotal }}</p>
               </div>
             </div>
-            <div class="prod-li-info">
-              <div class="prod-li-rating-wrap">
-                <p data-rating="5" class="prod-li-rating">
-                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-                    <path
-                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
-                  </svg>
-                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-                    <path
-                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
-                  </svg>
-                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-                    <path
-                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
-                  </svg>
-                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-                    <path
-                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
-                  </svg>
-                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-                    <path
-                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z" />
-                    </svg>
-                  <!-- <i class="rating-ico" title="1"></i>
-                  <i class="rating-ico" title="2"></i>
-                  <i class="rating-ico" title="3"></i>
-                  <i class="rating-ico" title="4"></i>
-                  <i class="rating-ico" title="5"></i> -->
-                </p>
-                <p class="prod-li-rating-count">12</p>
-              </div>
+          </div>
+          <div class="prod-li-info">
+            <div class="prod-li-rating-wrap">
+              <p data-rating="5" class="prod-li-rating">
+                <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+                  <path
+                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"
+                  />
+                </svg>
+                <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+                  <path
+                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"
+                  />
+                </svg>
+                <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+                  <path
+                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"
+                  />
+                </svg>
+                <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+                  <path
+                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"
+                  />
+                </svg>
+                <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
+                  <path
+                      d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"
+                  />
+                </svg>
+                <!-- <i class="rating-ico" title="1"></i>
+                <i class="rating-ico" title="2"></i>
+                <i class="rating-ico" title="3"></i>
+                <i class="rating-ico" title="4"></i>
+                <i class="rating-ico" title="5"></i> -->
+              </p>
+              <p class="prod-li-rating-count">12</p>
+            </div>
+            <form class="cart-actions" action="{% url 'cart:delete_product_cart' value.product_id %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="location-url" value="{{ request.get_full_path }}" />
               <p class="prod-li-add">
-                <a href="{% url 'cart:delete_product_cart' value.product_id %}" class="button hover-label prod-addbtn"><i class="icon ion-close-round"></i><span>Delete</span></a>
+                <button class="button hover-label prod-addbtn" type="submit">
+                  <i class="icon ion-close-round"></i><span>Delete</span>
+                </button>
               </p>
-              <p class="prod-li-information">
-                <a href="#" class="hover-label"><i class="icon ion-more"></i><span>Show Information</span></a>
-              </p>
-            </div>
+            </form>
+            <p class="prod-li-information">
+              <a href="#" class="hover-label"><i class="icon ion-more"></i><span>Show Information</span></a>
+            </p>
           </div>
-          <div class="page-styling prod-li-informations">
-            <dl class="prod-li-props">
-              <dt>Brand:</dt>
-              <dd><a href="{% url 'web:filter_by_brand' value.brand.id %}">{{ value.brand.name }}</a></dd>
-              <dt>Weight:</dt>
-              <dd>{{ value.weight }} kg</dd>
-              <dt>Dimension:</dt>
-              <dd>{{ value.dimension }}</dd>
-              <dt>Color:</dt>
-              <dd>{{ value.color }}</dd>
-            </dl>
-          </div>
-        </article>
+        </div>
+        <div class="page-styling prod-li-informations">
+          <dl class="prod-li-props">
+            <dt>Brand:</dt>
+            <dd>
+              <a href="{% url 'web:filter_by_brand' value.brand.id %}">{{ value.brand.name }}</a>
+            </dd>
+            <dt>Weight:</dt>
+            <dd>{{ value.weight }} kg</dd>
+            <dt>Dimension:</dt>
+            <dd>{{ value.dimension }}</dd>
+            <dt>Color:</dt>
+            <dd>{{ value.color }}</dd>
+          </dl>
+        </div>
+      </article>
       {% endfor %}
     </div>
     <div class="cart-actions">
+      <!-- TODO: Coupon code functionality -->
       <div class="coupon">
-        <input type="text" placeholder="Coupon code" />
+        <label for="coupon-code-input">Coupon code:</label>
+        <input type="text" id="coupon-code-input" placeholder="Coupon code" />
         <input type="submit" class="button" value="Apply" />
       </div>
       <div class="cart-collaterals">
-        <a href="{% url 'cart:clear_cart' %}" class="checkout-button button">Clear Cart</a>
-        <a href="{% url 'order:create_order' %}" class="checkout-button button">Place Order</a>
+        <form class="cart-actions cart" action="{% url 'cart:clear_cart' %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="location-url" value="{{ request.get_full_path }}" />
+          <input class="checkout-button button" type="submit" value="Clear Cart" />
+        </form>
+        <form class="cart-actions cart" action="{% url 'order:create_order' %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="location-url" value="{{ request.get_full_path }}" />
+          <input class="checkout-button button" type="submit" value="Place Order" />
+        </form>
         <div class="order-total">
           <p class="cart-totals-ttl">Total</p>
           <p class="cart-totals-val">${{ request.session.cart_total_price }}</p>
@@ -108,36 +138,6 @@
     </div>
   </div>
   {% if pending_orders %}
-    <div class="page-styling">
-      <div class="woocommerce prod-litems section-list">
-        <article class="prod-li sectls" id="pending-orders">
-          <h2>Pending Orders:</h2>
-          {% for pending_order in pending_orders %}
-            <div style="padding: 30px 50px;">
-              <h5>Order ID: {{ pending_order.id }}</h5>
-              <h5>Order Date: {{ pending_order.registration_date }}</h5>
-              <h5 style="margin-bottom: 0px;">Details:</h5>
-              <div style="padding-left: 30px;">
-                {% for order_detail in pending_order.order_details.all %}
-                  <ul>
-                    <li>Product: {{ order_detail.product.title }}</li>
-                    <li>Price: $ {{ order_detail.product.price }}</li>
-                    <li>Quantity: {{ order_detail.quantity }}</li>
-                    <li>Subtotal: $ {{ order_detail.subtotal }}</li>
-                  </ul>
-                {% endfor %}
-              </div>
-              <h5>Total Amount: $ {{ pending_order.total_price }}</h5>
-              <div style="padding-bottom: 15px;">
-                <a href="{% url 'cart:restore_order_pending_cart' pending_order.id %}">Add all this order to the CART again</a>
-              </div>
-              <div style="padding-bottom: 15px;">
-                <a href="{% url 'order:order_summary' pending_order.id %}">Add all the order to the SUMMARY</a>
-              </div>
-            </div>
-          {% endfor %}
-        </article>
-      </div>
-    </div>
+    {% include "includes/pending_orders.html" %}
   {% endif %}
 {% endblock content %}

@@ -1,0 +1,41 @@
+<div class="page-styling">
+  <div class="woocommerce prod-litems section-list">
+    <article class="prod-li sectls" id="pending-orders">
+      <h2>Pending Orders:</h2>
+      {% for pending_order in pending_orders %}
+        <div class="pending-data-container">
+          <h5>Order ID: {{ pending_order.id }}</h5>
+          <h5>Order Date: {{ pending_order.registration_date }}</h5>
+          <h5 class="pending-data-h5">Details:</h5>
+          <div class="pending-data-details">
+            {% for order_detail in pending_order.order_details.all %}
+              <ul>
+                <li>Product: {{ order_detail.product.title }}</li>
+                <li>Price: $ {{ order_detail.product.price }}</li>
+                <li>Quantity: {{ order_detail.quantity }}</li>
+                <li>Subtotal: $ {{ order_detail.subtotal }}</li>
+              </ul>
+            {% endfor %}
+          </div>
+          <h5>Total Amount: $ {{ pending_order.total_price }}</h5>
+          <div class="pending-data restore">
+            <form action="{% url 'cart:restore_order_pending_cart' pending_order.id %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="location-url" value="{{ request.get_full_path }}" />
+              <button type="submit" value="Add all this order to the CART again">
+                Add all this order to the CART again
+              </button>
+            </form>
+          </div>
+          <div class="pending-data order-summary">
+            <form action="{% url 'order:order_summary' pending_order.id %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="location-url" value="{{ request.get_full_path }}" />
+              <button type="submit" value="Add all the order to the SUMMARY"></button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </article>
+  </div>
+</div>
