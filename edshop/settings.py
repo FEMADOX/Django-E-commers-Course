@@ -13,26 +13,67 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 
 import cloudinary
-from decouple import config
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Initialize environment variables
+env = environ.Env(
+    # Set casting and default values
+    DEBUG=(bool, True),
+    ENVIRONMENT=(str, "development"),
+    ALLOWED_HOSTS=(list, ["*"]),
+    CORS_ORIGIN_WHITELIST=(list, ["http://127.0.0.1"]),
+    CSRF_TRUSTED_ORIGINS=(list, ["http://127.0.0.1"]),
+    LOCAL_DATABASE=(bool, True),
+)
+
+# Read .env file
+environ.Env.read_env(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("DJANGO_SECRET_KEY")
+SECRET_KEY = env("DJANGO_SECRET_KEY")
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", cast=bool)
+DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
-CORS_ORIGIN_WHITELIST = config("CORS_ORIGIN_WHITELIST").split(",")
-CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS").split(",")
+CORS_ORIGIN_WHITELIST = env.list("CORS_ORIGIN_WHITELIST")
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
 
+# Environment
+ENVIRONMENT = env("ENVIRONMENT")
+
+# Security settings - depend on eviroment
+
+if ENVIRONMENT == "production":
+    # Production security settings
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+else:
+    # Development security settings
+    CSRF_COOKIE_SECURE = False
+    SECURE_BROWSER_XSS_FILTER = False
+    SECURE_CONTENT_TYPE_NOSNIFF = False
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
+    SECURE_HSTS_SECONDS = 0
+    SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
 
 # Application definition
 
@@ -70,14 +111,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "edshop.urls"
 
-# DEPLOY SECURITY SETTINGS
-# _________________________________________________________________________________
-# SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT")
-# SESSION_COOKIE_SECURE = config("SESSION_COOKIE_SECURE")
-# CSRF_COOKIE_SECURE = config("CSRF_COOKIE_SECURE")
-# SECURE_HSTS_SECONDS = config("SECURE_HSTS_SECONDS")
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = config("SECURE_HSTS_INCLUDE_SUBDOMAINS")
-# SECURE_HSTS_PRELOAD = config("SECURE_HSTS_PRELOAD")
 
 TEMPLATES = [
     {
@@ -100,7 +133,7 @@ WSGI_APPLICATION = "edshop.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-LOCAL_DATABASE = config("LOCAL_DATABASE", cast=bool)
+LOCAL_DATABASE = env("LOCAL_DATABASE")
 
 if LOCAL_DATABASE:
     DATABASES = {
@@ -110,16 +143,7 @@ if LOCAL_DATABASE:
         },
     }
 else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": config("DB_NAME"),
-            "USER": config("DB_USER"),
-            "PASSWORD": config("DB_PASSWORD"),
-            "HOST": config("DB_HOST"),
-            "PORT": config("DB_PORT"),
-        },
-    }
+    DATABASES = {"default": env.db()}
 
 
 # Password validation
@@ -176,9 +200,9 @@ MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 cloudinary.config(
-    cloud_name=config("CLOUD_NAME", cast=str),
-    api_key=config("CLOUD_API_KEY", cast=str),
-    api_secret=config("CLOUD_API_SECRET", cast=str),
+    cloud_name=env("CLOUD_NAME"),
+    api_key=env("CLOUD_API_KEY"),
+    api_secret=env("CLOUD_API_SECRET"),
     secure=True,
 )
 
@@ -188,14 +212,14 @@ cloudinary.config(
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # STRIPE
-STRIPE_API = config("STRIPE_API")
+STRIPE_API = env("STRIPE_API")
 
 # EMAIL
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
