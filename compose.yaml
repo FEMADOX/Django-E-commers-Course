@@ -1,0 +1,26 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: /scripts/start.sh
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    env_file:
+      - .env.docker
+    image: e-commerce-image
+    container_name: web-container
+  db:
+    image: postgres
+    container_name: db-container
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      # Allow any conexions
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+
+volumes:
+  postgres_data:
+    driver: local

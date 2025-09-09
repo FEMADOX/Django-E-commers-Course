@@ -1,7 +1,10 @@
 from decimal import Decimal
+from typing import Any, Literal
 
 import pytest
 from django.contrib.auth.models import User
+from django.contrib.sessions.backends.base import SessionBase
+from django.test.client import Client as DjangoClient
 from django.urls import reverse
 
 from account.models import Client
@@ -11,7 +14,17 @@ from web.models import Category, Product
 
 
 @pytest.fixture
-def setup_data(db, client):  # noqa: ARG001
+def setup_data(
+    db: None,  # noqa: ARG001
+    client: DjangoClient,
+) -> tuple[
+    DjangoClient,
+    User,
+    Client,
+    Product,
+    Product,
+    SessionBase,
+]:
     # Create a user
     user = User.objects.create_user(username="testuser", password="testpass")
     client.login(username="testuser", password="testpass")
@@ -21,15 +34,21 @@ def setup_data(db, client):  # noqa: ARG001
 
     # Create products
     product_1 = Product.objects.create(
-        title="Product 1", category=category, price=Decimal(10),
+        title="Product 1",
+        category=category,
+        price=Decimal(10),
     )
     product_2 = Product.objects.create(
-        title="Product 2", category=category, price=Decimal(20),
+        title="Product 2",
+        category=category,
+        price=Decimal(20),
     )
 
     # Create a client
     client_model = Client.objects.create(
-        user=user, phone="1234567890", address="123 Test St",
+        user=user,
+        phone="1234567890",
+        address="123 Test St",
     )
 
     session = client.session
@@ -46,7 +65,7 @@ def setup_data(db, client):  # noqa: ARG001
         },
     }
 
-    def get_total_price(cart: dict):
+    def get_total_price(cart: dict) -> Decimal | Literal[0]:
         total = 0
         for value in cart.values():
             total += Decimal(value["subtotal"])
@@ -58,7 +77,9 @@ def setup_data(db, client):  # noqa: ARG001
     return client, user, client_model, product_1, product_2, session
 
 
-def test_confirm_order_success(setup_data):
+def test_confirm_order_success(
+    setup_data: tuple[DjangoClient, User, Client, Product, Product, SessionBase],
+) -> None:
     client, _, client_model, product_1, product_2, _ = setup_data
 
     response = client.post(
@@ -74,7 +95,8 @@ def test_confirm_order_success(setup_data):
     order = Order.objects.get(client=client_model)
 
     assert response.status_code == HTTP_302_REDIRECT
-    assert response.url == reverse("order:order_summary", args=[order.pk])
+    # assert response.url == reverse("order:order_summary", args=[order.pk])
+    assert response["Location"] == reverse("order:order_summary", args=[order.pk])
 
     # Check that the order was created
     assert Order.objects.count() == 1
@@ -93,9 +115,10 @@ def test_confirm_order_success(setup_data):
     assert order_detail_2.subtotal == Decimal(40)
 
 
-def test_confirm_order_empty_cart(setup_data):
+def test_confirm_order_empty_cart(
+    setup_data: tuple[DjangoClient, User, Client, Product, Product, SessionBase],
+) -> None:
     client, _, _, _, _, session = setup_data
-
     # Clear the cart
     session["cart"] = {}
     session.save()
@@ -112,19 +135,23 @@ def test_confirm_order_empty_cart(setup_data):
     )
 
     assert response.status_code == HTTP_302_REDIRECT
-    assert response.url == reverse("cart:cart")
+    # assert response.url == reverse("cart:cart")
+    assert response["Location"] == reverse("cart:cart")
 
     # Check that no order was created
     assert Order.objects.count() == 0
 
 
-def test_confirm_order_with_pending_orders(setup_data):
+def test_confirm_order_with_pending_orders(
+    setup_data: tuple[DjangoClient, User, Client, Product, Product, SessionBase],
+) -> None:
     client, _, client_model, product_1, _, _ = setup_data
-
     # Create a pending order
     pending_order = Order.objects.create(client=client_model, status="0")
     OrderDetail.objects.create(
-        order=pending_order, product=product_1, quantity=1,
+        order=pending_order,
+        product=product_1,
+        quantity=1,
         subtotal=Decimal(10),
     )
 
@@ -141,7 +168,8 @@ def test_confirm_order_with_pending_orders(setup_data):
     new_order = Order.objects.filter(client=client_model).first()
 
     assert response.status_code == HTTP_302_REDIRECT
-    assert response.url == reverse(
+
+    assert response["Location"] == reverse(
         "order:order_summary",
         args=[new_order.pk],  # type: ignore[attr-defined]
     )

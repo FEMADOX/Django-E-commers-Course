@@ -3,8 +3,7 @@ from typing import Any
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import AbstractBaseUser
-
-from account.views import HttpRequest
+from django.http import HttpRequest
 
 
 class AccountBackend(ModelBackend):

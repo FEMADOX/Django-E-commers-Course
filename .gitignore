@@ -146,7 +146,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+.env*
 .venv
 env/
 venv/
@@ -189,5 +189,4 @@ cython_debug/
 logo_old.png
 .idea/
 .ruff_cache/
-optimiced.css
 .run/

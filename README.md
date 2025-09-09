@@ -18,7 +18,6 @@ A full-featured e-commerce web application built with Django, featuring user aut
 Django-E-commers-Course/
 ├── account/          # User authentication and account management
 ├── cart/             # Shopping cart functionality
-├── common/           # Shared utilities and stubs
 ├── edshop/           # Main Django project settings
 ├── media/            # User uploaded files
 ├── order/            # Order processing and management
@@ -135,6 +134,90 @@ python manage.py runserver
 ```
 
 Visit `http://127.0.0.1:8000` to see the application.
+
+## 🐳 Docker Development
+
+For a containerized development environment, you can use Docker Compose to run the application with PostgreSQL.
+
+### Prerequisites
+
+- Docker and Docker Compose installed on your system
+- Clone the repository (as shown in Quick Start section)
+
+### 1. Set up environment variables for Docker
+
+Create a `.env.docker` file in the project root:
+
+```bash
+... # Like the previous .env file but with these changes:
+LOCAL_DATABASE=False
+
+# Database Configuration (PostgreSQL)
+DB_NAME=postgres # DB name defined in compose.yaml
+DB_USER=postgres # DB user defined in compose.yaml
+DB_PASSWORD=leave-empty or set-your-db-password changing the compose.yml
+DB_HOST=db # Service name defined in compose.yml
+DB_PORT=5432 # Default PostgreSQL port
+
+...
+```
+
+### 2. Build and run with Docker Compose
+
+```bash
+# Build and start all services
+docker-compose up --build
+
+# Or run in detached mode
+docker-compose up -d --build
+```
+
+### 3. Access the application
+
+- Django application: `http://localhost:8000`
+- PostgreSQL database runs on port 5432 (internal to containers)
+
+### 4. Useful Docker commands
+
+```bash
+# Stop all services
+docker-compose down
+
+# View logs
+docker-compose logs
+docker-compose logs web  # Only web service logs
+docker-compose logs db   # Only database logs
+
+# Execute this command to create the superuser
+docker-compose exec web python manage.py createsuperuser
+
+# Access the web container shell
+docker-compose exec web bash
+
+# Access PostgreSQL database
+docker-compose exec db psql -U postgres -d postgres
+```
+
+### 5. Development workflow with Docker
+
+The Docker setup includes:
+
+- **Volume mounting**: Your local code is mounted to `/app` in the container, so changes are reflected immediately
+- **PostgreSQL database**: Persistent data storage with Docker volumes
+- **Hot reloading**: Django development server automatically reloads on code changes
+- **Dependency management**: Uses `uv` for fast Python package installation
+
+### 6. Docker services
+
+- **web**: Django application container
+  - Based on Python 3.11
+  - Runs on port 8000
+  - Auto-reloads on code changes
+  
+- **db**: PostgreSQL database container
+  - PostgreSQL latest
+  - Data persisted in `postgres_data` volume
+  - Default credentials: postgres/postgres
 
 ## 🧪 Testing
 
