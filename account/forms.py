@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import re
 from datetime import UTC, datetime
 from re import Match
 from string import punctuation
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django import forms
 from django.contrib.auth import get_user_model
@@ -10,11 +12,8 @@ from django.contrib.auth.forms import (
     PasswordResetForm,
     SetPasswordForm,
 )
-from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
-from django.forms.models import ModelForm
-from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.urls.base import reverse
 from django.utils.encoding import force_bytes
@@ -24,6 +23,11 @@ from django.views.decorators.debug import sensitive_variables
 from account.backends import AccountBackend
 from account.emails import my_send_email
 from account.models import Client
+
+if TYPE_CHECKING:
+    from django.contrib.auth.models import AbstractBaseUser
+    from django.forms.models import ModelForm
+    from django.http import HttpRequest
 
 
 def regex_validation(
@@ -104,7 +108,7 @@ class ClientForm(forms.ModelForm):
         required=False,
         input_formats=["%Y-%m-%d"],
         widget=DateInput(
-            #     No Future Dates
+            # No Future Dates
             attrs={
                 "min": "1900-01-01",
                 "max": MAX_BIRTH_DATE,

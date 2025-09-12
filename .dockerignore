@@ -133,3 +133,4 @@ yarn-error.log*
 
 .ruff_cache/
 .run/
+*.code-workspace

@@ -1,10 +1,11 @@
+from __future__ import annotations
+
 import hashlib
 import time
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import AbstractBaseUser, User
 from django.contrib.auth.views import (
@@ -14,10 +15,6 @@ from django.contrib.auth.views import (
     PasswordResetView,
 )
 from django.core.exceptions import ValidationError
-from django.db.models import QuerySet
-from django.forms import Form
-from django.forms.models import BaseModelForm
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_str
@@ -35,6 +32,13 @@ from account.forms import (
 )
 from account.mixins import AnonymousRequiredMixin
 from account.models import Client
+
+if TYPE_CHECKING:
+    from django.contrib.auth.forms import AuthenticationForm
+    from django.db.models import QuerySet
+    from django.forms import Form
+    from django.forms.models import BaseModelForm
+    from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 
 
 class UserAccountView(LoginRequiredMixin, TemplateView):
@@ -157,7 +161,7 @@ class AccountActivationView(View):
         detail: str | None = None,
     ) -> HttpResponseRedirect:
         if detail:
-            detail += f"({detail})"
+            detail = f"({detail})"
         messages.error(self.request, f"Activation link is invalid! {detail}")
         return redirect(self.failed_url)
 
@@ -174,15 +178,15 @@ class AccountActivationView(View):
             result["details"] = "Invalid Email"
             return result
 
-        # Token Validation
-        if not self._validate_token(email, token):
-            result["details"] = "Token Mismatch"
-            return result
-
         # Pending Registration Validation
         pending_registration = self.get_pending_registration()
         if not pending_registration:
             result["details"] = "Pending Registration Not Found"
+            return result
+
+        # Token Validation
+        if not self._validate_token(email, token):
+            result["details"] = "Token Mismatch"
             return result
 
         # Validate email consistency

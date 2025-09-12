@@ -79,18 +79,17 @@ cp .env.example .env
 Create a `.env` file in the project root with the following configuration:
 
 ```bash
-# Django Configuration
-DJANGO_SECRET_KEY=your-secret-key-here
+# Django Settings
+DJANGO_SECRET_KEY="skz02xGaSTY5fsDAf9nQJPl4xYUuk2nc7OC4NixADN(*@!)(*@YJIO#)"
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-CORS_ORIGIN_WHITELIST=http://localhost:3000,http://127.0.0.1:3000
-CSRF_TRUSTED_ORIGINS=http://localhost:8000,http://127.0.0.1:8000
-SECURE_SSL_REDIRECT=False
-SESSION_COOKIE_SECURE=False
-CSRF_COOKIE_SECURE=False
-SECURE_HSTS_SECONDS=0
-SECURE_HSTS_INCLUDE_SUBDOMAINS=False
-SECURE_HSTS_PRELOAD=False
+ALLOWED_HOSTS="127.0.0.1"
+CORS_ORIGIN_WHITELIST="http://127.0.0.1"
+CSRF_TRUSTED_ORIGINS="http://127.0.0.1"
+
+# Choices production | development
+ENVIRONMENT="development"
+
+# Use local database (SQLite) if True, else use PostgreSQL
 LOCAL_DATABASE=True
 
 # Payment Processing
@@ -101,11 +100,7 @@ EMAIL_HOST_USER=your-email@example.com
 EMAIL_HOST_PASSWORD=your-app-password
 
 # Database Configuration
-DB_NAME=your-database-name
-DB_USER=your-database-user
-DB_PASSWORD=your-database-password
-DB_HOST=localhost
-DB_PORT=5432
+DATABASE_URL=your-database-url-here
 
 # Cloudinary (Media Storage)
 CLOUD_NAME=your-cloudinary-name
@@ -150,15 +145,10 @@ Create a `.env.docker` file in the project root:
 
 ```bash
 ... # Like the previous .env file but with these changes:
-LOCAL_DATABASE=False
+LOCAL_DATABASE=False # Use Dockerized Postgre instead of SQLite (local)
 
 # Database Configuration (PostgreSQL)
-DB_NAME=postgres # DB name defined in compose.yaml
-DB_USER=postgres # DB user defined in compose.yaml
-DB_PASSWORD=leave-empty or set-your-db-password changing the compose.yml
-DB_HOST=db # Service name defined in compose.yml
-DB_PORT=5432 # Default PostgreSQL port
-
+DATABASE_URL=postgres://[postgres_user]:[postgres_password]@[postgres_host]:[postgres_port]/[postgres_database]
 ...
 ```
 
@@ -213,7 +203,7 @@ The Docker setup includes:
   - Based on Python 3.11
   - Runs on port 8000
   - Auto-reloads on code changes
-  
+
 - **db**: PostgreSQL database container
   - PostgreSQL latest
   - Data persisted in `postgres_data` volume
@@ -237,6 +227,8 @@ This project uses Ruff for linting and formatting:
 
 ```bash
 python run_ruff.py
+# or
+ruff check .
 ```
 
 ### Pre-commit Hooks

@@ -50,7 +50,7 @@ CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
 # Environment
 ENVIRONMENT = env("ENVIRONMENT")
 
-# Security settings - depend on eviroment
+# Security settings - depend on environment
 
 if ENVIRONMENT == "production":
     # Production security settings
@@ -212,14 +212,14 @@ cloudinary.config(
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # STRIPE
-STRIPE_API = env("STRIPE_API")
+STRIPE_API = str(env("STRIPE_API"))
 
 # EMAIL
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = str(env("EMAIL_HOST_USER"))
+EMAIL_HOST_PASSWORD = str(env("EMAIL_HOST_PASSWORD"))
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
