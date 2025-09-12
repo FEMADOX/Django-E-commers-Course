@@ -496,7 +496,9 @@ class TestAccountActivationView:
         )
 
         self.assert_activation_error_redirect(
-            response, email, "Token Mismatch",
+            response,
+            email,
+            "Token Mismatch",
         )
 
 
