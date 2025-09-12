@@ -40,7 +40,7 @@ jobs:
           uv run python manage.py check --deploy
       - name: Run Linter
         run: uv run ruff check . --output-format=github
-      - name: Run Ruff formatting check
+      - name: Run Ruff formating check
         run: uv run ruff format --check .
 
   test:
@@ -86,7 +86,7 @@ jobs:
           echo "DJANGO_SECRET_KEY=ci-secret-key-$(openssl rand -base64 32)" >> $GITHUB_ENV
           echo "DEBUG=False" >> $GITHUB_ENV
           echo "ENVIRONMENT=production" >> $GITHUB_ENV
-          echo "LOCAL_DATABASE=False" >> $GITHUB_ENV
+          echo "LOCAL_DATABASE=True" >> $GITHUB_ENV
           echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/test_ecommerce" >> $GITHUB_ENV
           echo "ALLOWED_HOSTS=127.0.0.1,localhost" >> $GITHUB_ENV
           echo "CORS_ORIGIN_WHITELIST=http://localhost:8000" >> $GITHUB_ENV
