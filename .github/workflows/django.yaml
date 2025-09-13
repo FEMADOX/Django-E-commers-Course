@@ -94,6 +94,8 @@ jobs:
           echo "CORS_ORIGIN_WHITELIST=http://localhost:8000" >> $GITHUB_ENV
           echo "CSRF_TRUSTED_ORIGINS=http://localhost:8000" >> $GITHUB_ENV
 
+          echo "STRIPE_API=test" >> $GITHUB_ENV
+
           echo "EMAIL_HOST_USER=test@example.com" >> $GITHUB_ENV
           echo "EMAIL_HOST_PASSWORD=test" >> $GITHUB_ENV
 
