@@ -54,13 +54,12 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: test_ecommerce
+          POSTGRES_HOST_AUTH_METHOD: trust
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports:
-          - 5432:5432
     strategy:
       matrix:
         python-version: ["3.12", "3.13"]
@@ -112,5 +111,7 @@ jobs:
         run: |
           uv run manage.py makemigrations --noinput
           uv run manage.py migrate --noinput
+      - name: Check migrations
+        run: uv run manage.py showmigrations
       - name: Run tests
         run: uv run pytest .
