@@ -59,32 +59,3 @@ def run_ruff() -> int:
 if __name__ == "__main__":
     exit_code = run_ruff()
     sys.exit(exit_code)
-
-# if __name__ == "__main__":
-#     # Run ruff check
-#     check_result = subprocess.run(
-#         ["ruff", "check", "."],
-#         capture_output=True,
-#         check=True,
-#     )
-#     if check_result.returncode != 0:
-#         logger.error("Ruff check failed:")
-#         logger.error(check_result.stdout.decode())
-#         logger.error(check_result.stderr.decode())
-#         sys.exit(check_result.returncode)
-
-#     # Run ruff format
-#     format_result = subprocess.run(
-#         ["ruff", "format", "."],
-#         capture_output=True,
-#         check=True,
-#     )
-#     if format_result.returncode != 0:
-#         logger.error("Ruff format failed:")
-#         logger.error(format_result.stdout.decode())
-#         logger.error(format_result.stderr.decode())
-#         sys.exit(format_result.returncode)
-
-#     logger.info("Ruff check and format completed successfully")
-#     result = format_result
-#     sys.exit(result.returncode)
