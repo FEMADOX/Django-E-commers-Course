@@ -29,8 +29,8 @@ jobs:
         run: |
           echo "DJANGO_SECRET_KEY=ci-secret-key-$(openssl rand -base64 32)" >> $GITHUB_ENV
           echo "DEBUG=False" >> $GITHUB_ENV
-          echo "ENVIRONMENT=production" >> $GITHUB_ENV
-          echo "LOCAL_DATABASE=False" >> $GITHUB_ENV
+          echo "ENVIRONMENT=development" >> $GITHUB_ENV
+          echo "LOCAL_DATABASE=True" >> $GITHUB_ENV
           echo "ALLOWED_HOSTS=127.0.0.1,localhost" >> $GITHUB_ENV
           echo "CORS_ORIGIN_WHITELIST=http://localhost:8000" >> $GITHUB_ENV
           echo "CSRF_TRUSTED_ORIGINS=http://localhost:8000" >> $GITHUB_ENV
@@ -86,7 +86,7 @@ jobs:
         run: |
           echo "DJANGO_SECRET_KEY=ci-secret-key-$(openssl rand -base64 32)" >> $GITHUB_ENV
           echo "DEBUG=True" >> $GITHUB_ENV
-          echo "ENVIRONMENT=production" >> $GITHUB_ENV
+          echo "ENVIRONMENT=development" >> $GITHUB_ENV
 
           echo "LOCAL_DATABASE=False" >> $GITHUB_ENV
           echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/test_ecommerce" >> $GITHUB_ENV
@@ -105,10 +105,21 @@ jobs:
           echo "CLOUD_API_SECRET=test" >> $GITHUB_ENV
       - name: Wait for PostgreSQL
         run: |
-          until pg_isready -h localhost -p 5432 -U postgres; do
-            echo "Waiting for PostgreSQL..."
+          timeout=30
+          count=0
+          until pg_isready -h localhost -p 5432 -U postgres || [ $count -eq $timeout ]; do
+            echo "Waiting for PostgreSQL... ($count/$timeout)"
             sleep 2
+            count=$((count + 1))
           done
+
+          if [ $count -eq $timeout ]; then
+            echo "❌ PostgreSQL failed to start within $timeout attempts"
+            docker ps  # Ver qué contenedores están corriendo
+            exit 1
+          fi
+
+          echo "✅ PostgreSQL is ready!"
       - name: Run migrations
         run: |
           uv run manage.py makemigrations --noinput
@@ -116,4 +127,4 @@ jobs:
       - name: Check migrations
         run: uv run manage.py showmigrations
       - name: Run tests
-        run: uv run pytest .
+        run: uv run pytest
