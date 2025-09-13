@@ -144,6 +144,7 @@ if LOCAL_DATABASE:
     }
 else:
     DATABASES = {"default": env.db()}
+    DATABASES["default"]["ENGINE"] = "django.db.backends.postgresql"
 
 
 # Password validation
