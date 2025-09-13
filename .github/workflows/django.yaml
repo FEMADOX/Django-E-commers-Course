@@ -86,11 +86,20 @@ jobs:
           echo "DJANGO_SECRET_KEY=ci-secret-key-$(openssl rand -base64 32)" >> $GITHUB_ENV
           echo "DEBUG=False" >> $GITHUB_ENV
           echo "ENVIRONMENT=production" >> $GITHUB_ENV
+
           echo "LOCAL_DATABASE=False" >> $GITHUB_ENV
           echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/test_ecommerce" >> $GITHUB_ENV
+
           echo "ALLOWED_HOSTS=127.0.0.1,localhost" >> $GITHUB_ENV
           echo "CORS_ORIGIN_WHITELIST=http://localhost:8000" >> $GITHUB_ENV
           echo "CSRF_TRUSTED_ORIGINS=http://localhost:8000" >> $GITHUB_ENV
+
+          echo "EMAIL_HOST_USER=test@example.com" >> $GITHUB_ENV
+          echo "EMAIL_HOST_PASSWORD=test" >> $GITHUB_ENV
+
+          echo "CLOUD_NAME=test" >> $GITHUB_ENV
+          echo "CLOUD_API_KEY=test" >> $GITHUB_ENV
+          echo "CLOUD_API_SECRET=test" >> $GITHUB_ENV
       - name: Wait for PostgreSQL
         run: |
           until pg_isready -h localhost -p 5432 -U postgres; do
