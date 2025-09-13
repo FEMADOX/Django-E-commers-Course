@@ -84,10 +84,10 @@ jobs:
       - name: Set environment variables
         run: |
           echo "DJANGO_SECRET_KEY=ci-secret-key-$(openssl rand -base64 32)" >> $GITHUB_ENV
-          echo "DEBUG=False" >> $GITHUB_ENV
+          echo "DEBUG=True" >> $GITHUB_ENV
           echo "ENVIRONMENT=production" >> $GITHUB_ENV
 
-          echo "LOCAL_DATABASE=False" >> $GITHUB_ENV
+          echo "LOCAL_DATABASE=True" >> $GITHUB_ENV
           echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/test_ecommerce" >> $GITHUB_ENV
 
           echo "ALLOWED_HOSTS=127.0.0.1,localhost" >> $GITHUB_ENV
@@ -108,9 +108,7 @@ jobs:
             echo "Waiting for PostgreSQL..."
             sleep 2
           done
-      # - name: Run migrations
-      #   run: |
-      #     cat edshop/settings.py
-      #     uv run python manage.py migrate --noinput
+      - name: Run migrations
+        run: uv run python manage.py migrate --noinput
       - name: Run tests
         run: uv run pytest . --verbose

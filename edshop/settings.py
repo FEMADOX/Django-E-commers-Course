@@ -135,16 +135,15 @@ WSGI_APPLICATION = "edshop.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 LOCAL_DATABASE = env("LOCAL_DATABASE")
 
-if LOCAL_DATABASE:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        },
-    }
-else:
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    },
+}
+
+if not LOCAL_DATABASE:
     DATABASES = {"default": env.db()}
-    DATABASES["default"]["ENGINE"] = "django.db.backends.postgresql"
 
 
 # Password validation
