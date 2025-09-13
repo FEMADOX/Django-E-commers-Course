@@ -109,6 +109,8 @@ jobs:
             sleep 2
           done
       - name: Run migrations
-        run: uv run python manage.py migrate --noinput
+        run: |
+          uv run manage.py makemigrations --noinput
+          uv run manage.py migrate --noinput
       - name: Run tests
         run: uv run pytest . --config-file pyproject.toml
