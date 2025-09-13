@@ -5,21 +5,25 @@ repos:
     rev: v5.0.0
     hooks:
     -   id: trailing-whitespace
+        verbose: true
     -   id: end-of-file-fixer
+        verbose: true
     -   id: check-yaml
+        verbose: true
     -   id: check-added-large-files
+        verbose: true
 -   repo: local
     hooks:
     -   id: run-tests
-        name: run-tests
-        entry: python run_tests.py
+        name: "🧪 Django Tests"
+        entry: uv run run_tests.py
         language: system
         types: [python]
         stages: [pre-commit]
         verbose: true
         pass_filenames: true
     -   id: run-linter
-        name: run-linter
+        name: "🧹 Ruff Linting"
         entry: uv run run_ruff.py
         language: system
         types: [python]

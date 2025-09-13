@@ -12,9 +12,6 @@ edteam-cursodjango-main.zip
 venv/
 Recursos del curso/
 IMAGENES_TIENDA/
-run_tests.py
-run_ruff.py
-
 
 ### Django ###
 *.log
