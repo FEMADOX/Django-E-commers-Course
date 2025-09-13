@@ -16,9 +16,13 @@ repos:
         language: system
         types: [python]
         stages: [pre-commit]
-    -   id: run-ruff
-        name: run-ruff
+        verbose: true
+        pass_filenames: true
+    -   id: run-linter
+        name: run-linter
         entry: uv run run_ruff.py
         language: system
         types: [python]
         stages: [pre-commit]
+        verbose: true
+        pass_filenames: true
