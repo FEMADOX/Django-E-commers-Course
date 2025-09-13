@@ -76,7 +76,7 @@ cp .env.example .env
 
 ### 3.1 Set up environment variables
 
-Create a `.env` file in the project root with the following configuration:
+Create a `.env` file in the project root with the following configuration (or use the provided `.env.example` as a template):
 
 ```bash
 # Django Settings
