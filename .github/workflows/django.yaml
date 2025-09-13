@@ -97,9 +97,9 @@ jobs:
             echo "Waiting for PostgreSQL..."
             sleep 2
           done
-      - name: Run migrations
-        run: |
-          cat edshop/settings.py
-          uv run python manage.py migrate --noinput
+      # - name: Run migrations
+      #   run: |
+      #     cat edshop/settings.py
+      #     uv run python manage.py migrate --noinput
       - name: Run tests
         run: uv run pytest . --verbose
