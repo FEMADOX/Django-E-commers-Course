@@ -253,6 +253,18 @@ class SmartAuthenticationForm(forms.Form):
         ),
         required=True,
     )
+    password_confirm = forms.CharField(
+        label="Confirm Password",
+        min_length=8,
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control password-confirm",
+                "placeholder": "Confirm your password",
+                "autocomplete": "current-password",
+            },
+        ),
+        required=True,
+    )
 
     error_messages = {
         "invalid_login": (
@@ -261,7 +273,7 @@ class SmartAuthenticationForm(forms.Form):
         ),
         "invalid_signup": "Email already registered. Please use another email.",
         "inactive": "This account is inactive.",
-        "invalid_field": "invalid %(field)s",
+        "invalid_field": "Invalid %(field)s",
     }
 
     def __init__(
@@ -277,6 +289,10 @@ class SmartAuthenticationForm(forms.Form):
         self.is_signup = is_signup
         self.user_cache = None
         self.email_field = self.fields["email"]
+
+        # If not signup, remove password_confirm field
+        if not self.is_signup:
+            del self.fields["password_confirm"]
 
     def clean_email(self) -> str | None:
         """
@@ -341,12 +357,22 @@ class SmartAuthenticationForm(forms.Form):
         Raises:
             ValidationError: If authentication fails or login is not allowed
         """
-        if self.is_signup:
-            return super().clean() or {}
+        cleaned_data = super().clean() or {}
 
-        cleaned_data = super().clean()
-        if not cleaned_data:
-            return cleaned_data or {}
+        if self.is_signup:
+            password = cleaned_data.get("password")
+            password_confirm = cleaned_data.get("password_confirm")
+
+            if password and password_confirm and password != password_confirm:
+                self.add_error(
+                    "password_confirm",
+                    ValidationError(
+                        "Passwords do not match.",
+                        code="invalid_field",
+                        params={"field": "password"},
+                    ),
+                )
+            return cleaned_data
 
         email = cleaned_data.get("email")
         password = cleaned_data.get("password")

@@ -13,6 +13,14 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
 from account.models import Client
+from tests.parametrizes import (
+    PARAM_EMPTY_SPACES,
+    PARAM_INVALID_EMAIL,
+    PARAM_INVALID_PASSWORD_V1,
+    PARAM_INVALID_PASSWORD_V2,
+    PARAM_PASSWORD_NOT_MATCH,
+    PARAM_PASSWORD_TOO_SHORT,
+)
 from tests.status import HTTP_200_OK, HTTP_302_REDIRECT, HTTP_404_NOT_FOUND
 
 if TYPE_CHECKING:
@@ -289,23 +297,63 @@ class TestUserSignupView:
         messages = list(get_messages(response.wsgi_request))
         assert any("sent an email" in str(m) for m in messages)
 
+    @pytest.mark.parametrize(
+        ("test_case", "data", "expected_message"),
+        [
+            PARAM_INVALID_EMAIL,
+            PARAM_PASSWORD_NOT_MATCH,
+            PARAM_PASSWORD_TOO_SHORT,
+            PARAM_EMPTY_SPACES,
+            PARAM_INVALID_PASSWORD_V1,
+            PARAM_INVALID_PASSWORD_V2,
+        ],
+    )
     def test_signup_view_post_invalid_data(
         self,
         client: DjangoClient,
+        test_case: str,
+        data: dict[str, str],
+        expected_message: str | list[str],
     ) -> None:
         """Test POST request with invalid signup data."""
-        invalid_data = {
-            "email": "invalid-email",
-            "password": "weak",
-            "password_confirm": "different",
-        }
-
-        response = client.post(reverse("account:signup"), invalid_data)
+        response = client.post(reverse("account:signup"), data)
 
         assert response.status_code == HTTP_200_OK
 
         # Check error message
         messages = list(get_messages(response.wsgi_request))
+        form: Form = response.context["form"]
+
+        message_found = False
+        all_error_text = []
+
+        if messages:
+            all_error_text.append(" ".join(str(m) for m in messages))
+
+        if form.errors:
+            # Add all form errors to list for easier debugging
+            for field_errors in form.errors.values():
+                all_error_text.extend(str(error) for error in field_errors)
+            # Also check non-field errors
+            if form.non_field_errors():
+                all_error_text.append(
+                    " ".join(str(error) for error in form.non_field_errors()),
+                )
+        if isinstance(expected_message, str):
+            message_found = any(expected_message in text for text in all_error_text)
+        elif isinstance(expected_message, list):
+            message_found = all(
+                any(expected in text for text in all_error_text)
+                for expected in expected_message
+            )
+
+        assert message_found, (
+            f"Expected message '{expected_message}' not found in case '{test_case}'\n"
+            f"All error texts: {all_error_text}\n"
+            f"Form errors: {dict(form.errors) if form.errors else 'No form errors'}\n"
+            f"Django messages: {[str(message) for message in messages]}"
+        )
+
         assert any("SignUp Failed" in str(m) for m in messages)
 
 
