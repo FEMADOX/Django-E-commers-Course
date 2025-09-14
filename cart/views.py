@@ -46,7 +46,7 @@ class AddProductCartView(LoginRequiredMixin, View):
     def post(
         request: HttpRequest,
         product_id: int,
-    ) -> HttpResponseRedirect:
+    ) -> HttpResponse:
         """Add product with specified quantity and show cart"""
 
         quantity = int(request.POST["quantity"])
@@ -71,7 +71,7 @@ class DeleteProductCartView(LoginRequiredMixin, View):
     def post(
         request: HttpRequest,
         product_id: int,
-    ) -> HttpResponseRedirect:
+    ) -> HttpResponse:
         product = get_object_or_404(Product, id=product_id)
         cart = Cart(request)
         cart.delete(product)
@@ -92,7 +92,7 @@ class ClearCartView(LoginRequiredMixin, View):
     @staticmethod
     def post(
         request: HttpRequest,
-    ) -> HttpResponseRedirect:
+    ) -> HttpResponse:
         cart = Cart(request)
         cart.clear()
 
@@ -113,7 +113,7 @@ class RestoreOrderPendingCartView(LoginRequiredMixin, View):
     def post(
         request: HttpRequest,
         order_pending_id: int,
-    ) -> HttpResponseRedirect:
+    ) -> HttpResponse:
         cart = Cart(request)
         cart.restore_order_pending(order_pending_id)
         actual_location = request.POST.get("location-url")

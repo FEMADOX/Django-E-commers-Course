@@ -15,6 +15,7 @@ from django.contrib.auth.views import (
     PasswordResetView,
 )
 from django.core.exceptions import ValidationError
+from django.http.request import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -160,7 +161,7 @@ class AccountActivationView(View):
     def _error_response(
         self,
         detail: str | None = None,
-    ) -> HttpResponseRedirect:
+    ) -> HttpResponse:
         if detail:
             detail = f"({detail})"
         messages.error(self.request, f"Activation link is invalid! {detail}")

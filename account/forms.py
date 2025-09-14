@@ -287,7 +287,7 @@ class SmartAuthenticationForm(forms.Form):
         super().__init__(*arg, **kwargs)
         self.request = request
         self.is_signup = is_signup
-        self.user_cache = None
+        self.user_cache: AbstractBaseUser | None = None
         self.email_field = self.fields["email"]
 
         # If not signup, remove password_confirm field

@@ -56,7 +56,7 @@ def create_order(request: HttpRequest) -> HttpResponse:
 @login_required(login_url="/account/login/")
 def confirm_order(
     request: HttpRequest,
-) -> HttpResponseRedirect:
+) -> HttpResponse:
     user = User.objects.get(pk=request.user.pk)
 
     if request.method == "POST":

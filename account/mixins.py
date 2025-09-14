@@ -7,7 +7,9 @@ from django.urls import reverse_lazy
 
 
 class AnonymousRequiredMixin(UserPassesTestMixin):
-    login_redirect_url = reverse_lazy("account:user_account")
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        super().__init__(*args, **kwargs)
+        self.login_redirect_url = str(reverse_lazy("account:user_account"))
 
     if TYPE_CHECKING:
         request: HttpRequest
@@ -18,4 +20,4 @@ class AnonymousRequiredMixin(UserPassesTestMixin):
     def handle_no_permission(
         self,
     ) -> HttpResponseRedirect:
-        return redirect(self.login_redirect_url, permanent=False)
+        return redirect(self.login_redirect_url)

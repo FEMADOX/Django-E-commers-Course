@@ -22,13 +22,17 @@ dependencies = [
 
 [project.optional-dependencies]
 types-stubs = [
-    "django-stubs>=5.2.0",
+    "django-stubs>=5.2.5",
     "django-stubs-ext>=5.2.0",
     "django-types>=0.20.0",
 ]
 
 [dependency-groups]
-dev = ["django-livereload-server>=0.5.1", "ipython>=9.2.0"]
+dev = [
+    "django-livereload-server>=0.5.1",
+    "ipython>=9.2.0",
+    "ty>=0.0.1a20",
+]
 
 [tool.ruff]
 lint.select = [
@@ -99,8 +103,21 @@ lint.ignore = [
     "COM812",  # Missing trailing comma in a list or tuple
 ]
 
+[tool.pyrefly]
+project-includes = ["**/*"]
+project-excludes = [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/*venv/**/*",
+    "**/migrations/**/*",
+    "**/.vscode/*"
+]
+
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "edshop.settings"
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
+
+[tool.django-stubs]
+django_settings_module = "edshop.settings"
