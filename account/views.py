@@ -34,6 +34,7 @@ from account.forms import (
 )
 from account.mixins import AnonymousRequiredMixin
 from account.models import Client
+from common.views.client import get_or_create_client_form
 
 if TYPE_CHECKING:
     from django.contrib.auth.forms import AuthenticationForm
@@ -50,25 +51,7 @@ class UserAccountView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         user = User.objects.get(pk=self.request.user.pk)
 
-        try:
-            client = Client.objects.get(user=user)
-            client_data = {
-                "name": user.first_name or user.username,
-                "last_name": user.last_name,
-                "email": user.email,
-                "dni": client.dni,
-                "sex": client.sex,
-                "phone": client.phone,
-                "birth": client.birth,
-                "address": client.address,
-            }
-        except Client.DoesNotExist:
-            client_data = {
-                "name": user.username,
-                "email": user.email,
-            }
-
-        context["form"] = ClientForm(client_data)
+        context["form"] = get_or_create_client_form(user)
         return context
 
 

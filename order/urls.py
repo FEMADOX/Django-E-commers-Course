@@ -1,23 +1,23 @@
 from django.urls import path
 
-from order.views import confirm_order, create_order, order_summary
+from order.views import ConfirmOrderView, CreateOrderView, OrderSummaryView
 
 app_name = "order"
 
 urlpatterns = [
     path(
         "creating-order/",
-        create_order,
+        CreateOrderView.as_view(),
         name="create_order",
     ),
     path(
         "confirm-order/",
-        confirm_order,
+        ConfirmOrderView.as_view(),
         name="confirm_order",
     ),
     path(
         "order_summary/<int:order_id>",
-        order_summary,
+        OrderSummaryView.as_view(),
         name="order_summary",
     ),
 ]

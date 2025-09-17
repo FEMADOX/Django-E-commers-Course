@@ -53,7 +53,9 @@
           {% endif %}
         </ul>
       </li>
-      {% include 'includes/header_cart.html' %}
+      {% if user.is_authenticated %}
+        {% include 'includes/header_cart.html' %}
+      {% endif %}
     </ul>
   </div>
   <button id="theme-switch">

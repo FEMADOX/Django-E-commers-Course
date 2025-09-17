@@ -1,10 +1,14 @@
-from decimal import Decimal
-from typing import Literal
+from __future__ import annotations
 
-from django.http import HttpRequest
+from decimal import Decimal
+from typing import TYPE_CHECKING, Any
 
 from order.models import Order
-from web.models import Product
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
+
+    from web.models import Product
 
 
 class Cart:
@@ -17,21 +21,20 @@ class Cart:
 
         if not cart:
             cart = self.session["cart"] = {}
-            total_price = self.session["cart_total_price"] = "0.00"
+            total_price = self.session["cart_total_price"] = 0.00
 
         self.cart = cart
         self.total_price = total_price
 
-    def get_total_price(self) -> Decimal | Literal[0]:
+    def get_total_price(self) -> int:
         total = 0
         for value in self.cart.values():
             total += Decimal(value["subtotal"])
-        return total
+        return int(total)
 
     def add(self, product: Product, quantity: int) -> None:
         if str(product.pk) not in self.cart:
             self.cart[product.pk] = {
-                "product_id": product.pk,
                 "title": product.title,
                 "price": str(product.price),
                 "quantity": quantity,
@@ -48,7 +51,7 @@ class Cart:
                 "weight": product.weight,
                 "dimension": product.dimension,
                 "color": product.color,
-                "subtotal": str(quantity * product.price),
+                "subtotal": float(quantity * product.price),
             }
         else:
             for key, value in self.cart.items():
@@ -68,6 +71,19 @@ class Cart:
 
         self.save()
 
+    def update(self, product: Product, quantity: int) -> None:
+        product_id = str(product.pk)
+        if product_id in self.cart:
+            if quantity < 1:
+                self.delete(product)
+                return
+            self.cart[product_id]["quantity"] = quantity
+            self.cart[product_id]["subtotal"] = str(
+                Decimal(self.cart[product_id]["price"]) * quantity,
+            )
+
+        self.save()
+
     def clear(self) -> None:
         self.session["cart"] = {}
 
@@ -78,5 +94,14 @@ class Cart:
 
     def save(self) -> None:
         self.session["cart"] = self.cart
-        self.session["cart_total_price"] = str(self.get_total_price())
+        self.session["cart_total_price"] = self.get_total_price()
         self.session.modified = True
+
+    def items(self) -> Any:  # noqa: ANN401
+        return self.cart.items()
+
+    def get_order_product_subtotal(self, product: Product) -> Decimal:
+        product_id = str(product.pk)
+        if product_id in self.cart:
+            return Decimal(self.cart[product_id]["subtotal"])
+        return Decimal("0.00")

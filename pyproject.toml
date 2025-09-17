@@ -103,16 +103,6 @@ lint.ignore = [
     "COM812",  # Missing trailing comma in a list or tuple
 ]
 
-[tool.pyrefly]
-project-includes = ["**/*"]
-project-excludes = [
-    "**/node_modules",
-    "**/__pycache__",
-    "**/*venv/**/*",
-    "**/migrations/**/*",
-    "**/.vscode/*"
-]
-
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "edshop.settings"
 python_files = ["tests.py", "test_*.py", "*_tests.py"]

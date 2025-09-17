@@ -1,13 +1,15 @@
+import json
 from typing import Any
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect, JsonResponse
 from django.http.response import HttpResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import TemplateView, View
 
 from cart.cart import Cart
 from order.models import Order
+from tests import status
 from web.models import Product
 
 
@@ -81,6 +83,45 @@ class DeleteProductCartView(LoginRequiredMixin, View):
             return redirect(actual_location)
 
         return redirect("/")
+
+
+class UpdateProductCartView(LoginRequiredMixin, View):
+    """View to update a product from the cart"""
+
+    http_method_names = ["patch"]
+    login_url = "/account/login/"
+
+    @staticmethod
+    def patch(
+        request: HttpRequest,
+        product_id: int,
+    ) -> JsonResponse:
+        try:
+            product = get_object_or_404(Product, id=product_id)
+            data = json.loads(request.body)
+            quantity = data.get("quantity")
+
+            cart = Cart(request)
+            cart.update(product, quantity)
+
+            return JsonResponse(
+                {
+                    "subtotal": cart.get_order_product_subtotal(product),
+                    "total_price": cart.get_total_price(),
+                    "message": "Product updated successfully",
+                },
+                status=200,
+            )
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+        except ValueError as error:
+            return JsonResponse(
+                {"error": f"Invalid quantity: {error!s}"},
+                status=400,
+            )
+        except Exception as error:  # noqa: BLE001
+            return JsonResponse({"error": str(error)}, status=400)
 
 
 class ClearCartView(LoginRequiredMixin, View):

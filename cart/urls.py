@@ -7,6 +7,7 @@ from cart.views import (
     ClearCartView,
     DeleteProductCartView,
     RestoreOrderPendingCartView,
+    UpdateProductCartView,
 )
 
 app_name = "cart"
@@ -23,6 +24,11 @@ urlpatterns = [
         "delete-from-cart/<int:product_id>",
         DeleteProductCartView.as_view(),
         name="delete_product_cart",
+    ),
+    path(
+        "update-product-cart/<int:product_id>",
+        UpdateProductCartView.as_view(),
+        name="update_product_cart",
     ),
     path(
         "restore_cart/<int:order_pending_id>",

@@ -5,7 +5,7 @@ from django.urls import reverse
 
 class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.RESTRICT)
-    dni = models.CharField(max_length=10)
+    dni = models.PositiveSmallIntegerField(blank=True, default=0)
     sex = models.CharField(max_length=1, blank=True, default="N")
     phone = models.CharField(max_length=20, blank=True, default="")
     birth = models.DateField(blank=True, null=True)

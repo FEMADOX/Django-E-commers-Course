@@ -49,7 +49,7 @@ def client_data(user_data: dict[str, str]) -> dict[str, str]:
         "name": user_data["username"],
         "last_name": "User",
         "email": user_data["email"],
-        "dni": "12345678",
+        "dni": 12345678,
         "sex": "M",
         "phone": "123456789",
         "birth": "1990-01-01",
@@ -84,7 +84,7 @@ def client_profile(authenticated_user: User) -> Client:
     """Create and return a client profile."""
     return Client.objects.create(
         user=authenticated_user,
-        dni="12345678",
+        dni=12345678,
         sex="M",
         phone="123456789",
         address="123 Test Street",
