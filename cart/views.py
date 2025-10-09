@@ -4,12 +4,11 @@ from typing import Any
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponseRedirect, JsonResponse
 from django.http.response import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import TemplateView, View
 
 from cart.cart import Cart
 from order.models import Order
-from tests import status
 from web.models import Product
 
 

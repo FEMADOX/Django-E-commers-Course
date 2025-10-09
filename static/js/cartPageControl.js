@@ -5,7 +5,6 @@ const updateCartOnServer = async (productId, quantity) => {
 
     try {
         const response = await fetch(`${actualUrl}update-product-cart/${productId}`, {
-            // method: 'PUT',
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -39,7 +38,6 @@ const updateCartTotals = (serverData) => {
     document.location.reload()
 }
 
-// TODO: Implement product removal when quantity is 0
 const updateCartData = async (button, quantity) => {
     const productContainer = button.closest('.prod-li-cont')
     const totalPriceElement = productContainer.querySelector('#product-total-price')

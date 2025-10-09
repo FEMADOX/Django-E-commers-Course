@@ -14,7 +14,8 @@ from django.contrib.auth.views import (
     PasswordResetDoneView,
     PasswordResetView,
 )
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -42,6 +43,7 @@ if TYPE_CHECKING:
     from django.forms import Form
     from django.forms.models import BaseModelForm
     from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+    from django.http.response import HttpResponseBase
 
 
 class UserAccountView(LoginRequiredMixin, TemplateView):
@@ -315,6 +317,39 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
     template_name = "account/password/reset_confirm.html"
     success_url = "/account/login/"
     form_class = CustomSetPasswordForm
+
+    def dispatch(
+        self,
+        request: HttpRequest,
+        *args: tuple,
+        **kwargs: dict,
+    ) -> HttpResponseBase:
+        if "uidb64" not in kwargs or "token" not in kwargs:
+            msg = "The URL path must contain 'uidb64' and 'token' parameters."
+            raise ImproperlyConfigured(msg)
+
+        uidb64 = kwargs["uidb64"]
+        token = kwargs["token"]
+
+        user = self.get_user(uidb64 if isinstance(uidb64, str) else "")
+        if not user:
+            messages.error(
+                request,
+                "The password reset link is invalid (uidb64 invalid!).",
+            )
+            return redirect("account:login")
+
+        if token != self.reset_url_token and not self.token_generator.check_token(
+            user,
+            token,
+        ):
+            messages.error(
+                request,
+                "The password reset link is invalid (token invalid!).",
+            )
+            return redirect("account:login")
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_user(self, uidb64: str) -> AbstractBaseUser | None:
         user = get_user_model()

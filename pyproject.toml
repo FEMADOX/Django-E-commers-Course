@@ -28,11 +28,7 @@ types-stubs = [
 ]
 
 [dependency-groups]
-dev = [
-    "django-livereload-server>=0.5.1",
-    "ipython>=9.2.0",
-    "ty>=0.0.1a20",
-]
+dev = ["django-livereload-server>=0.5.1", "ipython>=9.2.0", "ty>=0.0.1a20"]
 
 [tool.ruff]
 lint.select = [
@@ -108,6 +104,11 @@ DJANGO_SETTINGS_MODULE = "edshop.settings"
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
+
+markers = [
+    "unit: Unit tests - fast, isolated tests for individual components.",
+    "integration: Integration tests - tests that verify interactions and workflows between multiple components.",
+]
 
 [tool.django-stubs]
 django_settings_module = "edshop.settings"
