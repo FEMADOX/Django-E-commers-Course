@@ -3,31 +3,17 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
-from django.test.client import Client
 from django.urls import reverse
 
-from tests.status import HTTP_200_OK
-from web.models import Brand, Category, Product
+from tests.common.status import HTTP_200_OK
 
 if TYPE_CHECKING:
-    from django.http import HttpResponse
-    from django.test import Client
+    from django.test.client import Client
+
+    from web.models import Brand, Category, Product
 
 
-@pytest.fixture
-def setup_data(db: None) -> tuple[Category, Brand, Product]:  # noqa: ARG001
-    """Create test data for web app tests."""
-    category = Category.objects.create(name="Electronics")
-    brand = Brand.objects.create(name="BrandA", fundator="FounderA")
-    product = Product.objects.create(
-        title="Product1",
-        category=category,
-        price=100.00,
-        brand=brand,
-    )
-    return category, brand, product
-
-
+@pytest.mark.unit
 def test_index_view(
     client: Client,
     setup_data: tuple[Category, Brand, Product],
@@ -40,6 +26,7 @@ def test_index_view(
     assert product.title in response.content.decode()
 
 
+@pytest.mark.unit
 def test_filter_by_category_view(
     client: Client,
     setup_data: tuple[Category, Brand, Product],
@@ -54,6 +41,7 @@ def test_filter_by_category_view(
     assert product.title in response.content.decode()
 
 
+@pytest.mark.unit
 def test_filter_by_brand_view(
     client: Client,
     setup_data: tuple[Category, Brand, Product],
@@ -66,6 +54,7 @@ def test_filter_by_brand_view(
     assert product.title in response.content.decode()
 
 
+@pytest.mark.unit
 def test_search_product_title_view(
     client: Client,
     setup_data: tuple[Category, Brand, Product],
@@ -78,6 +67,7 @@ def test_search_product_title_view(
     assert product.title in response.content.decode()
 
 
+@pytest.mark.unit
 def test_product_detail_view(
     client: Client,
     setup_data: tuple[Category, Brand, Product],

@@ -126,5 +126,7 @@ jobs:
           uv run manage.py migrate --noinput
       - name: Check migrations
         run: uv run manage.py showmigrations
-      - name: Run tests
-        run: uv run pytest
+      - name: Run unit tests
+        run: uv run pytest -m unit
+      - name: Run integration tests
+        run: uv run pytest -m integration

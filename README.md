@@ -219,6 +219,22 @@ python run_tests.py
 pytest
 ```
 
+Run specific test module:
+
+```bash
+pytest tests/test_module_dir
+```
+
+Run only unit tests or integration tests:
+
+```bash
+# Unit tests
+pytest -m unit
+
+# Integration tests
+pytest -m integration
+```
+
 ## 🔧 Development
 
 ### Code Quality

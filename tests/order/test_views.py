@@ -1,5 +1,4 @@
 from decimal import Decimal
-from typing import Any, Literal
 
 import pytest
 from django.contrib.auth.models import User
@@ -9,74 +8,11 @@ from django.urls import reverse
 
 from account.models import Client
 from order.models import Order, OrderDetail
-from tests.status import HTTP_302_REDIRECT
-from web.models import Category, Product
+from tests.common.status import HTTP_302_REDIRECT
+from web.models import Product
 
 
-@pytest.fixture
-def setup_data(
-    db: None,  # noqa: ARG001
-    client: DjangoClient,
-) -> tuple[
-    DjangoClient,
-    User,
-    Client,
-    Product,
-    Product,
-    SessionBase,
-]:
-    # Create a user
-    user = User.objects.create_user(username="testuser", password="testpass")
-    client.login(username="testuser", password="testpass")
-
-    # Create category
-    category = Category.objects.create(name="TEST CATEGORY")
-
-    # Create products
-    product_1 = Product.objects.create(
-        title="Product 1",
-        category=category,
-        price=Decimal(10),
-    )
-    product_2 = Product.objects.create(
-        title="Product 2",
-        category=category,
-        price=Decimal(20),
-    )
-
-    # Create a client
-    client_model = Client.objects.create(
-        user=user,
-        phone="1234567890",
-        address="123 Test St",
-    )
-
-    session = client.session
-    session["cart"] = {
-        str(product_1.pk): {
-            "product_id": product_1.pk,
-            "quantity": 1,
-            "subtotal": str(Decimal(product_1.price) * 1),
-        },
-        str(product_2.pk): {
-            "product_id": product_2.pk,
-            "quantity": 2,
-            "subtotal": str(Decimal(product_2.price) * 2),
-        },
-    }
-
-    def get_total_price(cart: dict) -> Decimal | Literal[0]:
-        total = 0
-        for value in cart.values():
-            total += Decimal(value["subtotal"])
-        return total
-
-    session["cart_total_price"] = str(get_total_price(session["cart"]))
-    session.save()
-
-    return client, user, client_model, product_1, product_2, session
-
-
+@pytest.mark.unit
 def test_confirm_order_success(
     setup_data: tuple[DjangoClient, User, Client, Product, Product, SessionBase],
 ) -> None:
@@ -115,6 +51,7 @@ def test_confirm_order_success(
     assert order_detail_2.subtotal == Decimal(40)
 
 
+@pytest.mark.unit
 def test_confirm_order_empty_cart(
     setup_data: tuple[DjangoClient, User, Client, Product, Product, SessionBase],
 ) -> None:
@@ -142,6 +79,7 @@ def test_confirm_order_empty_cart(
     assert Order.objects.count() == 0
 
 
+@pytest.mark.unit
 def test_confirm_order_with_pending_orders(
     setup_data: tuple[DjangoClient, User, Client, Product, Product, SessionBase],
 ) -> None:
