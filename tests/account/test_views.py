@@ -39,71 +39,6 @@ if TYPE_CHECKING:
     from django.test.client import _MonkeyPatchedWSGIResponse
 
 
-@pytest.fixture
-def user_data() -> dict[str, str]:
-    """Sample user data for testing."""
-
-    email = "testuser@example.com"
-    return {
-        "username": email.split("@", maxsplit=1)[0],
-        "email": email,
-        "password": "TestPassword123!",
-    }
-
-
-@pytest.fixture
-def client_data(user_data: dict[str, str | int]) -> dict[str, str | int]:
-    """Sample client data for testing."""
-
-    return {
-        "name": user_data["username"],
-        "last_name": "User",
-        "email": user_data["email"],
-        "dni": 12345678,
-        "sex": "M",
-        "phone": "123456789",
-        "birth": "1990-01-01",
-        "address": "123 Test Street",
-    }
-
-
-@pytest.fixture
-def authenticated_user(db: None, user_data: dict[str, str]) -> User:  # noqa: ARG001
-    """Create and return an authenticated user."""
-
-    return User.objects.create_user(
-        username=user_data["username"],
-        email=user_data["email"],
-        password=user_data["password"],
-        first_name=user_data.get("first_name", ""),
-        last_name=user_data.get("last_name", ""),
-    )
-
-
-@pytest.fixture
-def authenticated_client(
-    authenticated_user: User,
-    client: DjangoClient,
-) -> DjangoClient:
-    """Return a client with authenticated user."""
-
-    client.force_login(authenticated_user)
-    return client
-
-
-@pytest.fixture
-def client_profile(authenticated_user: User) -> Client:
-    """Create and return a client profile."""
-
-    return Client.objects.create(
-        user=authenticated_user,
-        dni=12345678,
-        sex="M",
-        phone="123456789",
-        address="123 Test Street",
-    )
-
-
 @pytest.mark.unit
 class TestUserAccountView:
     """Tests for UserAccountView."""
@@ -658,36 +593,54 @@ class TestUserLoginView:
 class TestEmailActivationView:
     """Tests for EmailActivationView."""
 
-    def test_email_activation_view_get(self, client: DjangoClient) -> None:
+    @pytest.fixture
+    def mock_time(self) -> int:
+        return 1_000_000
+
+    @pytest.fixture
+    def pending_registration(
+        self,
+        client: DjangoClient,
+        user_data: dict[str, str],
+        mock_time: int,
+    ) -> None:
+        # Set up pending registration
+        session = client.session
+        session["pending_registration"] = {
+            "email": user_data["email"],
+            "timestamp": mock_time,
+        }
+        session.save()
+
+    def test_email_activation_view_get(
+        self,
+        client: DjangoClient,
+        mock_time: int,
+    ) -> None:
         """Test GET request to email activation view."""
 
-        response = client.get(reverse("account:email_validation"))
+        with patch("time.time", return_value=mock_time):
+            response = client.get(reverse("account:email_validation"))
+            assert response.status_code == HTTP_200_OK
 
-        assert response.status_code == HTTP_200_OK
         assert "account/activation/account_activation.html" in [
             t.name for t in response.templates
         ]
 
     @patch("account.views.send_account_activation_email")
-    def test_email_activation_view_post_with_pending_registration(
+    def test_email_activation_view_post(
         self,
         mock_send_email: MagicMock,
         client: DjangoClient,
         user_data: dict[str, str],
+        mock_time: int,
+        pending_registration: None,
     ) -> None:
         """Test POST request to resend activation email."""
 
-        # Set up pending registration
-        session = client.session
-        session["pending_registration"] = {
-            "email": user_data["email"],
-            "timestamp": int(time.time()),
-        }
-        session.save()
-
-        response = client.post(reverse("account:email_validation"))
-
-        assert response.status_code == HTTP_200_OK
+        with patch("time.time", return_value=mock_time + 60):
+            response = client.post(reverse("account:email_validation"))
+            assert response.status_code == HTTP_200_OK
 
         # Check that email sending was called
         mock_send_email.assert_called_once_with(
@@ -697,7 +650,10 @@ class TestEmailActivationView:
 
         # Check success message
         messages = list(get_messages(response.wsgi_request))
-        assert any("re-sent successfully" in str(m) for m in messages)
+        assert any(
+            "Email re-sent successfully. Please check your inbox." in str(m)
+            for m in messages
+        )
 
     def test_email_activation_view_post_without_pending_registration(
         self,
@@ -712,7 +668,25 @@ class TestEmailActivationView:
 
         # Check error message
         messages = list(get_messages(response.wsgi_request))
-        assert any("start the registration" in str(m) for m in messages)
+        assert any("Please start the registration process." in str(m) for m in messages)
+
+    def test_email_activation_view_post_no_waiting_time(
+        self,
+        client: DjangoClient,
+        mock_time: int,
+        pending_registration: None,
+    ) -> None:
+        """Test POST request to resend activation email without waiting time."""
+
+        with patch("time.time", return_value=mock_time + 30):
+            response = client.post(reverse("account:email_validation"))
+            assert response.status_code == HTTP_200_OK
+
+        # Check error message
+        messages = list(get_messages(response.wsgi_request))
+        assert any(
+            "Please wait before requesting another email." in str(m) for m in messages
+        )
 
 
 @pytest.mark.django_db

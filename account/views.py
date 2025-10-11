@@ -260,12 +260,21 @@ class EmailActivationView(TemplateView):
     template_name = "account/activation/account_activation.html"
 
     def post(self, request: HttpRequest) -> HttpResponse:
-        if not request.session.get("pending_registration") or not request.session[
-            "pending_registration"
-        ].get("email"):
+        pending_registration = request.session.get("pending_registration")
+        if not pending_registration or not pending_registration.get("email"):
             messages.error(request, "Please start the registration process.")
             return redirect("account:signup")
-        email = request.session["pending_registration"]["email"]
+
+        email = pending_registration.get("email")
+
+        # If timestamp difference is less than 1 minute, do not resend
+        current_time = int(time.time())
+        timestamp = pending_registration.get("timestamp")
+        time_to_wait = 60  # seconds
+        if timestamp and current_time - int(timestamp) < time_to_wait:
+            messages.error(request, "Please wait before requesting another email.")
+            return render(request, self.template_name or "")
+
         send_account_activation_email(request, email)
         messages.success(
             request,
