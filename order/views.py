@@ -1,144 +1,33 @@
+from __future__ import annotations
+
 from decimal import Decimal
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from django.http import (
-    HttpResponse,
-)
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import DetailView, FormView, TemplateView
 
+if TYPE_CHECKING:
+    from django.contrib.auth.models import User
+    from django.db.models import QuerySet
+    from django.http import HttpResponse
+
+    from cart.cart import Cart
+
 from account.forms import ClientForm
 from account.models import Client
-from cart.cart import Cart
 from common.views.client import get_or_create_client_form
 from order.models import Order, OrderDetail
 from web.models import Product
 
+
 # Create your views here.
-
-# ============================================================================
-# ORIGINAL FBV CODE (COMMENTED OUT)
-# ============================================================================
-
-# @login_required(login_url="/account/login/")
-# def create_order(request: HttpRequest) -> HttpResponse:
-#     user = User.objects.get(pk=request.user.pk)
-#
-#     try:
-#         client = Client.objects.get(user=user)
-#         client_data = {
-#             "name": user.first_name,
-#             "last_name": user.last_name,
-#             "email": user.email,
-#             "dni": client.dni,
-#             "sex": client.sex,
-#             "address": client.address,
-#             "phone": client.phone,
-#             "birth": client.birth,
-#         }
-#     except Client.DoesNotExist:
-#         client_data = {
-#             "name": user.first_name,
-#             "last_name": user.last_name,
-#             "email": user.email,
-#         }
-#
-#     client_form = ClientForm(client_data)
-#
-#     return render(
-#         request,
-#         "order/order.html",
-#         {
-#             "client_form": client_form,
-#         },
-#     )
-
-
-# @login_required(login_url="/account/login/")
-# def confirm_order(
-#     request: HttpRequest,
-# ) -> HttpResponse:
-#     user = User.objects.get(pk=request.user.pk)
-#
-#     if request.method == "POST":
-#         user.first_name = request.POST["name"]
-#         user.last_name = request.POST["last_name"]
-#         user.email = request.POST["email"]
-#         user.save()
-#
-#         # Storing the data in the session
-#         request.session["client_data"] = {
-#             "phone": request.POST.get("phone", ""),
-#             "address": request.POST.get("address", ""),
-#         }
-#     try:
-#         client = Client.objects.get(user=user)
-#         client.phone = request.session["client_data"].pop("phone", "")
-#         client.address = request.session["client_data"].pop("address", "")
-#         client.save()
-#     except Client.DoesNotExist:
-#         client = Client.objects.create(
-#             user=user,
-#             address=request.session["client_data"]["address"],
-#             phone=request.session["client_data"]["phone"],
-#         )
-#
-#     # Check the cart
-#     order_cart: dict | Any = request.session.get("cart", None)
-#     if not order_cart:
-#         return redirect("cart:cart")
-#
-#     # ORDER
-#     new_order = Order.objects.create(client=client)
-#
-#     # ORDER DETAIL
-#     for value in order_cart.values():
-#         cart_product = Product.objects.get(pk=value["product_id"])
-#         order_detail, created = OrderDetail.objects.get_or_create(
-#             order=new_order,
-#             product=cart_product,
-#             defaults={
-#                 "quantity": int(value["quantity"]),
-#                 "subtotal": Decimal(value["subtotal"]),
-#             },
-#         )
-#         if not created:
-#             order_detail.quantity = int(value["quantity"])
-#             order_detail.subtotal = Decimal(value["subtotal"])
-#             order_detail.save()
-#
-#     new_order.order_num = (
-#         f"Order #{new_order.pk} - Date {new_order.registration_date.strftime('%Y')}"
-#     )
-#     new_order.total_price = Decimal(
-#         request.session.pop("cart_total_price", "0.00"),
-#     )
-#     new_order.save()
-#
-#     # Cleaning the cart after the order is confirmed
-#     order_cart.clear()
-#
-#     return redirect(reverse("order:order_summary", args=[new_order.pk]))
-
-
-# @login_required(login_url="/account/login/")
-# def order_summary(request: HttpRequest, order_id: int) -> HttpResponse:
-#     order = Order.objects.get(pk=order_id)
-#     request.session["order_id"] = order.pk
-#     return render(request, "order/shipping.html", {"order": order})
-
-
-# ============================================================================
-# NEW CLASS-BASED VIEWS (CBV)
-# ============================================================================
-
-
 class CreateOrderView(LoginRequiredMixin, TemplateView):
     """
     Displays the order creation form with client data pre-populated.
+
+    Note: This view uses TemplateView and only renders the template with context.
     """
 
     template_name = "order/order.html"
@@ -158,6 +47,7 @@ class ConfirmOrderView(LoginRequiredMixin, FormView):
     """
 
     form_class = ClientForm
+    template_name = "order/order.html"  # For form errors
     login_url = "/account/login/"
 
     def form_valid(self, form: ClientForm) -> HttpResponse:
@@ -213,19 +103,24 @@ class ConfirmOrderView(LoginRequiredMixin, FormView):
 
         # Create | Get order details
         for product_pk, order_cart_detail in order_cart.items():
-            product = Product.objects.get(pk=product_pk)
-            quantity = int(order_cart_detail["quantity"])
-            subtotal = Decimal(order_cart_detail["subtotal"])
+            try:
+                product = Product.objects.get(pk=product_pk)
+                quantity = int(order_cart_detail["quantity"])
+                subtotal = Decimal(order_cart_detail["subtotal"])
 
-            new_order_detail, created = OrderDetail.objects.get_or_create(
-                order=new_order,
-                product=product,
-                defaults={"quantity": quantity, "subtotal": subtotal},
-            )
-            if not created:
-                new_order_detail.quantity = quantity
-                new_order_detail.subtotal = subtotal
-                new_order_detail.save()
+                new_order_detail, created = OrderDetail.objects.get_or_create(
+                    order=new_order,
+                    product=product,
+                    defaults={"quantity": quantity, "subtotal": subtotal},
+                )
+                if not created:
+                    new_order_detail.quantity = quantity
+                    new_order_detail.subtotal = subtotal
+                    new_order_detail.save()
+            except Product.DoesNotExist:
+                # Skip products that don't exist in the database
+                # This could happen if a product was deleted after being added to cart
+                continue
 
         # Update order metadata
         new_order.order_num = (
@@ -249,6 +144,10 @@ class OrderSummaryView(LoginRequiredMixin, DetailView):
     context_object_name = "order"
     pk_url_kwarg = "order_id"
     login_url = "/account/login/"
+
+    def get_queryset(self) -> QuerySet[Order]:
+        """Restrict queryset to only orders belonging to the current user."""
+        return Order.objects.filter(client__user=self.request.user)
 
     def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)

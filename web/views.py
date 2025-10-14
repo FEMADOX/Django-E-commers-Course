@@ -1,78 +1,103 @@
-from django.http import HttpRequest
-from django.http.response import HttpResponse
-from django.shortcuts import render
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from django.shortcuts import get_object_or_404
+from django.views.generic import DetailView, ListView
 
 from web.models import Brand, Category, Product
 
-
-def index(request: HttpRequest) -> HttpResponse:
-    products = Product.objects.all()
-    categories = Category.objects.all()
-    brands = Brand.objects.all()
-
-    return render(
-        request,
-        "web/index.html",
-        {
-            "products": products,
-            "categories": categories,
-            "brands": brands,
-        },
-    )
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
+    from django.http import HttpRequest, HttpResponse
 
 
-def filter_by_category(request: HttpRequest, category_id: int) -> HttpResponse:
-    categories = Category.objects.all()
-    category = Category.objects.get(id=category_id)
-    brands = Brand.objects.all()
-    products = Product.objects.filter(category=category)
+class IndexView(ListView):
+    """Display all products with categories and brands navigation."""
 
-    return render(
-        request,
-        "web/index.html",
-        {
-            "products": products,
-            "categories": categories,
-            "brands": brands,
-        },
-    )
+    model = Product
+    template_name = "web/index.html"
+    context_object_name = "products"
+
+    def get_context_data(self, **kwargs):  # noqa: ANN003, ANN201
+        """Add categories and brands to context."""
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        context["brands"] = Brand.objects.all()
+        return context
 
 
-def filter_by_brand(request: HttpRequest, brand_id: int) -> HttpResponse:
-    brands = Brand.objects.all()
-    brand = Brand.objects.get(id=brand_id)
-    categories = Category.objects.all()
-    products = Product.objects.filter(brand=brand)
+class FilterByCategoryView(ListView):
+    """Display products filtered by category."""
 
-    return render(
-        request,
-        "web/index.html",
-        {
-            "products": products,
-            "brands": brands,
-            "categories": categories,
-        },
-    )
+    model = Product
+    template_name = "web/index.html"
+    context_object_name = "products"
 
+    def get_queryset(self) -> QuerySet[Product]:
+        """Filter products by category."""
+        category_id = self.kwargs["category_id"]
+        category = get_object_or_404(Category, id=category_id)
+        return Product.objects.filter(category=category)
 
-def search_product_title(request: HttpRequest) -> HttpResponse:
-    if request.method == "POST":
-        product_title = request.POST["title"]
-        categories = Category.objects.all()
-        products = Product.objects.filter(title__contains=product_title)
-
-        return render(
-            request,
-            "web/index.html",
-            {
-                "products": products,
-                "categories": categories,
-            },
-        )
-    return render(request, "web/index.html")
+    def get_context_data(self, **kwargs):  # noqa: ANN003, ANN201
+        """Add categories and brands to context."""
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        context["brands"] = Brand.objects.all()
+        return context
 
 
-def product_detail(request: HttpRequest, product_id: int) -> HttpResponse:
-    product = Product.objects.get(id=product_id)
+class FilterByBrandView(ListView):
+    """Display products filtered by brand."""
 
-    return render(request, "web/product.html", {"product": product})
+    model = Product
+    template_name = "web/index.html"
+    context_object_name = "products"
+
+    def get_queryset(self) -> QuerySet[Product]:
+        """Filter products by brand."""
+        brand_id = self.kwargs["brand_id"]
+        brand = get_object_or_404(Brand, id=brand_id)
+        return Product.objects.filter(brand=brand)
+
+    def get_context_data(self, **kwargs):  # noqa: ANN003, ANN201
+        """Add categories and brands to context."""
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        context["brands"] = Brand.objects.all()
+        return context
+
+
+class SearchProductTitleView(ListView):
+    """Search products by title."""
+
+    model = Product
+    template_name = "web/index.html"
+    context_object_name = "products"
+
+    def get_queryset(self) -> QuerySet[Product]:
+        """Filter products by search title."""
+        if self.request.method == "POST":
+            product_title = self.request.POST.get("title", "")
+            return Product.objects.filter(title__contains=product_title)
+        return Product.objects.all()
+
+    def get_context_data(self, **kwargs):  # noqa: ANN003, ANN201
+        """Add categories to context."""
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        return context
+
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:  # noqa: ANN002, ANN003
+        """Handle POST requests for search."""
+        return self.get(request, *args, **kwargs)
+
+
+class ProductDetailView(DetailView):
+    """Display detailed view of a single product."""
+
+    model = Product
+    template_name = "web/product.html"
+    context_object_name = "product"
+    pk_url_kwarg = "product_id"

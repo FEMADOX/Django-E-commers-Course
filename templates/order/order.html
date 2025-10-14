@@ -49,16 +49,20 @@
             {% for key, value in request.session.cart.items %}
               <article class="prod-li sectls">
                 <div class="prod-li-inner">
-                  <a href="{% url 'web:product_detail' value.product_id %}" class="prod-li-img"><img src="{{ value.image }}" alt="" /></a>
+                  <a href="{% url 'web:product_detail' key %}" class="prod-li-img"><img src="{{ value.image }}" alt="" /></a>
                   <div class="prod-li-cont">
                     <div class="prod-li-ttl-wrap">
-                      <p>
-                        <a href="{% url 'web:filter_by_category' value.category.id %}">{{ value.category.name }}</a>
-                      </p>
-                      <p>
-                        <a href="{% url 'web:filter_by_brand' value.brand.id %}">{{ value.brand.name }}</a>
-                      </p>
-                      <h3><a href="{% url 'web:product_detail' value.product_id %}">{{ value.title }}</a></h3>
+                      {% if value.category.id %}
+                        <p>
+                          <a href="{% url 'web:filter_by_category' value.category.id %}">{{ value.category.name }}</a>
+                        </p>
+                      {% endif %}
+                      {% if value.brand.id %}
+                        <p>
+                          <a href="{% url 'web:filter_by_brand' value.brand.id %}">{{ value.brand.name }}</a>
+                        </p>
+                      {% endif %}
+                      <h3><a href="{% url 'web:product_detail' key %}">{{ value.title }}</a></h3>
                     </div>
                     <div class="prod-li-prices" style="padding-right: 0px; margin-right: 0px;">
                       <div class="prod-li-price-wrap" style="padding-right: 0px; margin-right: 0px;">

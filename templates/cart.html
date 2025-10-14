@@ -133,9 +133,7 @@
           <input type="hidden" name="location-url" value="{{ request.get_full_path }}"/>
           <input class="checkout-button button" type="submit" value="Clear Cart"/>
         </form>
-        <form class="cart-actions cart" action="{% url 'order:create_order' %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="location-url" value="{{ request.get_full_path }}"/>
+        <form class="cart-actions cart" action="{% url 'order:create_order' %}" method="get">
           <input class="checkout-button button" type="submit" value="Place Order"/>
         </form>
         <div class="order-total">
