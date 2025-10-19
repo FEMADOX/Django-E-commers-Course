@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+{% block head %}
+  <script src="{% static 'js/cartPageControl.js' %}" defer></script>
+{% endblock head %}
+
 {% block content %}
   <h1 class="main-cont-ttl">ORDER REGISTRATION</h1>
   <ul class="b-crumbs">
@@ -12,127 +19,114 @@
     <article class="page-cont">
       <div class="page-styling">
         <div class="auth-wrap">
-          <div>
+          <div class="card-header">
+            <i class="ion-android-person"></i>
             <h2>Personal Information</h2>
-            <p>
-              <label for="username">First Name<span class="required">*</span></label>
-              {{ client_form.name }}
-            </p>
-            <p>
-              <label for="username">Last Name<span class="required">*</span></label>
-              {{ client_form.last_name }}
-            </p>
-            <p>
-              <label for="username">Email<span class="required">*</span></label>
-              {{ client_form.email }}
-            </p>
           </div>
-          <div class="auth-col" style="padding-top: 20px;">
-            <h2>Shipping Information</h2>
-            <p>
-              <label for="username">Phone<span class="required">*</span></label>
-              {{ client_form.phone }}
-            </p>
-            <p>
-              <label for="username">Address<span class="required">*</span></label>
-              {{ client_form.address }}
-            </p>
+          {{ client_form.name|as_crispy_field }}
+          {{ client_form.last_name|as_crispy_field }}
+          {{ client_form.email|as_crispy_field }}
+        </div>
+      </div>
+    </article>
+    <article class="page-cont">
+      <div class="page-styling">
+        <div class="auth-wrap">
+          <div class="auth-col">
+            <div class="card-header">
+              <i class="bi bi-truck"></i>
+              <h2>Shipping Information</h2>
+            </div>
+            {{ client_form.phone|as_crispy_field }}
+            {{ client_form.address|as_crispy_field }}
           </div>
         </div>
       </div>
     </article>
-    {% if request.session.cart.items|length > 0 %}
-      <article class="page-cont-confirm" style="padding-top: 20px;">
-        <div class="page-styling">
-          <h2>Product Confirmation</h2>
-          <div class="woocommerce prod-litems section-list" style="padding-top: 10px;">
-            {% for key, value in request.session.cart.items %}
-              <article class="prod-li sectls">
-                <div class="prod-li-inner">
-                  <a href="{% url 'web:product_detail' key %}" class="prod-li-img"><img src="{{ value.image }}" alt="" /></a>
-                  <div class="prod-li-cont">
-                    <div class="prod-li-ttl-wrap">
-                      {% if value.category.id %}
-                        <p>
-                          <a href="{% url 'web:filter_by_category' value.category.id %}">{{ value.category.name }}</a>
-                        </p>
-                      {% endif %}
-                      {% if value.brand.id %}
-                        <p>
-                          <a href="{% url 'web:filter_by_brand' value.brand.id %}">{{ value.brand.name }}</a>
-                        </p>
-                      {% endif %}
-                      <h3><a href="{% url 'web:product_detail' key %}">{{ value.title }}</a></h3>
-                    </div>
-                    <div class="prod-li-prices" style="padding-right: 0px; margin-right: 0px;">
-                      <div class="prod-li-price-wrap" style="padding-right: 0px; margin-right: 0px;">
-                        <p>Price</p>
-                        <p class="prod-li-price">${{ value.price }}</p>
+    <article class="page-cont">
+      <div class="page-styling">
+        {% if request.session.cart.items|length > 0 %}
+          <div class="card-header">
+            <i class="bi bi-clipboard-check"></i>
+            <h2>Order Resume</h2>
+          </div>
+          <div class="woocommerce prod-litems section-list d-flex flex-column align-items-center">
+            <ul class="list-group list-group-flush ms-0 mb-1 w-100">
+              <li class="list-group-item">
+                {% for product_id, details in request.session.cart.items %}
+                  <div class="prod-li sectls mb-3" data-product-id="{{ product_id }}">
+                    <div class="prod-li-inner d-grid grid-col-3">
+                      <a href="{% url 'web:product_detail' product_id %}" class="prod-li-img p-0 border-bottom-0 rounded-3">
+                        <img src="{{ details.image }}" alt="{{ details.title }}"/>
+                      </a>
+                      <div class="prod-li-cont d-flex flex-column justify-content-start py-1">
+                        <div class="prod-li-ttl-wrap p-0 w-100">
+                          {% if details.category.id %}
+                            <p class="mb-0">
+                              <a href="{% url 'web:filter_by_category' details.category.id %}">{{ details.category.name }}</a>
+                            </p>
+                          {% endif %}
+                          {% comment %} {% if details.brand.id %}
+                            <p class="mb-0">
+                              <a href="{% url 'web:filter_by_brand' details.brand.id %}">{{ details.brand.name }}</a>
+                            </p>
+                          {% endif %} {% endcomment %}
+                          <p class="fw-bolder fs-6 mb-0">
+                            <a href="{% url 'web:product_detail' product_id %}" class="text-black">{{ details.title }}</a>
+                          </p>
+                        </div>
+                        <p class="prod-li-price text-primary mb-0 fw-semibold" id="product-price">${{ details.price }}</p>
+                      </div>
+                      <div class="d-flex flex-column py-1 gap-1 align-items-end">
+                        <!-- Quantity Control Component -->
+                        <div class="border rounded quantity-control-component">
+                          <p class="qnt-wrap prod-li-qnt mb-0 d-flex">
+                            <a href="#" class="qnt-minus prod-li-minus border-bottom-0" id="quantity-down"><i class="bi bi-dash text-black"></i></a>
+                            <input class="mb-0 rounded-0 p-0 text-center h-auto" name="quantity" type="text" value="{{ details.quantity }}">
+                            <a href="#" class="qnt-plus prod-li-plus border-bottom-0" id="quantity-up"><i class="bi bi-plus text-black"></i></a>
+                          </p>
+                        </div>
+                        <div class="prod-li-total-wrap pe-0 w-auto" id="product-order-subtotal">
+                          <p class="prod-li-total text-black fw-bolder" id="product-total-price" >
+                            $ {{ details.subtotal|floatformat:2 }}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                    <div class="prod-li-qnt-wrap" style="padding-left: 0px; margin-left: 0px;">
-                      <p class="qnt-wrap prod-li-qnt" style="padding-left: 0px; margin-left: 0px;">
-                        <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
-                        <input type="text" value="{{ value.quantity }}" />
-                        <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
-                      </p>
-                    </div>
-                    <div class="prod-li-total-wrap">
-                      <p>SubTotal</p>
-                      <p class="prod-li-total">${{ value.subtotal }}</p>
+                  </div>
+                {% endfor %}
+              </li>
+              <li class="list-group-item">
+                <div class="d-flex justify-content-between mb-2">
+                  <p class="m-0">Subtotal</p>
+                  <p class="m-0" id="order-resume-subtotal">$ {{ request.session.cart_total_price|floatformat:2 }}</p>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <p class="m-0 ">Shipping</p>
+                  <p class="m-0 text-success">Free</p>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="cart-actions-confirm p-0">
+                  <div class="cart-collaterals">
+                    <div class="order-total d-flex justify-content-between fw-bolder">
+                      <p class="cart-totals-ttl mb-2">Total</p>
+                      <p class="cart-totals-val mb-2">$ {{ request.session.cart_total_price|floatformat:2 }}</p>
                     </div>
                   </div>
                 </div>
-              </article>
-            {% endfor %}
-          </div>
-          <!--  <div class="cart-actions" style="padding-bottom: 5px; margin-bottom: 5px;">
-            <div class="cart-collaterals">
-              <div class="order-total">
-                <p class="cart-totals-ttl">Total</p>
-                <p class="cart-totals-val">${{ request.session.cart_total_price }}</p>
-              </div>
-            </div>  -->
-          <!-- </div> -->
-          <!-- </div> -->
-          <!-- </article> -->
-          <!-- <article class="page-cont" style="padding-top: 0px; margin-top: 0px;"> -->
-          <!-- <div class="page-styling"> -->
-          <!-- <div class="auth-wrap"> -->
-        </div>
-      </article>
-      <div class="page-styling">
-        <div class="cart-actions-confirm" style="padding-top: 15px;">
-          <div class="cart-collaterals">
-            <div class="order-total">
-              <p class="cart-totals-ttl">Total</p>
-              <p class="cart-totals-val">$ {{ request.session.cart_total_price }}</p>
-            </div>
-            <div class="auth-col">
-              <p class="auth-submit">
-                <input type="submit" value="Confirm Order" />
+              </li>
+            </ul>
+            <div class="auth-col mt-2 w-100">
+              <p class="auth-submit m-0">
+                <button class="btn d-flex rounded-3 py-2 order-confirm-button w-100 justify-content-center" type="submit">
+                  Confirm and Pay
+                </button>
               </p>
             </div>
           </div>
-        </div>
+        {% endif %}
       </div>
-    {% else %}
-      <article class="cart-actions-confirm" style="padding-top: 20px;">
-        <div class="page-styling">
-          <h2>Please add some product to the cart to continue</h2>
-          <article class="page-cont" style="padding-top: 0px; margin-top: 0px;">
-            <div class="page-styling">
-              <div class="auth-wrap">
-                <div class="auth-col">
-                  <p class="auth-submit">
-                    <a href="{% url 'web:index' %}">Catalog of Products</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-      </article>
-    {% endif %}
+    </article>
   </form>
 {% endblock content %}

@@ -12,6 +12,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no" />
 
+    <meta name="description" content="A comprehensive e-commerce web application built with Django framework featuring modular architecture with dedicated apps for user accounts, shopping cart, order management, and payment processing. The project includes modern development practices with Docker containerization, automated testing, code quality tools (Ruff, pre-commit hooks). ">
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="https://django-e-commers.onrender.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Django E-commerce">
+    <meta property="og:description" content="A comprehensive e-commerce web application built with Django framework featuring modular architecture with dedicated apps for user accounts, shopping cart, order management, and payment processing. The project includes modern development practices with Docker containerization, automated testing, code quality tools (Ruff, pre-commit hooks). ">
+    <meta property="og:image" content="https://opengraph.b-cdn.net/production/images/cf05f4e1-d3e0-454e-be8a-4458270d4a4d.jpg?token=cck3XbktDrPCRFpVJbOw2UDMEUdssIWtzG6TDURA6mU&height=1248&width=832&expires=33296912245">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="django-e-commers.onrender.com">
+    <meta property="twitter:url" content="https://django-e-commers.onrender.com/">
+    <meta name="twitter:title" content="Django E-commerce">
+    <meta name="twitter:description" content="A comprehensive e-commerce web application built with Django framework featuring modular architecture with dedicated apps for user accounts, shopping cart, order management, and payment processing. The project includes modern development practices with Docker containerization, automated testing, code quality tools (Ruff, pre-commit hooks). ">
+    <meta name="twitter:image" content="https://opengraph.b-cdn.net/production/images/cf05f4e1-d3e0-454e-be8a-4458270d4a4d.jpg?token=cck3XbktDrPCRFpVJbOw2UDMEUdssIWtzG6TDURA6mU&height=1248&width=832&expires=33296912245">
+
+    <!-- Meta Tags Generated via https://www.opengraph.xyz -->
+
     {% block head %}
     {% endblock head %}
 
@@ -19,23 +38,25 @@
 
     <link
       href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900%7COpen+Sans:300,300i,400,400i,600,600i,700,700i&amp;subset=cyrillic"
-      rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ionicons@2.0.1/css/ionicons.min.css" />
+      rel="stylesheet"
+    />
 
-    <!-- CDNJS -->
+    <!-- IonIcons -->
+    <link rel="stylesheet" href="https://unpkg.com/ionicons@2.0.1/css/ionicons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ionicons@2.0.1/css/ionicons.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
 
-    <!-- Unpkg -->
-    <link rel="stylesheet" href="https://unpkg.com/ionicons@2.0.1/css/ionicons.min.css" />
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous" refer defer></script>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/media.css' %}" />
 
     <!-- jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" defer></script>
@@ -47,7 +68,7 @@
 
   <body class="">
     <div id="page" class="site">
-      {% include 'includes/navbar.html' %}
+      {% include 'includes/top_info.html' %}
       {% include 'includes/header.html' %}
       <div id="content" class="site-content">
         <div id="primary" class="content-area">

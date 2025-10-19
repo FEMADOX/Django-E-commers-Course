@@ -29,7 +29,7 @@ class TestOrderWorkflowIntegration:
     def test_complete_order_creation_workflow(
         self,
         authenticated_client: DjangoTestClient,
-        authenticated_user: User,
+        user: User,
         product: Product,
         category: Category,
     ) -> None:
@@ -87,7 +87,7 @@ class TestOrderWorkflowIntegration:
         assert response.status_code == HTTP_302_REDIRECT
 
         # Verify order was created
-        order = Order.objects.get(client__user=authenticated_user)
+        order = Order.objects.get(client__user=user)
         assert order.total_price == Decimal(product.price) * 2
         assert order.order_num.startswith("Order #")
 
@@ -107,13 +107,13 @@ class TestOrderWorkflowIntegration:
         assert authenticated_client.session["order_id"] == order.pk
 
         # Step 6: Verify user data was updated
-        authenticated_user.refresh_from_db()
-        assert authenticated_user.first_name == "John"
-        assert authenticated_user.last_name == "Doe"
-        assert authenticated_user.email == "john@example.com"
+        user.refresh_from_db()
+        assert user.first_name == "John"
+        assert user.last_name == "Doe"
+        assert user.email == "john@example.com"
 
         # Step 7: Verify client was created/updated
-        client = AccountClient.objects.get(user=authenticated_user)
+        client = AccountClient.objects.get(user=user)
         assert client.phone == "1234567890"
         assert client.address == "123 Test Street"
 
@@ -163,7 +163,7 @@ class TestOrderWorkflowIntegration:
     def test_multiple_products_order_workflow(
         self,
         authenticated_client: DjangoTestClient,
-        authenticated_user: User,
+        user: User,
         category: Category,
     ) -> None:
         """Test order workflow with multiple products."""
@@ -220,7 +220,7 @@ class TestOrderWorkflowIntegration:
         assert response.status_code == HTTP_302_REDIRECT
 
         # Verify order and details
-        order = Order.objects.get(client__user=authenticated_user)
+        order = Order.objects.get(client__user=user)
         assert order.total_price == total_price
 
         order_details = OrderDetail.objects.filter(order=order).order_by("product__pk")
@@ -337,7 +337,7 @@ class TestOrderSecurityIntegration:
     def test_order_data_integrity(
         self,
         authenticated_client: DjangoTestClient,
-        authenticated_user: User,
+        user: User,
         product: Product,
     ) -> None:
         """Test that order data integrity is maintained throughout workflow."""
@@ -372,7 +372,7 @@ class TestOrderSecurityIntegration:
         assert response.status_code == HTTP_302_REDIRECT
 
         # Verify order data integrity
-        order = Order.objects.get(client__user=authenticated_user)
+        order = Order.objects.get(client__user=user)
         order_detail = OrderDetail.objects.get(order=order)
 
         # Check that order preserves original cart data
@@ -395,17 +395,27 @@ class TestOrderErrorHandlingIntegration:
         self,
         authenticated_client: DjangoTestClient,
         account_client: AccountClient,
+        product: Product,
     ) -> None:
         """Test handling of invalid form data."""
-        # Set up cart
+        # Set up cart with valid product
         session = authenticated_client.session
-        session["cart"] = {"1": {"product_id": 1, "quantity": 1, "subtotal": "10.00"}}
+        session["cart"] = {
+            str(product.pk): {
+                "product_id": product.pk,
+                "quantity": 1,
+                "subtotal": str(product.price),
+            },
+        }
+        session["cart_total_price"] = str(product.price)
         session.save()
 
         # Submit invalid form data (missing required fields)
         invalid_data = {
             "name": "",  # Required field is empty
             "email": "invalid-email",  # Invalid email format
+            "phone": "",  # Missing required field
+            "address": "",  # Missing required field
         }
         response = authenticated_client.post(
             reverse("order:confirm_order"),
@@ -414,6 +424,15 @@ class TestOrderErrorHandlingIntegration:
 
         # Should re-render form with errors (not redirect)
         assert response.status_code == HTTP_200_OK
+
+        # Verify the form is in the context and has errors
+        assert "client_form" in response.context
+        form = response.context["client_form"]
+        assert hasattr(form, "errors")  # Verify it's a form object
+        assert form.errors  # Form should have validation errors
+
+        # Verify specific field errors
+        assert "name" in form.errors or "email" in form.errors
 
         # No order should be created
         assert Order.objects.count() == 0
@@ -457,7 +476,7 @@ class TestOrderErrorHandlingIntegration:
 
     def test_concurrent_order_creation_handling(
         self,
-        authenticated_user: User,
+        user: User,
         product: Product,
     ) -> None:
         """Test handling of concurrent order creation attempts."""
@@ -465,8 +484,8 @@ class TestOrderErrorHandlingIntegration:
         client1 = DjangoTestClient()
         client2 = DjangoTestClient()
 
-        client1.force_login(authenticated_user)
-        client2.force_login(authenticated_user)
+        client1.force_login(user)
+        client2.force_login(user)
 
         # Set up identical carts in both clients
         cart_data = {
@@ -500,4 +519,4 @@ class TestOrderErrorHandlingIntegration:
         assert response2.status_code in {HTTP_200_OK, HTTP_302_REDIRECT}
 
         # At least one order should be created
-        assert Order.objects.filter(client__user=authenticated_user).count() >= 1
+        assert Order.objects.filter(client__user=user).count() >= 1

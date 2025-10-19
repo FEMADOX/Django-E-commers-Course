@@ -274,11 +274,11 @@ jQuery(document).ready(function ($) {
 	}
 
 	// Sticky sidebar
-	if ($('#section-sb').length > 0 && $('#section-list-withsb').length > 0) {
-		$('#section-sb, #section-list-withsb').theiaStickySidebar({
-			additionalMarginTop: 30
-		});
-	}
+	// if ($('#section-sb').length > 0 && $('#section-list-withsb').length > 0) {
+	// 	$('#section-sb, #section-list-withsb').theiaStickySidebar({
+	// 		additionalMarginTop: 30
+	// 	});
+	// }
 
 
 	// Product Tabs

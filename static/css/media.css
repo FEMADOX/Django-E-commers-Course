@@ -939,10 +939,6 @@
 
 @media only screen and (max-width : 480px) {
 
-    .page-cont {
-        padding: 45px 15px 50px;
-    }
-
     body .site-content .heading-multishop,
     body .site-content .main-cont-ttl {
         padding: 0;
@@ -1169,12 +1165,6 @@
 }
 
 
-
-
-
-
-
-
 @media only screen and (min-width : 481px) {}
 
 @media only screen and (min-width : 769px) {}
@@ -1339,4 +1329,41 @@
 
 }
 
-@media only screen and (min-width : 1221px) {}
+/* MOBILE */
+@media screen and (max-width: 500px) {
+    .prod-litems .prod-li-img {
+        width: auto;
+        border: none;
+        max-width: 5rem;
+        height: auto;
+    }
+
+    .main-cont .prod-litems .prod-li {
+        padding: 0;
+    }
+
+    .main-cont .prod-litems .prod-li-inner {
+        padding: 0;
+        grid-template-columns: auto 1fr .5fr;
+        gap: .5rem;
+    }
+
+    .prod-litems .prod-li-rating-wrap {
+        display: none;
+    }
+
+    .prod-li .prod-li-props dt {
+        width: 47%;
+        clear: left;
+    }
+
+    .prod-li .prod-li-props-hasparts .prod-li-props-parts-value,
+    .prod-li .prod-li-props dd {
+        width: 53%;
+    }
+
+    .prod-litems .prod-li-informations {
+        padding: 15px 20px 1px;
+    }
+
+}

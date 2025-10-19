@@ -84,7 +84,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "livereload",
+    # "livereload",
     "django.contrib.staticfiles",
     "cloudinary",
     "stripe",
@@ -106,8 +106,20 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "livereload.middleware.LiveReloadScript",
+    # "livereload.middleware.LiveReloadScript",
 ]
+
+# DJANGO LIVERELOAD settings
+if ENVIRONMENT != "production":
+    # Insert livereload before django.contrib.staticfiles when not in production
+    django_contrib_staticfiles_index = INSTALLED_APPS.index(
+        "django.contrib.staticfiles",
+    )
+    INSTALLED_APPS.insert(django_contrib_staticfiles_index, "livereload")
+
+    # Add livereload middleware at the end of MIDDLEWARE
+    MIDDLEWARE.append("livereload.middleware.LiveReloadScript")
+
 
 ROOT_URLCONF = "edshop.urls"
 

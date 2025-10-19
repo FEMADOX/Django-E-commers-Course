@@ -1,25 +1,27 @@
 from __future__ import annotations
 
+import json
 from decimal import Decimal
 from typing import TYPE_CHECKING, Any, cast
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import DetailView, FormView, TemplateView
 
+from account.forms import ClientForm
+from account.models import Client
+from cart.cart import Cart
+from common.views.client import get_or_create_client_form
+from order.models import Order, OrderDetail
+from tests.common.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from web.models import Product
+
 if TYPE_CHECKING:
     from django.contrib.auth.models import User
     from django.db.models import QuerySet
-    from django.http import HttpResponse
-
-    from cart.cart import Cart
-
-from account.forms import ClientForm
-from account.models import Client
-from common.views.client import get_or_create_client_form
-from order.models import Order, OrderDetail
-from web.models import Product
+    from django.http import HttpRequest, HttpResponse
 
 
 # Create your views here.
@@ -30,6 +32,7 @@ class CreateOrderView(LoginRequiredMixin, TemplateView):
     Note: This view uses TemplateView and only renders the template with context.
     """
 
+    http_method_names = ["get", "patch"]
     template_name = "order/order.html"
     login_url = "/account/login/"
 
@@ -40,6 +43,45 @@ class CreateOrderView(LoginRequiredMixin, TemplateView):
         context["client_form"] = get_or_create_client_form(user)
         return context
 
+    def get(self, request: HttpRequest, **kwargs: dict) -> HttpResponse:
+        cart = Cart(request)
+
+        # If not products in cart redirect to catalog dashboard
+        if not cart.cart:
+            return redirect("/")
+
+        return super().get(request)
+
+    def patch(self, request: HttpRequest, *args: tuple, **kwargs: dict) -> JsonResponse:
+        """Return JsonResponse PATCH requests to the ConfirmOrderView."""
+
+        try:
+            data: dict[str, Any] = json.loads(request.body)
+
+            product_id, quantity = data.values()
+            cart = Cart(request)
+
+            # Update product details based on new quantity
+            cart.update(product_id, quantity)
+
+            return JsonResponse(
+                {
+                    "message": "Order updated successfully.",
+                    "subtotal": str(cart.get_order_product_subtotal(product_id)),
+                    "total_price": cart.get_total_price(),
+                },
+                status=HTTP_200_OK,
+            )
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {
+                    "details": {
+                        "message": "Invalid JSON data.",
+                    },
+                },
+                status=HTTP_400_BAD_REQUEST,
+            )
+
 
 class ConfirmOrderView(LoginRequiredMixin, FormView):
     """
@@ -49,6 +91,20 @@ class ConfirmOrderView(LoginRequiredMixin, FormView):
     form_class = ClientForm
     template_name = "order/order.html"  # For form errors
     login_url = "/account/login/"
+
+    def get(self, request: HttpRequest, *args: tuple, **kwargs: dict) -> HttpResponse:
+        """Redirect GET requests to create order page."""
+        return redirect("order:create_order")
+
+    def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
+        """Add additional context data for the template."""
+        context = super().get_context_data(**kwargs)
+
+        # Ensure the form is in context with the correct key
+        if "form" in context:
+            context["client_form"] = context["form"]
+
+        return context
 
     def form_valid(self, form: ClientForm) -> HttpResponse:
         """Process valid form data and create order."""
@@ -81,6 +137,18 @@ class ConfirmOrderView(LoginRequiredMixin, FormView):
         order_cart.clear()
 
         return redirect(reverse("order:order_summary", args=[new_order.pk]))
+
+    def form_invalid(self, form: ClientForm) -> HttpResponse:
+        """Handle invalid form data by re-rendering the order page with errors."""
+        # Check if cart still exists
+        cart = Cart(self.request)
+        if not cart.cart:
+            return redirect("web:index")
+
+        # Return the form with errors and full context
+        context = self.get_context_data()
+        context["form"] = form
+        return self.render_to_response(context)
 
     def _get_or_create_client(self, user: User) -> Client:
         """Get existing client or create new one with session data."""

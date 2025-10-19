@@ -5,11 +5,11 @@ This module contains unit tests for individual order view components,
 focusing on isolated functionality testing with mocked dependencies.
 """
 
-from decimal import Decimal
 from unittest.mock import Mock, patch
 
 import pytest
 from django.contrib.auth.models import User
+from django.contrib.sessions.backends.base import SessionBase
 from django.http import HttpResponse
 from django.test import RequestFactory
 from django.test.client import Client as DjangoTestClient
@@ -22,10 +22,9 @@ from order.views import ConfirmOrderView, CreateOrderView, OrderSummaryView
 from tests.common.status import (
     HTTP_200_OK,
     HTTP_302_REDIRECT,
-    HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
 )
-from web.models import Category, Product
+from web.models import Product
 
 
 @pytest.mark.unit
@@ -35,18 +34,30 @@ class TestCreateOrderView:
 
     def test_requires_authentication(self) -> None:
         """Test that CreateOrderView requires authentication."""
+
         client = DjangoTestClient()
         response = client.get(reverse("order:create_order"))
         assert response.status_code == HTTP_302_REDIRECT
         assert "/account/login/" in response["Location"]
 
-    def test_get_context_data(
+    def test_redirects_if_cart_empty(
         self,
         authenticated_client: DjangoTestClient,
-        account_client: AccountClient,
+    ) -> None:
+        """Test that view redirects to cart if cart is empty."""
+
+        response = authenticated_client.get(reverse("order:create_order"))
+        assert response.status_code == HTTP_302_REDIRECT
+        assert response["Location"] == reverse("web:index")
+
+    def test_get_context_data(
+        self,
+        authenticated_client_with_cart: tuple[DjangoTestClient, SessionBase],
     ) -> None:
         """Test that context contains client form."""
-        response = authenticated_client.get(reverse("order:create_order"))
+
+        client_with_cart = authenticated_client_with_cart[0]
+        response = client_with_cart.get(reverse("order:create_order"))
 
         assert response.status_code == HTTP_200_OK
         assert "client_form" in response.context
@@ -54,11 +65,12 @@ class TestCreateOrderView:
 
     def test_template_used(
         self,
-        authenticated_client: DjangoTestClient,
-        account_client: AccountClient,
+        authenticated_client_with_cart: tuple[DjangoTestClient, SessionBase],
     ) -> None:
         """Test that correct template is used."""
-        response = authenticated_client.get(reverse("order:create_order"))
+
+        client_with_cart = authenticated_client_with_cart[0]
+        response = client_with_cart.get(reverse("order:create_order"))
 
         assert response.status_code == HTTP_200_OK
         template_names = [t.name for t in response.templates]
@@ -68,22 +80,24 @@ class TestCreateOrderView:
     def test_get_context_data_calls_client_form_helper(
         self,
         mock_get_or_create_client_form: Mock,
-        authenticated_user: User,
+        authenticated_client_with_cart: tuple[DjangoTestClient, SessionBase],
+        user: User,
     ) -> None:
         """Test that get_context_data calls client form helper."""
+
         mock_form = Mock(spec=ClientForm)
         mock_get_or_create_client_form.return_value = mock_form
 
         factory = RequestFactory()
         request = factory.get(reverse("order:create_order"))
-        request.user = authenticated_user
+        request.user = user
 
         view = CreateOrderView()
         view.request = request
         context = view.get_context_data()
 
         assert context["client_form"] == mock_form
-        mock_get_or_create_client_form.assert_called_once_with(authenticated_user)
+        mock_get_or_create_client_form.assert_called_once_with(user)
 
 
 @pytest.mark.unit
@@ -93,6 +107,7 @@ class TestConfirmOrderView:
 
     def test_requires_authentication(self) -> None:
         """Test that ConfirmOrderView requires authentication."""
+
         client = DjangoTestClient()
         response = client.post(reverse("order:confirm_order"))
         assert response.status_code == HTTP_302_REDIRECT
@@ -100,6 +115,7 @@ class TestConfirmOrderView:
 
     def test_form_class_is_client_form(self) -> None:
         """Test that view uses ClientForm."""
+
         view = ConfirmOrderView()
         assert view.form_class == ClientForm
 
@@ -109,9 +125,10 @@ class TestConfirmOrderView:
         self,
         mock_get_or_create_client: Mock,
         mock_create_order: Mock,
-        authenticated_user: User,
+        user: User,
     ) -> None:
         """Test that form_valid updates user data correctly."""
+
         # Setup mocks
         mock_client = Mock(spec=AccountClient)
         mock_order = Mock(spec=Order)
@@ -133,7 +150,7 @@ class TestConfirmOrderView:
         # Create request with session and cart
         factory = RequestFactory()
         request = factory.post(reverse("order:confirm_order"))
-        request.user = authenticated_user
+        request.user = user
 
         # Mock the session with proper support for item assignment
         session_mock = Mock()
@@ -156,10 +173,10 @@ class TestConfirmOrderView:
         response = view.form_valid(form)
 
         # Verify user was updated
-        authenticated_user.refresh_from_db()
-        assert authenticated_user.first_name == "John"
-        assert authenticated_user.last_name == "Doe"
-        assert authenticated_user.email == "john@example.com"
+        user.refresh_from_db()
+        assert user.first_name == "John"
+        assert user.last_name == "Doe"
+        assert user.email == "john@example.com"
 
         # Verify response is redirect
         assert isinstance(response, HttpResponse)
@@ -167,9 +184,10 @@ class TestConfirmOrderView:
 
     def test_form_valid_empty_cart_redirects_to_cart(
         self,
-        authenticated_user: User,
+        user: User,
     ) -> None:
         """Test that empty cart redirects to cart page."""
+
         form_data = {
             "name": "John",
             "last_name": "Doe",
@@ -182,7 +200,7 @@ class TestConfirmOrderView:
 
         factory = RequestFactory()
         request = factory.post(reverse("order:confirm_order"))
-        request.user = authenticated_user
+        request.user = user
 
         # Mock the session
         client_data_mock = Mock()
@@ -221,13 +239,14 @@ class TestConfirmOrderView:
 
     def test_get_or_create_client_existing_client(
         self,
-        authenticated_user: User,
+        user: User,
         account_client: AccountClient,
     ) -> None:
         """Test _get_or_create_client with existing client."""
+
         factory = RequestFactory()
         request = factory.post(reverse("order:confirm_order"))
-        request.user = authenticated_user
+        request.user = user
 
         # Mock the session
         client_data_mock = Mock()
@@ -252,9 +271,9 @@ class TestConfirmOrderView:
         view.request = request
 
         # form_data = {
-        #     "name": authenticated_user.username,
-        #     "last_name": authenticated_user.last_name,
-        #     "email": authenticated_user.email,
+        #     "name": user.username,
+        #     "last_name": user.last_name,
+        #     "email": user.email,
         #     "phone": "987654321",
         #     "address": "456 Test Avenue",
         # }
@@ -264,7 +283,7 @@ class TestConfirmOrderView:
         # view.form_valid(form)
 
         # Test the private method directly
-        result_client = view._get_or_create_client(authenticated_user)  # noqa: SLF001
+        result_client = view._get_or_create_client(user)  # noqa: SLF001
 
         # Verify the returned client is the existing one
         assert result_client == account_client
@@ -276,12 +295,13 @@ class TestConfirmOrderView:
 
     def test_get_or_create_client_new_client(
         self,
-        authenticated_user: User,
+        user: User,
     ) -> None:
         """Test _get_or_create_client creates new client."""
+
         factory = RequestFactory()
         request = factory.post(reverse("order:confirm_order"))
-        request.user = authenticated_user
+        request.user = user
 
         # Mock the session
         session_mock = Mock()
@@ -299,10 +319,10 @@ class TestConfirmOrderView:
         view = ConfirmOrderView()
         view.request = request
 
-        result_client = view._get_or_create_client(authenticated_user)  # noqa: SLF001
+        result_client = view._get_or_create_client(user)  # noqa: SLF001
 
         assert isinstance(result_client, AccountClient)
-        assert result_client.user == authenticated_user
+        assert result_client.user == user
         assert result_client.phone == "1111111111"
         assert result_client.address == "789 Brand New St"
 
@@ -312,6 +332,7 @@ class TestConfirmOrderView:
         product: Product,
     ) -> None:
         """Test _create_order creates order and details correctly."""
+
         quantity = 2
         expected_subtotal = product.price * quantity
 
@@ -355,6 +376,7 @@ class TestOrderSummaryView:
 
     def test_requires_authentication(self) -> None:
         """Test that OrderSummaryView requires authentication."""
+
         client = DjangoTestClient()
         response = client.get(reverse("order:order_summary", args=[1]))
         assert response.status_code == HTTP_302_REDIRECT
@@ -362,6 +384,7 @@ class TestOrderSummaryView:
 
     def test_model_and_template(self) -> None:
         """Test that view uses correct model and template."""
+
         view = OrderSummaryView()
         assert view.model == Order
         assert view.template_name == "order/shipping.html"
@@ -375,6 +398,7 @@ class TestOrderSummaryView:
         order: Order,
     ) -> None:
         """Test that get_context_data stores order ID in session."""
+
         response = authenticated_client.get(
             reverse("order:order_summary", args=[order.pk]),
         )
@@ -389,6 +413,7 @@ class TestOrderSummaryView:
         order: Order,
     ) -> None:
         """Test that order is available in context with correct name."""
+
         response = authenticated_client.get(
             reverse("order:order_summary", args=[order.pk]),
         )
@@ -403,6 +428,7 @@ class TestOrderSummaryView:
         account_client: AccountClient,
     ) -> None:
         """Test that accessing nonexistent order returns 404."""
+
         response = authenticated_client.get(
             reverse("order:order_summary", args=[99999]),
         )

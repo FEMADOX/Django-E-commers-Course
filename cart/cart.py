@@ -26,11 +26,11 @@ class Cart:
         self.cart = cart
         self.total_price = total_price
 
-    def get_total_price(self) -> int:
+    def get_total_price(self) -> str:
         total = 0
         for value in self.cart.values():
             total += Decimal(value["subtotal"])
-        return int(total)
+        return str(total)
 
     def add(self, product: Product, quantity: int) -> None:
         if str(product.pk) not in self.cart:
@@ -64,18 +64,16 @@ class Cart:
 
         self.save()
 
-    def delete(self, product: Product) -> None:
-        product_id = str(product.pk)
+    def delete(self, product_id: str) -> None:
         if product_id in self.cart:
             del self.cart[product_id]
 
         self.save()
 
-    def update(self, product: Product, quantity: int) -> None:
-        product_id = str(product.pk)
+    def update(self, product_id: str, quantity: int) -> None:
         if product_id in self.cart:
             if quantity < 1:
-                self.delete(product)
+                self.delete(product_id)
                 return
             self.cart[product_id]["quantity"] = quantity
             self.cart[product_id]["subtotal"] = str(
@@ -100,8 +98,7 @@ class Cart:
     def items(self) -> Any:  # noqa: ANN401
         return self.cart.items()
 
-    def get_order_product_subtotal(self, product: Product) -> Decimal:
-        product_id = str(product.pk)
+    def get_order_product_subtotal(self, product_id: str) -> Decimal:
         if product_id in self.cart:
             return Decimal(self.cart[product_id]["subtotal"])
         return Decimal("0.00")

@@ -73,9 +73,8 @@ class DeleteProductCartView(LoginRequiredMixin, View):
         request: HttpRequest,
         product_id: int,
     ) -> HttpResponse:
-        product = get_object_or_404(Product, id=product_id)
         cart = Cart(request)
-        cart.delete(product)
+        cart.delete(str(product_id))
 
         actual_location = request.POST.get("location-url")
         if actual_location:
@@ -96,16 +95,15 @@ class UpdateProductCartView(LoginRequiredMixin, View):
         product_id: int,
     ) -> JsonResponse:
         try:
-            product = get_object_or_404(Product, id=product_id)
             data = json.loads(request.body)
             quantity = data.get("quantity")
 
             cart = Cart(request)
-            cart.update(product, quantity)
+            cart.update(str(product_id), quantity)
 
             return JsonResponse(
                 {
-                    "subtotal": cart.get_order_product_subtotal(product),
+                    "subtotal": cart.get_order_product_subtotal(str(product_id)),
                     "total_price": cart.get_total_price(),
                     "message": "Product updated successfully",
                 },
