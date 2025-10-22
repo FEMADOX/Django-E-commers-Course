@@ -46,6 +46,7 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 CORS_ORIGIN_WHITELIST = env.list("CORS_ORIGIN_WHITELIST")
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
+# CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
 
 # Environment
 ENVIRONMENT = env("ENVIRONMENT")
@@ -78,6 +79,7 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
+    # Django Apps
     "whitenoise.runserver_nostatic",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -86,10 +88,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     # "livereload",
     "django.contrib.staticfiles",
+    # 3rd Party Packages
     "cloudinary",
     "stripe",
     "crispy_forms",
     "crispy_bootstrap5",
+    # Local Apps
     "web",
     "account",
     "cart",
@@ -110,15 +114,15 @@ MIDDLEWARE = [
 ]
 
 # DJANGO LIVERELOAD settings
-if ENVIRONMENT != "production":
-    # Insert livereload before django.contrib.staticfiles when not in production
-    django_contrib_staticfiles_index = INSTALLED_APPS.index(
-        "django.contrib.staticfiles",
-    )
-    INSTALLED_APPS.insert(django_contrib_staticfiles_index, "livereload")
+# if ENVIRONMENT != "production":
+#     # Insert livereload before django.contrib.staticfiles when not in production
+#     django_contrib_staticfiles_index = INSTALLED_APPS.index(
+#         "django.contrib.staticfiles",
+#     )
+#     INSTALLED_APPS.insert(django_contrib_staticfiles_index, "livereload")
 
-    # Add livereload middleware at the end of MIDDLEWARE
-    MIDDLEWARE.append("livereload.middleware.LiveReloadScript")
+#     # Add livereload middleware at the end of MIDDLEWARE
+#     MIDDLEWARE.append("livereload.middleware.LiveReloadScript")
 
 
 ROOT_URLCONF = "edshop.urls"

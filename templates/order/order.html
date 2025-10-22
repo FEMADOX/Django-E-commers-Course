@@ -72,7 +72,7 @@
                             </p>
                           {% endif %} {% endcomment %}
                           <p class="fw-bolder fs-6 mb-0">
-                            <a href="{% url 'web:product_detail' product_id %}" class="text-black">{{ details.title }}</a>
+                            <a href="{% url 'web:product_detail' product_id %}">{{ details.title }}</a>
                           </p>
                         </div>
                         <p class="prod-li-price text-primary mb-0 fw-semibold" id="product-price">${{ details.price }}</p>
@@ -81,13 +81,13 @@
                         <!-- Quantity Control Component -->
                         <div class="border rounded quantity-control-component">
                           <p class="qnt-wrap prod-li-qnt mb-0 d-flex">
-                            <a href="#" class="qnt-minus prod-li-minus border-bottom-0" id="quantity-down"><i class="bi bi-dash text-black"></i></a>
-                            <input class="mb-0 rounded-0 p-0 text-center h-auto" name="quantity" type="text" value="{{ details.quantity }}">
-                            <a href="#" class="qnt-plus prod-li-plus border-bottom-0" id="quantity-up"><i class="bi bi-plus text-black"></i></a>
+                            <a href="#" class="qnt-minus prod-li-minus border-bottom-0" id="quantity-down"><i class="bi bi-dash"></i></a>
+                            <input class="mb-0 rounded-0 p-0 text-center h-auto bg-transparent" name="quantity" type="text" value="{{ details.quantity }}">
+                            <a href="#" class="qnt-plus prod-li-plus border-bottom-0" id="quantity-up"><i class="bi bi-plus"></i></a>
                           </p>
                         </div>
                         <div class="prod-li-total-wrap pe-0 w-auto" id="product-order-subtotal">
-                          <p class="prod-li-total text-black fw-bolder" id="product-total-price" >
+                          <p class="prod-li-total fw-bolder" id="product-total-price" >
                             $ {{ details.subtotal|floatformat:2 }}
                           </p>
                         </div>

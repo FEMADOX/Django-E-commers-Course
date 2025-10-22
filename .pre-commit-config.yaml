@@ -6,6 +6,7 @@ repos:
     hooks:
     -   id: trailing-whitespace
         verbose: true
+        ignore: ['migrations/.*\.py$']
     -   id: end-of-file-fixer
         verbose: true
     -   id: check-yaml

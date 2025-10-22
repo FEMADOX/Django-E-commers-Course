@@ -98,6 +98,12 @@ lint.ignore = [
     "G004",    # Logging statement uses f-string
     "COM812",  # Missing trailing comma in a list or tuple
 ]
+lint.exclude = [
+    "*/migrations/*",  # Ignore all files in migrations folders
+]
+format.exclude = [
+    "*/migrations/*",  # Ignore all files in migrations folders
+]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "edshop.settings"
