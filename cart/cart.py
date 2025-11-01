@@ -34,6 +34,13 @@ class Cart:
 
     def add(self, product: Product, quantity: int) -> None:
         if str(product.pk) not in self.cart:
+            # Handle both CloudinaryField objects and string URLs
+            image_url = (
+                product.image.url
+                if hasattr(product.image, "url")
+                else str(product.image)
+            )
+
             self.cart[product.pk] = {
                 "title": product.title,
                 "price": str(product.price),
@@ -43,7 +50,7 @@ class Cart:
                     "name": product.category.name,  # type: ignore
                 },
                 "description": product.description,
-                "image": product.image.url,
+                "image": image_url,
                 "brand": {
                     "id": product.brand.pk,  # type: ignore
                     "name": product.brand.name,  # type: ignore
@@ -83,9 +90,12 @@ class Cart:
         self.save()
 
     def clear(self) -> None:
+        self.cart = {}
         self.session["cart"] = {}
+        self.session.modified = True
 
     def restore_order_pending(self, order_id: int) -> None:
+        self.clear()  # Clear existing cart before restoring order
         order = Order.objects.get(pk=order_id, status="0")
         for order_detail in order.order_details.all():  # type: ignore[attr-defined]
             self.add(order_detail.product, order_detail.quantity)

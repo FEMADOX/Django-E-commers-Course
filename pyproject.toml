@@ -28,7 +28,10 @@ types-stubs = [
 ]
 
 [dependency-groups]
-dev = ["django-livereload-server>=0.5.1", "ipython>=9.2.0", "ty>=0.0.1a20"]
+dev = [
+ "ipython>=9.2.0",
+ "ty>=0.0.1a20",
+]
 
 [tool.ruff]
 lint.select = [

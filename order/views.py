@@ -52,36 +52,6 @@ class CreateOrderView(LoginRequiredMixin, TemplateView):
 
         return super().get(request)
 
-    def patch(self, request: HttpRequest, *args: tuple, **kwargs: dict) -> JsonResponse:
-        """Return JsonResponse PATCH requests to the ConfirmOrderView."""
-
-        try:
-            data: dict[str, Any] = json.loads(request.body)
-
-            product_id, quantity = data.values()
-            cart = Cart(request)
-
-            # Update product details based on new quantity
-            cart.update(product_id, quantity)
-
-            return JsonResponse(
-                {
-                    "message": "Order updated successfully.",
-                    "subtotal": str(cart.get_order_product_subtotal(product_id)),
-                    "total_price": cart.get_total_price(),
-                },
-                status=HTTP_200_OK,
-            )
-        except json.JSONDecodeError:
-            return JsonResponse(
-                {
-                    "details": {
-                        "message": "Invalid JSON data.",
-                    },
-                },
-                status=HTTP_400_BAD_REQUEST,
-            )
-
 
 class ConfirmOrderView(LoginRequiredMixin, FormView):
     """

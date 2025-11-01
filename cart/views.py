@@ -1,10 +1,12 @@
 import json
 from typing import Any
 
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponseRedirect, JsonResponse
 from django.http.response import HttpResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.generic import TemplateView, View
 
 from cart.cart import Cart
@@ -18,7 +20,7 @@ class CartIndexView(TemplateView):
     def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["pending_orders"] = Order.objects.filter(
-            client=self.request.user.pk,
+            client__user=self.request.user,
             status="0",
         )
         return context
@@ -32,6 +34,10 @@ class CartIndexView(TemplateView):
         cart = Cart(request)
 
         if not cart.cart:
+            messages.info(
+                request,
+                "Your cart is empty. Please add products to proceed.",
+            )
             return redirect("/")
 
         return super().get(request, *args, **kwargs)
@@ -40,20 +46,27 @@ class CartIndexView(TemplateView):
 class AddProductCartView(LoginRequiredMixin, View):
     """View to add products to the cart"""
 
-    http_method_names = ["post"]
+    http_method_names = ["get", "post"]
     login_url = "/account/login/"
 
-    @staticmethod
+    # Only allow GET for redirect from the login page
+    def get(self, request: HttpRequest, **kwargs: dict[str, str]) -> HttpResponse:
+        if "product_id" in kwargs and type(kwargs["product_id"]) is int:
+            product_id = kwargs["product_id"]
+            return self.post(request, product_id)
+        return redirect("/")
+
     def post(
+        self,
         request: HttpRequest,
         product_id: int,
     ) -> HttpResponse:
         """Add product with specified quantity and show cart"""
 
-        quantity = int(request.POST["quantity"])
+        quantity = int(request.POST.get("quantity", 1))
         product = get_object_or_404(Product, id=product_id)
         cart = Cart(request)
-        cart.add(product, quantity)  # type: ignore
+        cart.add(product, quantity)
 
         actual_location = request.POST.get("location-url")
         if actual_location:
@@ -97,6 +110,13 @@ class UpdateProductCartView(LoginRequiredMixin, View):
         try:
             data = json.loads(request.body)
             quantity = data.get("quantity")
+
+            # Validate quantity is a positive integer
+            if not isinstance(quantity, int) or quantity < 0:
+                return JsonResponse(
+                    {"error": "Quantity must be a positive integer"},
+                    status=400,
+                )
 
             cart = Cart(request)
             cart.update(str(product_id), quantity)

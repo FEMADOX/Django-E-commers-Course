@@ -20,7 +20,7 @@ const pendingUpdates = new Map()
 const updateCartOnServer = async (productId, quantity) => {
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
         document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
-    const url = `update-product-cart/${productId}`
+    const url = `/cart/update-product-cart/${productId}`
 
     try {
         const response = await fetch(url, {
@@ -34,13 +34,12 @@ const updateCartOnServer = async (productId, quantity) => {
 
         if (!response.ok) {
             console.error(`Response status: ${response.status}`)
-            const responseJson = await response.json()
-            throw new Error(`Network response was not ok: ${responseJson.error}`)
+            throw new Error(`Network response was not ok: ${response.error}`)
         }
 
         return await response.json()
     } catch (error) {
-        console.error('Error updating cart:\n', error)
+        console.error('Error updating cart:', error)
     }
 }
 
@@ -65,7 +64,16 @@ const updateCartTotals = (serverData) => {
 
 // Update cart data both in UI
 const updateCartData = async (productOrderContainer, quantity) => {
-    const cartTotalElement = document.querySelector('p.cart-totals-val')
+    const orderResumeSubtotal = document.querySelector('#order-resume-subtotal')
+    if (!orderResumeSubtotal) {
+        console.error('Order resume subtotal element not found in the DOM.')
+    }
+
+    const productOrderSubtotal = productOrderContainer.querySelector('#product-total-price')
+    if (!productOrderSubtotal) {
+        console.error('Order resume subtotal element not found in the DOM.')
+        return
+    }
 
     const productId = productOrderContainer.dataset.productId
     if (!productId) {
@@ -80,7 +88,8 @@ const updateCartData = async (productOrderContainer, quantity) => {
             if (serverData.subtotal !== undefined) {
                 // Update the product subtotal price in the UI
                 if (serverData.subtotal > 0 && serverData.total_price > 0) {
-                    cartTotalElement.textContent = `$ ${serverData.total_price}`
+                    productOrderSubtotal.textContent = `$ ${serverData.subtotal}`
+                    orderResumeSubtotal.textContent = `$ ${serverData.total_price}`
                 } else {
                     // Remove product from UI if subtotal is 0
 
@@ -94,7 +103,7 @@ const updateCartData = async (productOrderContainer, quantity) => {
                     productOrderContainer.remove()
 
                     // Update order resume subtotal
-                    cartTotalElement.textContent = `$ ${serverData.total_price}`
+                    orderResumeSubtotal.textContent = `$ ${serverData.total_price}`
 
                     // Check if cart is empty
                     const remainingProducts = document.querySelectorAll('.prod-li')
@@ -144,17 +153,36 @@ const clickQuantityButton = (buttons, operation) => {
 
             quantityInput.value = quantity
 
-            const productCartContainer = button.closest('article.prod-li.sectls')
+            const productOrderContainer = button.closest('div.prod-li.sectls')
 
-            if (!productCartContainer) {
-                console.error('Product cart container not found in the DOM.')
+            if (!productOrderContainer) {
+                console.error('Product order container not found in the DOM.')
                 return
             }
 
+            // Update Product Total UI inmediately (optimictic update)
+            updateLocalProductTotal(productOrderContainer, quantity)
+
             // Send debounced update to server
-            debouncedUpdateCartData(productCartContainer, quantity)
+            debouncedUpdateCartData(productOrderContainer, quantity)
         })
     })
+}
+
+// Function to update local product total price in the UI
+const updateLocalProductTotal = (productOrderContainer, quantity) => {
+    const priceElement = productOrderContainer.querySelector('#product-price')
+    const totalPriceElement = productOrderContainer.querySelector('#product-total-price')
+
+    if (priceElement && totalPriceElement) {
+        const priceText = priceElement.textContent.replace(/[$\s]/g, '')
+        const price = parseFloat(priceText)
+
+        if (!isNaN(price)) {
+            const totalPrice = (price * quantity).toFixed(2)
+            totalPriceElement.textContent = `$ ${totalPrice}`
+        }
+    }
 }
 
 // Setup listeners for quantity input changes
@@ -169,7 +197,7 @@ const setupQuantityInputListeners = () => {
                 event.target.value = 0
             }
 
-            const productOrderContainer = event.target.closest('article.prod-li.sectls')
+            const productOrderContainer = event.target.closest('div.prod-li.sectls')
             if (!productOrderContainer) {
                 console.error('Product order container not found in the DOM.')
                 return

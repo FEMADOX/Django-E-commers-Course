@@ -3,7 +3,7 @@
 
 {% block head %}
   <script type="text/javascript" src="{% static 'js/cartPageControl.js' %}" defer></script>
-{% endblock head %}
+{% endblock %}
 
 {% block content %}
   <h1 class="main-cont-ttl">Cart</h1>
@@ -15,101 +15,56 @@
   </ul>
   <div class="page-styling">
     <div class="woocommerce prod-litems section-list">
+      <h2>Your Items</h2>
       {% for product_id, product_order_detail in request.session.cart.items %}
-        <article class="prod-li sectls">
-          <div class="prod-li-inner">
-            <a href="{% url 'web:product_detail' product_id %}" class="prod-li-img">
-              <img
-                  src="{{ product_order_detail.image }}"
-                  alt=""
-              />
-            </a>
-            <div class="prod-li-cont">
-              <div class="prod-li-ttl-wrap">
-                <p>
-                  <a href="{% url 'web:filter_by_category' product_order_detail.category.id %}">{{ product_order_detail.category.name }}</a>
-                </p>
-                <h3>
-                  <a href="{% url 'web:product_detail' product_id %}">{{ product_order_detail.title }}</a>
-                </h3>
-              </div>
-              <div class="prod-li-prices">
-                <div class="prod-li-price-wrap">
-                  <p>Price</p>
-                  <p id="product-price" class="prod-li-price">${{ product_order_detail.price }}</p>
-                </div>
-                <div class="prod-li-qnt-wrap">
-                  <p class="qnt-wrap prod-li-qnt">
-                    <a
-                        id="quantity-up" href="#"
-                        class="qnt-plus prod-li-plus"
-                    ><i class="icon ion-arrow-up-b"></i></a>
-                    <input type="text" name="quantity" value="{{ product_order_detail.quantity }}"/>
-                    <a
-                        id="quantity-down" href="#"
-                        class="qnt-minus prod-li-minus"
-                    ><i class="icon ion-arrow-down-b"></i></a>
+        <article class="prod-li sectls" data-product-id="{{ product_id }}">
+          <div class="prod-li-inner d-flex gap-4">
+            <a href="{% url 'web:product_detail' product_id %}" class="prod-li-img"><img src="{{ product_order_detail.image }}" alt="" /></a>
+            <div class="cart-item">
+              <div class="card-header product-cart">
+                <div class="prod-li-ttl-wrap">
+                  <a href="{% url 'web:product_detail' product_id %}"><h3>{{ product_order_detail.title }}</h3></a>
+                  <p>
+                    <a href="{% url 'web:filter_by_category' product_order_detail.category.id %}">{{ product_order_detail.category.name }}</a>
                   </p>
                 </div>
-                <div class="prod-li-total-wrap">
-                  <p>Total</p>
-                  <p id="product-total-price" class="prod-li-total" data-product-id="{{ product_id }}">
-                    ${{product_order_detail.subtotal|floatformat:2 }}
+                <form class="cart-actions" action="{% url 'cart:delete_product_cart' product_id %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="location-url" value="{{ request.get_full_path }}" />
+                  <p class="prod-li-add">
+                    <button class="button hover-label prod-addbtn" type="submit"><i class="icon ion-close-round"></i></button>
+                  </p>
+                </form>
+              </div>
+              <div class="prod-li-info border-0">
+                <div class="card-body border-0">
+                  <div class="prod-li-prices">
+                    <div class="prod-li-price-wrap">
+                      <p id="product-price" class="prod-li-price">${{ product_order_detail.price }}</p>
+                    </div>
+                  </div>
+                  <div class="border rounded quantity-control-component">
+                    <p class="qnt-wrap prod-li-qnt mb-0 d-flex">
+                      <a href="#" class="qnt-minus prod-li-minus border-bottom-0" id="quantity-down"><i class="bi bi-dash"></i></a>
+                      <input
+                        id="product-quantity"
+                        class="mb-0 rounded-0 p-0 text-center h-auto bg-transparent"
+                        name="quantity" type="text" value="{{ product_order_detail.quantity }}"
+                      />
+                      <a href="#" class="qnt-plus prod-li-plus border-bottom-0" id="quantity-up"><i class="bi bi-plus"></i></a>
+                    </p>
+                  </div>
+                  <p class="prod-li-information">
+                    <a href="#" class="hover-label"><i class="icon ion-more"></i><span>Show Information</span></a>
                   </p>
                 </div>
               </div>
-            </div>
-            <div class="prod-li-info">
-              <div class="prod-li-rating-wrap">
-                <p data-rating="5" class="prod-li-rating">
-                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-                    <path
-                        d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"
-                    />
-                  </svg>
-                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-                    <path
-                        d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"
-                    />
-                  </svg>
-                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-                    <path
-                        d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"
-                    />
-                  </svg>
-                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-                    <path
-                        d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"
-                    />
-                  </svg>
-                  <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-                    <path
-                        d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"
-                    />
-                  </svg>
-                </p>
-                <p class="prod-li-rating-count">12</p>
-              </div>
-              <form class="cart-actions" action="{% url 'cart:delete_product_cart' product_id %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="location-url" value="{{ request.get_full_path }}"/>
-                <p class="prod-li-add">
-                  <button class="button hover-label prod-addbtn" type="submit">
-                    <i class="icon ion-close-round"></i><span>Delete</span>
-                  </button>
-                </p>
-              </form>
-              <p class="prod-li-information">
-                <a href="#" class="hover-label"><i class="icon ion-more"></i><span>Show Information</span></a>
-              </p>
             </div>
           </div>
           <div class="page-styling prod-li-informations">
             <dl class="prod-li-props">
               <dt>Brand:</dt>
-              <dd>
-                <a href="{% url 'web:filter_by_brand' product_order_detail.brand.id %}">{{ product_order_detail.brand.name }}</a>
-              </dd>
+              <dd><a href="{% url 'web:filter_by_brand' product_order_detail.brand.id %}">{{ product_order_detail.brand.name }}</a></dd>
               <dt>Weight:</dt>
               <dd>{{ product_order_detail.weight }} kg</dd>
               <dt>Dimension:</dt>
@@ -121,29 +76,29 @@
         </article>
       {% endfor %}
     </div>
-    <div class="cart-actions">
+    <div class="cart-actions cart-page">
       <!-- TODO: Coupon code functionality -->
       <div class="coupon">
-        <input type="text" id="coupon-code-input" placeholder="Coupon code"/>
-        <input type="submit" class="button" value="Apply"/>
+        <input type="text" id="coupon-code-input" placeholder="Coupon code" />
+        <input type="submit" class="button coupon-apply-btn" value="Apply" />
+      </div>
+      <div class="order-total">
+        <p class="cart-totals-ttl">Total</p>
+        <p class="cart-totals-val">${{ request.session.cart_total_price|floatformat:2 }}</p>
       </div>
       <div class="cart-collaterals">
         <form class="cart-actions cart" action="{% url 'cart:clear_cart' %}" method="post">
           {% csrf_token %}
-          <input type="hidden" name="location-url" value="{{ request.get_full_path }}"/>
-          <input class="checkout-button button" type="submit" value="Clear Cart"/>
+          <input type="hidden" name="location-url" value="{{ request.get_full_path }}" />
+          <input class="checkout-button button clear-cart-btn" type="submit" value="Clear Cart" />
         </form>
         <form class="cart-actions cart" action="{% url 'order:create_order' %}" method="get">
-          <input class="checkout-button button" type="submit" value="Place Order"/>
+          <input class="checkout-button button place-order-btn" type="submit" value="Place Order" />
         </form>
-        <div class="order-total">
-          <p class="cart-totals-ttl">Total</p>
-          <p class="cart-totals-val">${{ request.session.cart_total_price|floatformat:2 }}</p>
-        </div>
       </div>
     </div>
   </div>
   {% if pending_orders %}
-    {% include "includes/pending_orders.html" %}
+    {% include 'includes/pending_orders.html' %}
   {% endif %}
-{% endblock content %}
+{% endblock %}

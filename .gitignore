@@ -187,6 +187,4 @@ logo_old.png
 .idea/
 .ruff_cache/
 .run/
-
-bs-config.js
-start-dev.sh
+scripts/
