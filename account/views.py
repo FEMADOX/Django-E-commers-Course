@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import AbstractBaseUser, User
 from django.contrib.auth.views import (
     LoginView,
+    LogoutView,
     PasswordResetConfirmView,
     PasswordResetDoneView,
     PasswordResetView,
@@ -114,6 +115,12 @@ class UserSignupView(AnonymousRequiredMixin, CreateView):
     def form_invalid(self, form: BaseModelForm) -> HttpResponse:
         messages.error(self.request, "SignUp Failed!")
         return super().form_invalid(form)
+
+
+class CustomLogoutView(LogoutView):
+    def post(self, request: HttpRequest, *args: tuple, **kwargs: dict) -> HttpResponse:
+        messages.success(request, "You have been logged out successfully.")
+        return super().post(request)
 
 
 class AccountActivationView(View):

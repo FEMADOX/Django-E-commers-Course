@@ -67,6 +67,10 @@ class AddProductCartView(LoginRequiredMixin, View):
         product = get_object_or_404(Product, id=product_id)
         cart = Cart(request)
         cart.add(product, quantity)
+        messages.success(
+            request,
+            f'Product "{product.title}" has been added to your cart.',
+        )
 
         actual_location = request.POST.get("location-url")
         if actual_location:

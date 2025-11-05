@@ -78,7 +78,7 @@ def regex_validation(
         if not re.search(r"[0-9]", password):
             errors.append("At least one number.")
         if not re.search(rf"[{punctuation}]", password):
-            errors.append(f"At least one symbol ({punctuation}).")
+            errors.append(f"At least one symbol.")
         [form.add_error(form_field, error) for error in errors]
     return validation
 
@@ -227,39 +227,37 @@ class CustomSetPasswordForm(SetPasswordForm):
 
 class SmartAuthenticationForm(forms.Form):
     email = forms.EmailField(
-        label="E-mail",
+        label="",
         min_length=10,
         max_length=100,
         widget=forms.EmailInput(
             attrs={
                 "class": "form-control email-login",
-                "placeholder": "email@gmail.com",
+                "placeholder": "",
                 "autocomplete": "email",
             },
         ),
         required=True,
     )
     password = forms.CharField(
-        label="Password",
+        label="",
         min_length=8,
         widget=forms.PasswordInput(
             attrs={
                 "class": "form-control password-login",
-                "placeholder": (
-                    "1 uppercase, 1 lowercase, 1 number, 1 special character"
-                ),
+                "placeholder": "",
                 "autocomplete": "current-password",
             },
         ),
         required=True,
     )
     password_confirm = forms.CharField(
-        label="Confirm Password",
+        label="",
         min_length=8,
         widget=forms.PasswordInput(
             attrs={
                 "class": "form-control password-confirm",
-                "placeholder": "Confirm your password",
+                "placeholder": "",
                 "autocomplete": "current-password",
             },
         ),

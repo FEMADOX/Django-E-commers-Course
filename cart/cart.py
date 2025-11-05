@@ -41,7 +41,7 @@ class Cart:
                 else str(product.image)
             )
 
-            self.cart[product.pk] = {
+            self.cart[str(product.pk)] = {
                 "title": product.title,
                 "price": str(product.price),
                 "quantity": quantity,

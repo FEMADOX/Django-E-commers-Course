@@ -251,6 +251,8 @@ class TestLoginLogoutIntegration:
                 # Step 2: Logout
                 logout_response = client.post(reverse("account:logout"))
                 assert logout_response.status_code == HTTP_302_REDIRECT
+                messages = list(get_messages(logout_response.wsgi_request))
+                assert any("logged out successfully" in str(m) for m in messages)
 
                 # Step 3: Try to access protected page after logout
                 protected_response = client.get(reverse("account:user_account"))

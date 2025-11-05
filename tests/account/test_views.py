@@ -320,6 +320,46 @@ class TestUserSignupView:
         assert any("SignUp Failed" in str(m) for m in messages)
 
 
+class TestUserLogoutView:
+    """Tests for UserLogoutView."""
+
+    def test_logout_view_requires_post(
+        self,
+        authenticated_client: DjangoClient,
+    ) -> None:
+        """Test that logout view only allows POST requests."""
+
+        response = authenticated_client.get(reverse("account:logout"))
+
+        assert response.status_code == HTTP_405_METHOD_NOT_ALLOWED
+
+    def test_logout_view_post_requires_authentication(
+        self,
+        client: DjangoClient,
+    ) -> None:
+        """Test that logout view requires authentication."""
+
+        response = client.post(reverse("account:logout"))
+
+        assert response.status_code == HTTP_302_REDIRECT
+        assert "login" in response["Location"]
+
+    def test_logout_view_post(
+        self,
+        authenticated_client: DjangoClient,
+    ) -> None:
+        """Test POST request to logout view."""
+
+        response = authenticated_client.post(reverse("account:logout"))
+
+        assert response.status_code == HTTP_302_REDIRECT
+        assert response["Location"] == reverse("account:login")
+
+        # Check success message
+        messages = list(get_messages(response.wsgi_request))
+        assert any("logged out successfully" in str(m) for m in messages)
+
+
 @pytest.mark.django_db
 @pytest.mark.unit
 class TestAccountActivationView:
