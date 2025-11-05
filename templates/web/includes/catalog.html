@@ -1,19 +1,25 @@
-<div class="row prod-items prod-items-2">
+{% load static %}
+<script src="{% static 'js/catalogIntersectionObserver.js' %}" defer></script>
+
+<div class="row prod-items prod-items-2" id="catalog-section">
   {% for product in products %}
     <form class="cart-actions" action="{% url 'cart:add_product_cart' product.id %}" method="post">
       {% csrf_token %}
       <input type="hidden" name="location-url" value="{{ request.get_full_path }}"/>
       <article class="cf-sm-6 cf-md-6 cf-lg-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 sectgl-item">
         <div class="sectgl prod-i">
+          <!-- Product Image -->
           <div class="prod-i-top">
             <a class="prod-i-img" href="{% url 'web:product_detail' product.id %}">
               <img src="
-              {% if product.image %}
-                {{ product.image.url }}
-              {% else %}
-                https://via.placeholder.com/250
-              {% endif %}"
-                   alt=""/>
+                {% if product.image %}
+                  {{ product.image.url }}
+                {% else %}
+                  https://via.placeholder.com/250
+                {% endif %}
+                "
+                alt="{{ product.title }}"
+              />
             </a>
             <div class="prod-i-actions">
               <div class="prod-i-actions-in">
@@ -28,20 +34,22 @@
             </div>
           </div>
           <div class="prod-i-bot">
+            <!-- Product Top -->
             <h3 class="prod-i-ttl">
               <a href="{% url 'web:product_detail' product.id %}">{{ product.title }}</a>
-              <button class="add-to-cart-mobile" type="submit">
-                <i class="bi bi-cart-plus"></i>
-              </button>
             </h3>
+            <!-- Product Bottom -->
             <div class="prod-i-info">
-              <p class="prod-i-price">${{ product.price }}</p>
               <p class="prod-i-categ">
                 <a href="{% url 'web:filter_by_category' product.category.id %}">{{ product.category }}</a>
               </p>
+              <button class="add-to-cart-mobile" type="submit">
+                <i class="bi bi-cart-plus"></i>
+              </button>
               <p class="prod-i-categ">
                 <a href="{% url 'web:filter_by_brand' product.brand.id %}">{{ product.brand }}</a>
               </p>
+              <p class="prod-i-price">${{ product.price }}</p>
             </div>
           </div>
         </div>

@@ -1,4 +1,6 @@
-{% extends '../../base.html' %}
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+<!-- TODO: Improve UI for mobile devices -->
 
 {% block title %}Reset your password{% endblock %}
 
@@ -14,7 +16,6 @@
     <li>Reset Password</li>
   </ul>
   <div class="email-reset-wrapper">
-    {% include 'includes/messages.html' %}
     <div class="email-reset">
       <h2 class="email-reset">Enter your email address to obtain a new password:</h2>
         <svg fill="#000000" width="100px" height="100px" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg">
@@ -24,7 +25,7 @@
         </svg>
         <form class="email-reset" action="" method="post">
           {% csrf_token %}
-          {{ form.as_p }}
+          {{ form|crispy }}
           <input class="email-reset" type="submit" value="Send email" />
         </form>
     </div>

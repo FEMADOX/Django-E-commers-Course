@@ -1,13 +1,15 @@
 {% load static %}
-<script type="text/javascript" src="{% static 'js/close_button.js' %}" defer></script>
+<script type="text/javascript" src="{% static 'js/toastBehavior.js' %}" defer></script>
 
 {% if messages %}
-  <ul class="messages">
+  <div class="toast-container p-3">
     {% for message in messages %}
-      <li class="{{ message.tags }}">
-        {{ message|safe }}
-        <a href="#" class="close">x</a>
-      </li>
+      <div class="toast align-items-center border-0 {{ message.tags }}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" data-bs-delay="5000">
+        <div class="toast-content">
+          <div class="toast-body">{{ message|safe }}</div>
+          <button type="button" class="btn-close btn-close-white my-auto" aria-label="Close" onclick="closeToast(this)"></button>
+        </div>
+      </div>
     {% endfor %}
-  </ul>
+  </div>
 {% endif %}
