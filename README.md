@@ -214,8 +214,6 @@ The Docker setup includes:
 Run the test suite:
 
 ```bash
-python run_tests.py
-# or
 pytest
 ```
 
@@ -233,6 +231,14 @@ pytest -m unit
 
 # Integration tests
 pytest -m integration
+```
+
+Recomendation: Use `pytest` with the plugin `xdist` for parallel test execution:
+
+```bash
+pytest -n auto                  # Automatically uses all available CPU cores
+pytest -n 4                     # Specify number of CPU cores
+pytest -n auto --dist loadscope # Distribute tests by scope
 ```
 
 ## 🔧 Development
