@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 {% load crispy_forms_filters %}
+{% load static %}
 
 {% block title %}
-  Login/Sig Up
+  Login/Sign Up
 {% endblock title %}
+
+{% block head %}
+  <script src="{% static 'js/passwordTypeToggle.js' %}" defer></script>
+{% endblock head %}
 
 {% block content %}
   <h1 class="main-cont-ttl">Registration</h1>
@@ -13,29 +18,28 @@
     </li>
     <li>Login</li>
   </ul>
-
   <article class="page-cont">
     <div class="page-styling">
       <div class="auth-wrap">
         <div class="auth-col">
-          <h2>Login</h2>
-          {% include 'includes/messages.html' %}
-          <form class="register" method="post"  action="{% url 'account:login' %}">
+          <h2 class="mb-4">Login</h2>
+          <form class="register login w-100" method="post"  action="{% url 'account:login' %}">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ next }}" />
-            {{ form|crispy }}
+            {% include 'includes/crispy_fields/email.html' %}
+            {% include 'includes/crispy_fields/password.html' %}
             <p class="auth-submit">
               <input type="checkbox" id="rememberme" value="forever" />
-              <label for="rememberme">Remember me</label>
-              <input type="submit" value="Login" />
+              <label class="pt-0" for="rememberme">Remember me</label>
+              <input class="w-100" type="submit" value="Login" />
             </p>
           </form>
           <p class="auth-lost_password">
             <a href="{% url 'account:password_reset' %}">Lost your password?</a>
           </p>
-          <p>
+          <p class="mb-0">
             Don't have an account?
-            <a href="{% url 'account:signup' %}">SignUp</a>
+            <a href="{% url 'account:signup' %}" class="fw-semibold">SignUp</a>
           </p>
         </div>
       </div>

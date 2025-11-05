@@ -3,8 +3,6 @@
 
   <head>
     {% load static %}
-    {% comment %} {% load livereload_tags %}
-    {% livereload_script %} {% endcomment %}
     {% load crispy_forms_tags %}
     <meta charset="UTF-8" />
     <title>Django E-commerce</title>
@@ -30,9 +28,6 @@
     <meta name="twitter:image" content="https://opengraph.b-cdn.net/production/images/cf05f4e1-d3e0-454e-be8a-4458270d4a4d.jpg?token=cck3XbktDrPCRFpVJbOw2UDMEUdssIWtzG6TDURA6mU&height=1248&width=832&expires=33296912245">
 
     <!-- Meta Tags Generated via https://www.opengraph.xyz -->
-
-    {% block head %}
-    {% endblock head %}
 
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon" />
 
@@ -64,9 +59,12 @@
     <script type="text/javascript" src="{% static 'js/jquery-plugins.js' %}" defer></script>
     <script type="text/javascript" src="{% static 'js/main.js' %}" defer></script>
     <script type="text/javascript" src="{% static 'js/darkmode.js' %}" defer></script>
+
+    {% block head %}
+    {% endblock head %}
   </head>
 
-  <body class="">
+  <body>
     <div id="page" class="site">
       {% include 'includes/top_info.html' %}
       {% include 'includes/header.html' %}
@@ -82,6 +80,7 @@
       </div>
       {% include 'includes/footer.html' %}
     </div>
+    {% include 'includes/messages.html' %}
   </body>
 
 </html>

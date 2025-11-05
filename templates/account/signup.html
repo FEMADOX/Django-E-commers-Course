@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 {% load crispy_forms_filters %}
+{% load static %}
 
 {% block title %}
-  Login/Sig Up
-{% endblock %}
+  Login/Sign Up
+{% endblock title %}
+
+{% block head %}
+  <script src="{% static 'js/passwordTypeToggle.js' %}" defer></script>
+{% endblock head %}
 
 {% block content %}
   <h1 class="main-cont-ttl">Registration</h1>
@@ -13,23 +18,27 @@
     </li>
     <li>Registration</li>
   </ul>
-
   <article class="page-cont">
     <div class="page-styling">
       <div class="auth-wrap">
         <div class="auth-col">
-          <h2>Sign Up</h2>
-          {% include 'includes/messages.html' %}
-          <form class="register" method="post" action="{% url 'account:signup' %}">
+          <h2 class="mb-4">Sign Up</h2>
+          <form class="register signup w-100" method="post" action="{% url 'account:signup' %}">
             {% csrf_token %}
-            {{ form|crispy }}
+            {% include 'includes/crispy_fields/email.html' %}
+            {% include 'includes/crispy_fields/password.html' %}
+            {% include 'includes/crispy_fields/confirm_password.html' %}
+            <div class="my-4 d-flex gap-2">
+              <input type="checkbox" id="terms" required />
+              <label for="terms">I agree to the <a href="">Terms and Conditions</a></label>
+            </div>
             <p class="auth-submit">
-              <input type="submit" value="Create Account" />
+              <input type="submit" class="w-100" value="Create Account" />
             </p>
           </form>
-          <p>
+          <p class="mb-0">
             Already have an account?
-            <a href="{% url 'account:login' %}">LogIn</a>
+            <a href="{% url 'account:login' %}" class="fw-semibold">LogIn</a>
           </p>
         </div>
       </div>

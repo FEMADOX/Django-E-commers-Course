@@ -12,15 +12,30 @@
     <div class="page-styling">
       <div class="auth-wrap">
         <div class="auth-col">
-          <h2>Personal Information</h2>
-          {% include 'includes/messages.html' %}
-          <form class="register" method="post" action="{% url 'account:update_account' %}">
+          <div class="auth-header">
+            <h2>Profile Information</h2>
+            <p>Update your profile information</p>
+          </div>
+          <form class="register update-account-details" method="post" action="{% url 'account:update_account' %}">
             {% csrf_token %}
             {{ form|crispy }}
-            <p class="auth-submit">
+            <p class="auth-submit mb-0 mt-4">
               <input type="submit" value="Update Information" />
             </p>
+            <div class="divider">
+              <span>or</span>
+            </div>
           </form>
+          {% if request.user.is_authenticated %}
+            <ul class="logout-account-container m-0">
+              <li>
+                <form action="{% url 'account:logout' %}" method="post">
+                  {% csrf_token %}
+                  <input type="submit" class="logout-account" value="LogOut" />
+                </form>
+              </li>
+            </ul>
+          {% endif %}
         </div>
       </div>
     </div>
