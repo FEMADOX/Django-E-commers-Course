@@ -20,7 +20,6 @@ def run_ruff() -> int:
                 "run",
                 "ruff",
                 "check",
-                ".",
                 "--show-fixes",  # Show available fixes
             ],
             check=True,
@@ -37,7 +36,6 @@ def run_ruff() -> int:
                 "ruff",
                 "format",
                 "--check",
-                ".",
             ],
             check=True,
             text=True,

@@ -22,7 +22,7 @@ repos:
         types: [python]
         stages: [pre-commit]
         verbose: true
-        pass_filenames: true
+        pass_filenames: false
     -   id: run-linter
         name: "🧹 Ruff Linting"
         entry: uv run run_ruff.py
