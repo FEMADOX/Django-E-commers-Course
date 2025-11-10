@@ -270,18 +270,6 @@ class TestConfirmOrderView:
         view = ConfirmOrderView()
         view.request = request
 
-        # form_data = {
-        #     "name": user.username,
-        #     "last_name": user.last_name,
-        #     "email": user.email,
-        #     "phone": "987654321",
-        #     "address": "456 Test Avenue",
-        # }
-        # form = ClientForm(data=form_data)
-        # assert form.is_valid()
-
-        # view.form_valid(form)
-
         # Test the private method directly
         result_client = view._get_or_create_client(user)  # noqa: SLF001
 

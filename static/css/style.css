@@ -3674,14 +3674,7 @@ img {
 
 .main-cont .prod {
     margin-bottom: 49px;
-    padding: 0 0 0 51.3%;
     position: relative;
-}
-
-.prod:after {
-    clear: both;
-    display: block;
-    content: '';
 }
 
 .woocommerce div.product {
@@ -3731,31 +3724,31 @@ img {
 }
 
 .prod .prod-slider-wrap {
-    position: absolute;
+    position: static;
     top: 0;
     bottom: 0;
     left: 0;
-    padding: 0 0 95px;
     float: left;
-    width: 48.8%;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     background-color: #fff;
 }
 
 .prod .prod-slider-wrap.prod-slider-shown {
-    min-height: 500px;
-    border-radius: 20px 0 0 20px;
+    min-height: auto;
+    border-radius: 10px 10px 0 0;
 }
 
 .prod .prod-slider-wrap.prod-slider-shown+.prod-cont {
     min-height: 500px;
-    border-radius: 0 20px 20px 0;
+    border-radius: 0 0 10px 10px;
 }
 
 .prod .prod-slider {
     margin: 0;
     top: 0;
-    position: absolute;
+    position: static;
     width: 100%;
     bottom: 95px;
     overflow: hidden;
@@ -3983,7 +3976,7 @@ img {
     width: 100%;
     font-size: 15px;
     color: #9292b4;
-    background-color: #fff;
+    background-color: var(--secondary-color);
     padding: 36px 38px 1px;
 }
 
@@ -4188,7 +4181,7 @@ div.product.prod .prod-cont .stock {
 .prod .variations select {
     display: block;
     margin: 0;
-    opacity: 0;
+    opacity: 1;
     height: 27px;
     width: 100%;
 }
@@ -4216,21 +4209,27 @@ div.product.prod .prod-cont .stock {
 
 .prod-rating-wrap {
     margin: 0;
-    position: absolute;
+    position: static;
     font-size: 15px;
     color: #686f8a;
     text-align: left;
     padding: 0;
-    top: 32px;
-    right: 50px;
+    display: flex;
+    width: fit-content;
+    gap: 5px;
+    align-items: center;
+}
+
+.prod-rating-wrap .product-stars {
+    color: var(--third-color);
 }
 
 .prod-rating-wrap p {
     display: inline-block;
-    margin: 0;
+    margin: 0 2px;
     font-size: 14px;
     font-weight: 600;
-    color: #283346;
+    color: var(--base-text-color);
     vertical-align: middle;
 }
 
@@ -4291,7 +4290,7 @@ div.product.prod .prod-cont .stock {
 .prod .prod-add {
     font-size: 15px;
     font-weight: 600;
-    margin: 0 0 35px;
+    margin: 0 0 20px;
 }
 
 .woocommerce .prod .prod-add p.stock {
@@ -6058,4 +6057,8 @@ label[for="alert-danger"] {
 .woocommerce.prod-litems.section-list h2 {
     margin-bottom: 2rem;
     color: var(--base-text-color);
+}
+
+.prod-rating i {
+   color: var(--third-color);
 }

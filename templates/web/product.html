@@ -3,11 +3,11 @@
 {% block head %}
   {% load static %}
   <!-- Arrows -->
-  <link rel="stylesheet" href="{% static 'css/flexslider.css' %}"/>
+  <link rel="stylesheet" href="{% static 'css/flexslider.css' %}" />
   <!-- Choose an option -->
-  <link rel="stylesheet" href="{% static 'css/chosen.css' %}"/>
+  <link rel="stylesheet" href="{% static 'css/chosen.css' %}" />
   <!-- Box -->
-  <link rel="stylesheet" href="{% static 'css/jquery.fancybox.css' %}"/>
+  <link rel="stylesheet" href="{% static 'css/jquery.fancybox.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -24,100 +24,132 @@
     <div class="prod">
       <div class="prod-slider-wrap prod-slider-shown">
         <div class="flexslider prod-slider" id="prod-slider">
-          <ul class="slides">
-            <li>
-              <a data-fancybox-group="prod" class="fancy-img" href="#">
+          <div id="carouselExampleIndicators" class="carousel slide pointer-event" data-bs-ride="carousel" data-bs-touch="true">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                aria-label="Slide 1" aria-current="true"></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"
+                class=""></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"
+                class=""></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active" data-bs-interval="5000">
                 <img src="
-                  {% if product.image %}
-                    {{ product.image.url }}
-                  {% else %}
-                    https://via.placeholder.com/250
-                  {% endif %}"
-                     alt=""/>
-              </a>
-            </li>
-            <!--   <li>
-              <a data-fancybox-group="prod" class="fancy-img" href="#">
+                    {% if product.image %}
+                      {{ product.image.url }}
+                    {% else %}
+                      https://via.placeholder.com/250
+                    {% endif %}
+                  "
+                  alt="{{ product.title }}"
+                  data-bs-toggle="modal" data-bs-target="#imageModal"
+                  style="cursor: pointer;"
+                />
+              </div>
+              <div class="carousel-item">
                 <img src="
-                  {% if product.image %}{{ product.image.url }}
-                  {% else %}https://via.placeholder.com/250
-                  {% endif %}" alt="">
-              </a>
-            </li>   -->
-          </ul>
-          <!--   <div class="prod-slider-count">
-            <p>
-              <span class="count-cur">1</span> / <span class="count-all">2</span>
-            </p>
-            <p class="hover-label prod-slider-zoom">
-              <i class="icon ion-search"></i>
-              <span>Zoom In</span>
-            </p>
-          </div>   -->
-        </div>
-        <div class="flexslider prod-thumbs" id="prod-thumbs">
-          <ul class="slides">
-            <li>
-              <img src="
-                {% if product.image %}
-                  {{ product.image.url }}
-                {% else %}
-                  https://via.placeholder.com/250
-                {% endif %}"
-                   alt=""/>
-            </li>
-            <!--   <li>
-              <img src="
-                {% if product.image %}{{ product.image.url }}
-                {% else %}https://via.placeholder.com/250
-                {% endif %}" alt="">
-            </li>   -->
-          </ul>
+                    {% if product.image %}
+                      {{ product.image.url }}
+                    {% else %}
+                      https://via.placeholder.com/250
+                    {% endif %}
+                  "
+                  alt="{{ product.title }}"
+                  data-bs-toggle="modal" data-bs-target="#imageModal"
+                  style="cursor: pointer;"
+                />
+              </div>
+              <div class="carousel-item">
+                <img src="
+                    {% if product.image %}
+                      {{ product.image.url }}
+                    {% else %}
+                      https://via.placeholder.com/250
+                    {% endif %}
+                  "
+                  alt="{{ product.title }}"
+                  data-bs-toggle="modal" data-bs-target="#imageModal"
+                  style="cursor: pointer;"
+                />
+              </div>
+              <!-- Modal para mostrar imagen en pantalla completa -->
+              <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                  <div class="modal-content bg-transparent border-0">
+                    <div class="modal-body p-0">
+                      <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                      <img src="
+                          {% if product.image %}
+                            {{ product.image.url }}
+                          {% else %}
+                            https://via.placeholder.com/250
+                          {% endif %}
+                        "
+                        class="img-fluid w-100"
+                        alt="{{ product.title }}"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+              data-bs-slide="prev">
+              <div class="icon-control-wrap">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              </div>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+              data-bs-slide="next">
+              <div class="icon-control-wrap">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              </div>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
         </div>
       </div>
-
       <div class="prod-cont">
-        <div class="prod-rating-wrap">
-          <p data-rating="4" class="prod-rating">
-            <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-              <path
-                  d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"/>
-            </svg>
-            <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-              <path
-                  d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"/>
-            </svg>
-            <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-              <path
-                  d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"/>
-            </svg>
-            <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-              <path
-                  d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"/>
-            </svg>
-            <svg class="rating-ico" xmlns="http://www.w3.org/2000/svg" width="21.87" height="20.801">
-              <path
-                  d="m4.178 20.801 6.758-4.91 6.756 4.91-2.58-7.946 6.758-4.91h-8.352L10.936 0 8.354 7.945H0l6.758 4.91-2.58 7.946z"/>
-            </svg>
-          </p>
-          <p class="prod-rating-count">7</p>
-        </div>
-        <p class="prod-categs">
-          <a href="{% url 'web:filter_by_category' product.category.id %}">{{ product.category }}</a>
-        </p>
         <div id="product-details">
-          <h1>{{ product.title }}</h1>
-          <div class="variations_form cart">
-            <p class="prod-price">${{ product.price }}</p>
-            <p class="prod-excerpt">
-              {{ product.description }}
-              <a id="prod-showdesc" class="prod-excerpt-more" href="#">read more</a>
+          <p class="prod-categs prod-brands">
+            <a class="product-category" href="{% url 'web:filter_by_category' product.category.id %}">{{ product.category }}</a>
+            <a class="product-brand" href="{% url 'web:filter_by_brand' product.brand.id %}">{{ product.brand }}</a>
+          </p>
+          <h2>{{ product.title }}</h2>
+          <div class="prod-rating-wrap">
+            <div class="product-stars">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-half"></i>
+            </div>
+            <p data-rating="4.5" class="prod-rating">
+              4.5
             </p>
+            <span class="extra-information">(250 reviews)</span>
+          </div>
+          <div class="variations_form cart">
+            <p class="prod-price">
+              ${{ product.price }}
+              <span id="product-price-discount"></span>
+            </p>
+            <div class="prod-availability">
+              <span class="availability">In Stock</span>
+              <span class="extra-information">(10 Available)</span>
+              {% comment %} {% if product.stock > 0 %}
+                In Stock ({{ product.stock }} available)
+              {% else %}
+                Out of Stock
+              {% endif %} {% endcomment %}
+            </div>
             <div class="prod-add">
-              <form action="{% url 'cart:add_product_cart' product.id %}" method="post">
+              <form class="add-to-cart-form" action="{% url 'cart:add_product_cart' product.id %}" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="location-url" value="{{ request.get_full_path }}"/>
-                <div class="variations">
+                <input type="hidden" name="location-url" value="{{ request.get_full_path }}" />
+                <!-- <div class="variations">
                   <div class="variations-row">
                     <div class="label">
                       <label>Color</label>
@@ -126,29 +158,152 @@
                       <select>
                         <option value="">Choose an option</option>
                         <option value="blue">{{ product.color }}</option>
-                        <!--   <option value="green">Green</option>
-                      <option value="yellow">Yellow</option>   -->
+                        <option value="green">Green</option>
+                        <option value="yellow">Yellow</option>
                       </select>
                     </div>
                   </div>
+                </div> -->
+                <div class="quantity-wrapper">
+                  Quantity:
+                  <div class="border rounded quantity-control-component">
+                    <p class="qnt-wrap mb-0 d-flex">
+                      <a href="#" class="qnt-minus prod-li-minus border-bottom-0" id="quantity-down"><i class="bi bi-dash"></i></a>
+                      <input class="mb-0 rounded-0 p-0 text-center h-auto bg-transparent" name="quantity" type="text" value="1" />
+                      <a href="#" class="qnt-plus prod-li-plus border-bottom-0" id="quantity-up"><i class="bi bi-plus"></i></a>
+                    </p>
+                  </div>
                 </div>
-                <button type="submit" class="button">
-                  <i class="icon ion-android-cart"></i>
-                  Add to Card
-                </button>
-                <p class="qnt-wrap prod-li-qnt">
-                  <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
-                  <input type="text" name="quantity" value="1" />
-                  <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
-                </p>
+                <div class="buttons-container">
+                  <button type="submit" class="button">
+                    <i class="icon ion-android-cart"></i>
+                    Add to Cart
+                  </button>
+                  <label class="btn-wish-list">
+                    <input type="checkbox" class="wish-list-checkbox" hidden />
+                    <i class="bi bi-heart"></i>
+                    <i class="bi bi-heart-fill"></i>
+                  </label>
+                  <button type="button" class="btn-share">
+                    <i class="bi bi-share"></i>
+                  </button>
+                </div>
+                <div class="extra-icons">
+                    <i class="bi bi-truck"></i>
+                    <i class="bi bi-arrow-repeat"></i>
+                    <span class="title">Free Shipping</span>
+                    <span class="title">Easy Return</span>
+                    <span class="info">Orders Over $50</span>
+                    <span class="info">30 Days Return</span>
+                </div>
               </form>
             </div>
-          </div>
-          <div class="prod-props">
-            <dl class="product_meta"></dl>
+            <div class="product-extra-information">
+              <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                  <h3 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                      Description
+                    </button>
+                  </h3>
+                  <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                      <p>
+                        {{ product.description }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h3 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                      Specifications
+                    </button>
+                  </h3>
+                  <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                      <div class="page-styling prod-li-informations">
+                        <dl class="prod-li-props">
+                          <dt>Brand:</dt>
+                          <dd><a href="{% url 'web:filter_by_brand' product.brand.id %}">{{ product.brand.name }}</a></dd>
+                          <dt>Category:</dt>
+                          <dd><a href="{% url 'web:filter_by_category' product.category.id %}">{{ product.category.name }}</a></dd>
+                          <dt>Color:</dt>
+                          <dd>{{ product.color }}</dd>
+                          <dt>Dimension:</dt>
+                          <dd>{{ product.dimension }}</dd>
+                          <dt>Weight:</dt>
+                          <dd>{{ product.weight }} kg</dd>
+                        </dl>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h3 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                      Reviews
+                    </button>
+                  </h3>
+                  <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                      <div class="rating-average">
+                        <div class="total-stars-display">
+                          <p class="review-aver">4.5</p>
+                          <div>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-half"></i>
+                          </div>
+                          <p>Based on 250 reviews</p>
+                        </div>
+                        <div class="stars-count-graphic">
+                          <span>5 stars</span>
+                          <div class="star-bar">
+                            <div class="filled-bar" style="width: 60%;"></div>
+                          </div>
+                          <span>150</span>
+                          <span>4 stars</span>
+                          <div class="star-bar">
+                            <div class="filled-bar" style="width: 30%;"></div>
+                          </div>
+                          <span>75</span>
+                          <span>3 stars</span>
+                          <div class="star-bar">
+                            <div class="filled-bar" style="width: 10%;"></div>
+                          </div>
+                          <span>25</span>
+                          <span>2 stars</span>
+                          <div class="star-bar">
+                            <div class="filled-bar"></div>
+                          </div>
+                          <span>0</span>
+                          <span>1 star</span>
+                          <div class="star-bar">
+                            <div class="filled-bar"></div>
+                          </div>
+                          <span>0</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </article>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const discountPrice = document.getElementById('product-price-discount');
+      const originalPrice = {{ product.price }};
+      const discountPercentage = 10; // 10% discount
+      const discountedPrice = (originalPrice / (1 - discountPercentage / 100)).toFixed(2);
+      discountPrice.textContent = `$${discountedPrice}`;
+    });
+  </script>
 {% endblock %}

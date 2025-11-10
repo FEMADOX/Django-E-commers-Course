@@ -143,7 +143,7 @@ class CustomPasswordResetForm(PasswordResetForm):
         ),
     )
 
-    def send_mail(  # noqa: PLR0913, PLR0917
+    def send_mail(  # noqa: PLR0913
         self,
         subject_template_name: str,
         email_template_name: str,

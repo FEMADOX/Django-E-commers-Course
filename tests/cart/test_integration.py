@@ -34,18 +34,18 @@ class TestCartWorkflow:
             reverse("cart:add_product_cart", kwargs={"product_id": product.pk}),
             data={"quantity": 2, "location-url": "/"},
         )
-        assert response.status_code == HTTP_302_REDIRECT  # noqa: PLR2004
+        assert response.status_code == HTTP_302_REDIRECT
 
         # Step 2: Add second product to cart
         response = client.post(
             reverse("cart:add_product_cart", kwargs={"product_id": another_product.pk}),
             data={"quantity": 1, "location-url": "/"},
         )
-        assert response.status_code == HTTP_302_REDIRECT  # noqa: PLR2004
+        assert response.status_code == HTTP_302_REDIRECT
 
         # Step 3: View cart
         response = client.get(reverse("cart:cart"))
-        assert response.status_code == HTTP_200_OK  # noqa: PLR2004
+        assert response.status_code == HTTP_200_OK
         assert "cart" in response.wsgi_request.session
 
         # Step 4: Update product quantity
@@ -54,7 +54,7 @@ class TestCartWorkflow:
             data='{"quantity": 5}',
             content_type="application/json",
         )
-        assert response.status_code == HTTP_200_OK  # noqa: PLR2004
+        assert response.status_code == HTTP_200_OK
 
         # Step 5: Delete a product
         response = client.post(
@@ -64,14 +64,14 @@ class TestCartWorkflow:
             ),
             data={"location-url": "/cart/"},
         )
-        assert response.status_code == HTTP_302_REDIRECT  # noqa: PLR2004
+        assert response.status_code == HTTP_302_REDIRECT
 
         # Step 6: Clear cart
         response = client.post(
             reverse("cart:clear_cart"),
             data={"location-url": "/"},
         )
-        assert response.status_code == HTTP_302_REDIRECT  # noqa: PLR2004
+        assert response.status_code == HTTP_302_REDIRECT
 
     def test_unauthenticated_user_redirected_to_login(
         self,
@@ -84,7 +84,7 @@ class TestCartWorkflow:
             data={"quantity": 1},
         )
 
-        assert response.status_code == HTTP_302_REDIRECT  # noqa: PLR2004
+        assert response.status_code == HTTP_302_REDIRECT
         assert "/account/login/" in response.url  # type: ignore[attr-defined]
 
     def test_login_and_add_to_cart_workflow(
@@ -100,7 +100,7 @@ class TestCartWorkflow:
             data={"quantity": 2},
             follow=False,
         )
-        assert response.status_code == HTTP_302_REDIRECT  # noqa: PLR2004
+        assert response.status_code == HTTP_302_REDIRECT
         assert "/account/login/" in response.url  # type: ignore[attr-defined]
 
         # Step 2: Login
@@ -111,7 +111,7 @@ class TestCartWorkflow:
             reverse("cart:add_product_cart", kwargs={"product_id": product.pk}),
             data={"quantity": 2, "location-url": "/"},
         )
-        assert response.status_code == HTTP_302_REDIRECT  # noqa: PLR2004
+        assert response.status_code == HTTP_302_REDIRECT
 
     def test_empty_cart_redirects_to_home(
         self,
@@ -123,7 +123,7 @@ class TestCartWorkflow:
 
         response = client.get(reverse("cart:cart"), follow=True)
 
-        assert response.status_code == HTTP_200_OK  # noqa: PLR2004
+        assert response.status_code == HTTP_200_OK
         messages = list(get_messages(response.wsgi_request))
         assert len(messages) > 0
         assert "empty" in str(messages[0]).lower()
@@ -145,7 +145,7 @@ class TestCartWorkflow:
 
         # Make another request
         response = client.get("/")
-        assert response.status_code == HTTP_200_OK  # noqa: PLR2004
+        assert response.status_code == HTTP_200_OK
 
         # Cart should still have the product
         session = client.session
@@ -180,7 +180,7 @@ class TestRestoreOrderIntegration:
             data={"location-url": "/cart/"},
         )
 
-        assert response.status_code == HTTP_302_REDIRECT  # noqa: PLR2004
+        assert response.status_code == HTTP_302_REDIRECT
         assert response.url == "/cart/"  # type: ignore[attr-defined]
 
         # Verify cart has products from order
@@ -273,7 +273,7 @@ class TestUpdateCartIntegration:
             data='{"quantity": 10}',
             content_type="application/json",
         )
-        assert response.status_code == HTTP_200_OK  # noqa: PLR2004
+        assert response.status_code == HTTP_200_OK
 
         # Update second product
         response = client.patch(
@@ -284,7 +284,7 @@ class TestUpdateCartIntegration:
             data='{"quantity": 5}',
             content_type="application/json",
         )
-        assert response.status_code == HTTP_200_OK  # noqa: PLR2004
+        assert response.status_code == HTTP_200_OK
 
         # Verify both updates persisted
         session = client.session
@@ -313,11 +313,11 @@ class TestUpdateCartIntegration:
             content_type="application/json",
         )
 
-        assert response.status_code == HTTP_200_OK  # noqa: PLR2004
+        assert response.status_code == HTTP_200_OK
         data = response.json()
 
         # Check that totals are calculated correctly
-        expected_subtotal = float(product.price) * 5  # noqa: PLR2004
+        expected_subtotal = float(product.price) * 5
         assert "subtotal" in data
         assert "total_price" in data
         assert float(data["subtotal"]) == expected_subtotal
@@ -344,7 +344,7 @@ class TestCartViewContextIntegration:
 
         response = client.get(reverse("cart:cart"))
 
-        assert response.status_code == HTTP_200_OK  # noqa: PLR2004
+        assert response.status_code == HTTP_200_OK
         assert "pending_orders" in response.context
         assert pending_order in response.context["pending_orders"]
 
@@ -366,7 +366,7 @@ class TestCartViewContextIntegration:
 
         response = client.get(reverse("cart:cart"))
 
-        assert response.status_code == HTTP_200_OK  # noqa: PLR2004
+        assert response.status_code == HTTP_200_OK
         assert "pending_orders" in response.context
         assert completed_order not in response.context["pending_orders"]
 
@@ -396,7 +396,7 @@ class TestCartViewContextIntegration:
 
         response = client.get(reverse("cart:cart"))
 
-        assert response.status_code == HTTP_200_OK  # noqa: PLR2004
+        assert response.status_code == HTTP_200_OK
         assert pending_order in response.context["pending_orders"]
         assert other_order not in response.context["pending_orders"]
 
@@ -491,7 +491,7 @@ class TestClearCartIntegration:
             data={"location-url": "/"},
         )
 
-        assert response.status_code == HTTP_302_REDIRECT  # noqa: PLR2004
+        assert response.status_code == HTTP_302_REDIRECT
 
         # Verify cart is empty
         session = client.session

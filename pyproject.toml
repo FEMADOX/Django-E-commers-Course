@@ -93,14 +93,11 @@ lint.ignore = [
     "ARG003",  # Unused class method argument
     "PLR6301", # Method could be a function
     "RUF012",  # Mutable class attributes should be annotated
-    "RUF100",  # Unused `noqa` directive
-    "ERA001",  # Found commented-out code
     "TRY300",  # Consider moving this statement to an `else` block
     "PGH003",  # Use specific rule codes when ignoring type issues
     "FBT001",  # Boolean positional arg in function definition
     "FBT002",  # Boolean default positional argument in function definition
     "G004",    # Logging statement uses f-string
-    "COM812",  # Missing trailing comma in a list or tuple
 ]
 lint.exclude = [
     "*/migrations/*",  # Ignore all files in migrations folders
