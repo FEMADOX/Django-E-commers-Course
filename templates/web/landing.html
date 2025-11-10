@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+
+{% block head %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/landing.css' %}" />
+  <style>
+    /* Override base styles for landing page */
+  </style>
+{% endblock head %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <section class="landing-hero">
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Hero Image (First on mobile) -->
+        <div class="hero-image">
+          <div class="hero-image-wrapper">
+            <img
+              src="{% static 'img/Hero.jpeg' %}"
+              alt="Happy shopper with products"
+              loading="eager"
+            />
+            <div class="hero-image-overlay"></div>
+          </div>
+
+          <!-- Floating Card 1 - Visible on all devices -->
+          <div class="floating-card floating-card-1">
+            <div class="floating-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+              </svg>
+            </div>
+            <div class="floating-card-content">
+              <div class="floating-card-title">50% Off</div>
+              <div class="floating-card-subtitle">Summer Sale</div>
+            </div>
+          </div>
+
+          <!-- Floating Card 2 - Visible on all devices -->
+          <div class="floating-card floating-card-2">
+            <div class="floating-card-icon success">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </div>
+            <div class="floating-card-content">
+              <div class="floating-card-title">Order Confirmed</div>
+              <div class="floating-card-subtitle">Arriving tomorrow</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="hero-content">
+          <div class="hero-badge">
+            <svg class="sparkle-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/>
+            </svg>
+            <span>New Collection Available</span>
+          </div>
+
+          <h1 class="hero-title">
+            Shop Smarter,<br>
+            <span class="gradient-text">Live Better</span>
+          </h1>
+
+          <p class="hero-description">
+            Discover curated products that bring joy to your everyday life. From cutting-edge electronics to premium essentials, we've got everything you need.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="{% url 'web:index' %}" class="btn-primary btn-lg">
+              <span>Start Shopping</span>
+              <i class="bi bi-arrow-right"></i>
+            </a>
+            <a href="#features" class="btn-secondary btn-lg">
+              <span>Learn More</span>
+            </a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-number">10K+</div>
+              <div class="stat-label">Happy Customers</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-number">5K+</div>
+              <div class="stat-label">Products</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-rating">
+                <span class="rating-number">4.9</span>
+              </div>
+              <div class="stat-label">Rating</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="landing-features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Why Choose Us</div>
+        <h2 class="section-title">Shopping Made Simple</h2>
+        <p class="section-description">
+          Experience seamless online shopping
+        </p>
+        <p class="section-description">
+          With benefits designed around you
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+              <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+              <line x1="4" y1="4" x2="9" y2="9"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Fast Delivery</h3>
+          <p class="feature-description">
+            Get your orders delivered in record time with our express shipping service
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Secure Payments</h3>
+          <p class="feature-description">
+            Shop with confidence using our encrypted and secure payment gateway
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Easy Returns</h3>
+          <p class="feature-description">
+            Not satisfied? Return your purchase hassle-free within 30 days
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="landing-testimonials">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Testimonials</div>
+        <h2 class="section-title">Loved by Thousands</h2>
+        <p class="section-description">
+          See what our customers have to say about their shopping experience
+        </p>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">
+            <!-- <svg class="star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg> -->
+            <i class="bi bi-star-fill star"></i>
+            <i class="bi bi-star-fill star"></i>
+            <i class="bi bi-star-fill star"></i>
+            <i class="bi bi-star-fill star"></i>
+            <i class="bi bi-star-fill star"></i>
+            <!-- <svg class="star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <svg class="star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <svg class="star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <svg class="star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg> -->
+          </div>
+          <p class="testimonial-text">
+            "Absolutely amazing service! The products arrived quickly and were exactly as described. Will definitely be shopping here again."
+          </p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img src="{% static 'img/Sarah_Johnson.jpeg' %}" alt="Sarah-Johnson-Avatar" />
+            </div>
+            <div class="author-info">
+              <div class="author-name">
+                Sarah Johnson
+                <i class="bi bi-patch-check-fill"></i>
+              </div>
+              <div class="author-badge">
+                Verified Customer
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-stars">
+            <i class="bi bi-star-fill star"></i>
+            <i class="bi bi-star-fill star"></i>
+            <i class="bi bi-star-fill star"></i>
+            <i class="bi bi-star-fill star"></i>
+            <i class="bi bi-star-fill star"></i>
+          </div>
+          <p class="testimonial-text">
+            "Best online shopping experience I've had. The quality of products exceeded my expectations and customer service was top-notch."
+          </p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img src="{% static 'img/Michael_Chen.jpeg' %}" alt="Michael-Chen-Avatar" />
+            </div>
+            <div class="author-info">
+              <div class="author-name">
+                Michael Chen
+                <i class="bi bi-patch-check-fill"></i>
+              </div>
+              <div class="author-badge">
+                Verified Customer
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-stars">
+            <i class="bi bi-star-fill star"></i>
+            <i class="bi bi-star-fill star"></i>
+            <i class="bi bi-star-fill star"></i>
+            <i class="bi bi-star-fill star"></i>
+            <i class="bi bi-star-fill star"></i>
+          </div>
+          <p class="testimonial-text">
+            "Is easy to navigate and the customer support team is incredibly helpful."
+          </p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img src="{% static 'img/Emma_Parker.jpeg' %}" alt="Emma-Parker-Avatar" />
+            </div>
+            <div class="author-info">
+              <div class="author-name">
+                Emma Parker
+                <i class="bi bi-patch-check-fill"></i>
+              </div>
+              <div class="author-badge">
+                Verified Customer
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="landing-cta">
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="cta-title">Ready to Start Shopping?</h2>
+        <p class="cta-description">
+          Join thousands of happy customers and discover your next favorite product today
+        </p>
+        <div class="cta-buttons">
+          <a href="{% url 'account:signup' %}" class="btn-primary btn-lg">
+            <span>Create Account</span>
+            <i class="bi bi-arrow-right"></i>
+          </a>
+          <a href="{% url 'web:index' %}" class="btn-outline btn-lg">
+            <span>Browse Products</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}

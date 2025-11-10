@@ -94,7 +94,9 @@ class PaymentProcessView(LoginRequiredMixin, View):
             # Create STRIPE checkout session
             try:
                 session = stripe.checkout.Session.create(**session_data)
-                return redirect(session.url if session and session.url else "/")
+                return redirect(
+                    session.url if session and session.url else reverse("web:index")
+                )
             except Exception as e:
                 msg = f"Unexpected error during checkout session creation: {e}"
                 logger.exception(msg)

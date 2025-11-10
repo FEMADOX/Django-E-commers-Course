@@ -1,9 +1,10 @@
 from django.urls import path
 
 from web.views import (
+    CatalogView,
     FilterByBrandView,
     FilterByCategoryView,
-    IndexView,
+    LandingView,
     ProductDetailView,
     SearchProductTitleView,
 )
@@ -11,7 +12,8 @@ from web.views import (
 app_name = "web"
 
 urlpatterns = [
-    path("", IndexView.as_view(), name="index"),
+    path("", LandingView.as_view(), name="landing"),
+    path("catalog/", CatalogView.as_view(), name="index"),
     path(
         "by-category/<int:category_id>",
         FilterByCategoryView.as_view(),

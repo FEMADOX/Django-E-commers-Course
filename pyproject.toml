@@ -98,6 +98,7 @@ lint.ignore = [
     "FBT001",  # Boolean positional arg in function definition
     "FBT002",  # Boolean default positional argument in function definition
     "G004",    # Logging statement uses f-string
+    "COM812",  # Missing trailing comma in a list or tuple
 ]
 lint.exclude = [
     "*/migrations/*",  # Ignore all files in migrations folders

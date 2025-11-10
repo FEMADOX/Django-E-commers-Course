@@ -38,7 +38,7 @@ class CartIndexView(TemplateView):
                 request,
                 "Your cart is empty. Please add products to proceed.",
             )
-            return redirect("/")
+            return redirect(reverse("web:index"))
 
         return super().get(request, *args, **kwargs)
 

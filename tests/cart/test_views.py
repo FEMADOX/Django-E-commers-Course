@@ -84,7 +84,7 @@ class TestCartIndexView:
 
         assert isinstance(response, HttpResponseRedirect)
         assert response.status_code == HTTP_302_REDIRECT
-        assert response.url == "/"
+        assert response.url == "/catalog/"
 
     def test_get_with_products_in_cart(
         self,

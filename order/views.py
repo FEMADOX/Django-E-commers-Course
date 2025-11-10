@@ -48,7 +48,7 @@ class CreateOrderView(LoginRequiredMixin, TemplateView):
 
         # If not products in cart redirect to catalog dashboard
         if not cart.cart:
-            return redirect("/")
+            return redirect(reverse("web:index"))
 
         return super().get(request)
 
