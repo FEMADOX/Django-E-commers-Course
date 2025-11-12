@@ -112,6 +112,7 @@ XL (Extra Large):  ≥ 1200px    Standard desktops & up
 }
 
 @media only screen and (max-width: 1300px) {
+
     .site-header .h-shop {
         width: 315px;
     }
@@ -122,6 +123,12 @@ XL (Extra Large):  ≥ 1200px    Standard desktops & up
 }
 
 @media only screen and (min-width: 1200px) {
+
+    .footer-container {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
 
     .h-cart:hover .widget_shopping_cart {
         border-radius: 0 30px 30px 30px;
@@ -1705,6 +1712,12 @@ XL (Extra Large):  ≥ 1200px    Standard desktops & up
 }
 
 @media only screen and (max-width: 600px) {
+
+    .footer-container {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
 
     body .header-sticky .site-header.header_sticky,
     .site-header {

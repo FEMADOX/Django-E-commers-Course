@@ -139,6 +139,7 @@ class CustomPasswordResetForm(PasswordResetForm):
             attrs={
                 "class": "form-control email-reset",
                 "placeholder": "Enter your email",
+                "autocomplete": "email",
             },
         ),
     )

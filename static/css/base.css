@@ -15,6 +15,13 @@
     --shadow-light: rgba(0, 0, 0, 0.1);
     --shadow-medium: rgba(0, 0, 0, 0.15);
     --shadow-heavy: rgba(0, 0, 0, 0.25);
+
+    /* Full Shadows conf */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
 .darkmode {
@@ -1198,22 +1205,6 @@ hr {
     border-bottom: 1px solid var(--base-text-color);
 }
 
-@media screen and (min-width: 1200px) {
-    .footer-container {
-        display: flex;
-        justify-content: center;
-        text-align: center;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    .footer-container {
-        display: flex;
-        justify-content: center;
-        text-align: center;
-    }
-}
-
 .email-validation-container {
     background-color: var(--base-color-body);
     color: var(--base-color-body);
@@ -1229,8 +1220,23 @@ hr {
     min-width: 200px;
 }
 
+.email-validation-container {
+    p {
+        color: var(--base-text-color);
+    }
+
+    .primary-text {
+        font-size: 2.3rem;
+    }
+
+    .secondary-text {
+        font-size: 2rem;
+        color: var(--secondary-text-color);
+    }
+}
+
 .email-validation-wrapper {
-    padding: 0 10rem;
+    padding: 0 auto;
 }
 
 #resend-button {
@@ -1238,13 +1244,19 @@ hr {
     border-radius: 15px;
     padding: 5px 10px;
     color: white;
-    transition: background-color 0.2s ease-in;
+    transition: all 0.2s ease-in;
     border: 0;
 }
 
-#resend-button:hover {
-    background-color: #7dcd8c;
-    cursor: pointer;
+#resend-button {
+
+    &:active,
+    &:hover {
+        background-color: #7dcd8c;
+        cursor: pointer;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
 }
 
 *:disabled {
@@ -1257,19 +1269,19 @@ input[type=submit]:disabled {
 }
 
 div.email-reset {
-    background-color: white;
-    color: black;
+    background-color: var(--secondary-color);
+    color: var(--base-text-color);
     border-radius: 20px;
     text-align: center;
     display: flex;
     flex-direction: column;
     padding: 10px;
-    gap: 30px;
+    gap: 20px;
     align-items: center;
 }
 
 div.email-reset-wrapper {
-    padding: 0 60px;
+    padding: 0 auto;
 }
 
 h2.email-reset {
@@ -1278,29 +1290,69 @@ h2.email-reset {
 
 form.email-reset {
     display: flex;
+    flex-direction: column;
     justify-content: center;
 }
 
 div.email-reset>form.email-validation>#resend-button {
     width: 100%;
-    height: 3rem;
-    font-size: 24px;
+    height: auto;
+    font-size: 2rem;
+    margin-bottom: 4px;
+
+    &:active,
+    &:hover {
+       transform: translateY(-2px);
+       box-shadow: var(--shadow-lg);
+    }
+}
+
+.email-reset {
+    .remember-your-password {
+        font-size: 12px;
+        margin-bottom: 10px;
+
+        a {
+            color: var(--third-color);
+            transition: all 0.2s;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    form.email-reset {
+        input {
+            width: 25rem;
+            height: 4rem;
+            margin-bottom: .5rem !important;
+        }
+
+        .emailinput::placeholder {
+            color: var(--secondary-text-color);
+        }
+    }
+
 }
 
 input.form-control.email-reset {
-    border-radius: 10px 0 0 10px;
+    border-radius: 5px;
 }
 
 input[type=submit].email-reset {
-    border-radius: 0 10px 10px 0;
+    border-radius: 5px;
     transition: background-color 0.2s ease-out;
     border: 0;
     color: white;
-    background-color: var(--base-color-body);
+    background-color: var(--third-color);
+    transition: all 0.3s;
 }
 
 input[type=submit].email-reset:hover {
-    background-color: var(--third-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    background-color: #0f62a6;
 }
 
 p.email-reset {
@@ -1367,10 +1419,13 @@ form.register input.logout-account {
     border-radius: 10px;
 }
 
-form.register p.auth-submit input:hover,
-form.register p.auth-submit input:active {
-    box-shadow: 0 10px 25px rgba(102, 234, 144, 0.4);
-    transform: translateY(-2px);
+form.register p.auth-submit {
+
+    input:hover,
+    input:active {
+        box-shadow: 0 10px 25px rgba(102, 234, 144, 0.4);
+        transform: translateY(-2px);
+    }
 }
 
 form.cart-actions {

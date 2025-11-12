@@ -274,7 +274,7 @@ body.darkmode .gradient-text {
 .btn-primary {
   background: linear-gradient(135deg, var(--purple-600) 0%, var(--blue-600) 100%);
   color: white;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
 
   &:hover {
     transform: translateY(-2px);
@@ -406,7 +406,7 @@ body.darkmode .btn-outline:hover {
   position: relative;
   border-radius: var(--radius-xl);
   overflow: hidden;
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-md);
   aspect-ratio: 4/5;
   transition: all var(--transition-normal);
 
@@ -445,6 +445,7 @@ body.darkmode .hero-image-overlay {
   gap: 0.625rem;
   z-index: 10;
   transition: all var(--transition-normal);
+  animation: float 3s ease-in-out infinite;
 }
 
 .hero-image-wrapper {
@@ -460,12 +461,12 @@ body.darkmode .hero-image-overlay {
 
 .floating-card-1 {
   left: 0.5rem;
-  top: 1rem;
+  top: 2rem;
 }
 
 .floating-card-2 {
   right: 0.5rem;
-  bottom: 1rem;
+  bottom: 2rem;
 }
 
 .floating-card-icon {
@@ -894,7 +895,6 @@ body.darkmode .landing-cta {
   .floating-card {
     padding: 1rem 1.25rem;
     border-radius: var(--radius-xl);
-    animation: float 3s ease-in-out infinite;
   }
 
   .floating-card-1 {
