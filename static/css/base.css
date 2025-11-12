@@ -1327,6 +1327,7 @@ div.email-reset>form.email-validation>#resend-button {
             width: 25rem;
             height: 4rem;
             margin-bottom: .5rem !important;
+            color: var(--base-text-color);
         }
 
         .emailinput::placeholder {

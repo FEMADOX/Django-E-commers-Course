@@ -261,6 +261,20 @@ Install pre-commit hooks to ensure code quality:
 pre-commit install
 ```
 
+### AI-Assisted Development Setup
+
+This project includes comprehensive instructions for AI coding assistants (GitHub Copilot, Cursor, etc.) to help with development:
+
+- **Location**: [`.github/copilot-instructions.md`](.github/copilot-instructions.md)
+- **Purpose**: Guides AI assistants on project architecture, conventions, and patterns
+- **Benefits**:
+  - Faster onboarding for new developers using AI tools
+  - Consistent code generation following project patterns
+  - Understanding of session-based cart, email auth, and other custom implementations
+  - Automatic awareness of testing conventions and type annotation requirements
+
+GitHub Copilot and compatible AI tools will automatically read these instructions when working in this repository.
+
 ## 📱 Application Modules
 
 ### Account (`account/`)

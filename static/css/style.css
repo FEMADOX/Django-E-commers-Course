@@ -807,6 +807,7 @@ body .page-styling h1 {
 .page-cont input[type=email]:focus,
 .page-cont input[type=text]:focus {
     background: var(--base-color);
+    color: #9fa4bb;
 }
 
 .page-styling textarea::placeholder,
