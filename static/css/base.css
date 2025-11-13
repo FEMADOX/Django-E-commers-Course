@@ -1330,6 +1330,10 @@ div.email-reset>form.email-validation>#resend-button {
             color: var(--base-text-color);
         }
 
+        .emailinput {
+            font-size: 1.3rem;
+        }
+
         .emailinput::placeholder {
             color: var(--secondary-text-color);
         }
@@ -1361,18 +1365,61 @@ p.email-reset {
 }
 
 div.email-reset-confirm {
-    background-color: white;
-    color: black;
+    background-color: var(--secondary-color);
+    color: var(--base-text-color);
     border-radius: 20px;
     display: flex;
     flex-direction: column;
-    padding: 40px;
-    gap: 20px;
+    padding: 30px 35px;
+    gap: 10px;
     align-items: center;
+    box-shadow: 0 4px 8px var(--shadow-light);
+    margin-bottom: 40px;
+
+    form {
+        width: 100%;
+    }
+}
+
+div.email-reset-confirm-form {
+    div {
+        margin-top: 22px !important;
+    }
+
+    input {
+        color: var(--base-text-color);
+        height: 4rem;
+        border-radius: 8px;
+        font-size: 1.4rem;
+        width: 100%;
+        padding: 0 40px 0 25px;
+        border: none;
+
+        &:focus,
+        &::placeholder {
+            color: var(--secondary-text-color);
+            border: none;
+        }
+    }
+
+    [id*="helptext"] {
+        color: var(--secondary-text-color);
+        background-color: oklch(97.1% 0.013 17.38);
+        color: oklch(57.7% 0.245 27.325);
+        border-color: hsl(0, 85%, 68%);
+        border: 1px solid hsl(0, 85%, 90%);
+        border-radius: 8px;
+        padding: 5px 10px;
+        margin: 5px 0;
+        font-size: 1.3rem;
+        width: 100%;
+        font-weight: 500;
+    }
 }
 
 h2.email-reset-confirm {
-    font-size: 1.5rem;
+    font-size: 2rem;
+
 }
 
 form.email-reset-confirm {
@@ -1386,13 +1433,14 @@ div.email-reset-confirm-form {
 
 input.email-reset-confirm {
     background-color: var(--third-color);
-    border-radius: 15px;
-    padding: 8px 10px;
+    border-radius: 10px;
+    padding: 10px;
     color: white;
     transition: background-color 0.2s ease-in;
     border: 0;
-    margin: 25px 0 5px;
-    font-size: 1.3rem;
+    margin: 20px 0 5px;
+    font-size: 1.4rem;
+    width: 100%;
 }
 
 input.email-reset-confirm:hover {

@@ -219,7 +219,7 @@ class CustomSetPasswordForm(SetPasswordForm):
         widget=forms.PasswordInput(
             attrs={
                 "class": "form-control password-reset",
-                "placeholder": "Enter new password",
+                "placeholder": "",
                 "autocomplete": "new-password",
             },
         ),
@@ -234,7 +234,7 @@ class CustomSetPasswordForm(SetPasswordForm):
         widget=forms.PasswordInput(
             attrs={
                 "class": "form-control password-reset",
-                "placeholder": "Confirm new password",
+                "placeholder": "",
                 "autocomplete": "new-password",
             },
         ),
@@ -249,7 +249,7 @@ class CustomSetPasswordForm(SetPasswordForm):
 
         password = cleaned_data.get("new_password1")
         if password:
-            regex_validation(self, "new_password2", password)
+            regex_validation(self, "new_password1", password)
         return cleaned_data
 
 

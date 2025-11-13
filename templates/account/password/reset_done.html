@@ -3,7 +3,6 @@
 
 {% block title %}Reset your password{% endblock title %}
 
-<!-- TODO: Improve UI for mobile devices -->
 {% block content %}
   <h1 class="main-cont-ttl">Forgot your password?</h1>
   <ul class="b-crumbs">
@@ -24,7 +23,6 @@
       <p class="email-reset">If you continue to have issues</p>
       <form class="email-validation" action="{% url 'account:password_reset_done' %}" method="post">
         {% csrf_token %}
-        <!-- TODO: Improve UI -->
         <input id="resend-button" class="resend-button" type="submit" value="Resend Email" />
       </form>
     </div>

@@ -1,5 +1,4 @@
 const handleAnimationEnd = event => {
-    console.log('Animation ended:', event)
     const toastElement = event.target
     const animationName = event.animationName
     if (toastElement.classList.contains('closed') && animationName === 'dismissToast') {
@@ -9,7 +8,6 @@ const handleAnimationEnd = event => {
 
 // Toast behavior for Django messages
 document.addEventListener('DOMContentLoaded', () => {
-  // const toastElList = [].slice.call(document.querySelectorAll('.toast'))
   const toastElList = document.querySelectorAll('.toast')
 
   toastElList.forEach(toastElement => {

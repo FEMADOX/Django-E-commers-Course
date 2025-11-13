@@ -6,6 +6,11 @@
   Reset Password
 {% endblock title %}
 
+{% block head %}
+  <script src="{% static 'js/passwordTypeToggle.js' %}" defer></script>
+{% endblock head %}
+
+
 {% block content %}
   <h1 class="main-cont-ttl">Reset your Password</h1>
   <ul class="b-crumbs">
@@ -17,14 +22,14 @@
     </li>
     <li>Reset Password</li>
   </ul>
-  <!-- TODO: Improve UI for mobile devices -->
   <div class="email-reset-confirm-wrapper">
     <div class="email-reset-confirm">
       <h2 class="email-reset-confirm">Create a new password</h2>
       <form class="email-reset-confirm" method="post">
         {% csrf_token %}
         <div class="email-reset-confirm-form">
-          {{ form|crispy }}
+          {% include "includes/crispy_fields/new_password.html" %}
+          {% include "includes/crispy_fields/new_password2.html" %}
         </div>
         <input class="email-reset-confirm" type="submit" value="Change my password" />
       </form>
