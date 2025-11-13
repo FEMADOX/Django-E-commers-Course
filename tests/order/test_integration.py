@@ -75,7 +75,7 @@ class TestOrderWorkflowIntegration:
             "name": "John",
             "last_name": "Doe",
             "email": "john@example.com",
-            "phone": "1234567890",
+            "phone": "+19122532338",
             "address": "123 Test Street",
         }
         response = authenticated_client.post(
@@ -114,7 +114,7 @@ class TestOrderWorkflowIntegration:
 
         # Step 7: Verify client was created/updated
         client = AccountClient.objects.get(user=user)
-        assert client.phone == "1234567890"
+        assert client.phone == "+19122532338"
         assert client.address == "123 Test Street"
 
     def test_order_workflow_with_existing_client(
@@ -141,7 +141,7 @@ class TestOrderWorkflowIntegration:
             "name": "Jane",
             "last_name": "Smith",
             "email": "jane@example.com",
-            "phone": "9876543210",
+            "phone": "+19122532338",
             "address": "456 New Avenue",
         }
         response = authenticated_client.post(
@@ -153,7 +153,7 @@ class TestOrderWorkflowIntegration:
 
         # Verify existing client was updated
         account_client.refresh_from_db()
-        assert account_client.phone == "9876543210"
+        assert account_client.phone == "+19122532338"
         assert account_client.address == "456 New Avenue"
 
         # Verify order was created with existing client
@@ -209,7 +209,7 @@ class TestOrderWorkflowIntegration:
             "name": "Multi",
             "last_name": "Product",
             "email": "multi@example.com",
-            "phone": "5555555555",
+            "phone": "+19122532338",
             "address": "789 Multi Street",
         }
         response = authenticated_client.post(
@@ -263,7 +263,7 @@ class TestOrderWorkflowIntegration:
 
         # Should redirect to cart page
         assert response.status_code == HTTP_302_REDIRECT
-        assert response["Location"] == reverse("cart:cart")
+        assert response["Location"] == reverse("web:index")
 
         # No order should be created
         assert Order.objects.count() == 0
@@ -361,7 +361,7 @@ class TestOrderSecurityIntegration:
             "name": "Integrity",
             "last_name": "Test",
             "email": "integrity@example.com",
-            "phone": "1111111111",
+            "phone": "+19122532338",
             "address": "111 Integrity Street",
         }
         response = authenticated_client.post(
@@ -507,7 +507,7 @@ class TestOrderErrorHandlingIntegration:
             "name": "Concurrent",
             "last_name": "Test",
             "email": "concurrent@example.com",
-            "phone": "2222222222",
+            "phone": "+19122532338",
             "address": "222 Concurrent Street",
         }
 

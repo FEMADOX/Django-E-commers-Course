@@ -141,13 +141,14 @@ class TestUserUpdateView:
     ) -> None:
         """Test POST request with valid data updates user and client."""
 
+        # Use all fields from client_data as base, then update specific ones
         updated_data = client_data.copy()
         updated_data.update(
             {
                 "name": "Updated",
                 "last_name": "Name",
                 "email": "updated@example.com",
-                "phone": "987654321",
+                "phone": "+19122532338",
             },
         )
 
@@ -167,7 +168,7 @@ class TestUserUpdateView:
 
         # Verify client was updated
         client_profile.refresh_from_db()
-        assert client_profile.phone == "987654321"
+        assert client_profile.phone == "+19122532338"
 
         # Check success message
         messages = list(get_messages(response.wsgi_request))

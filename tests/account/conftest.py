@@ -33,7 +33,7 @@ def client_data(user_data: dict[str, str | int]) -> dict[str, str | int]:
         "email": user_data["email"],
         "dni": 12345678,
         "sex": "M",
-        "phone": "123456789",
+        "phone": "+12125552368",
         "birth": "1990-01-01",
         "address": "123 Test Street",
     }
@@ -71,6 +71,6 @@ def client_profile(authenticated_user: User) -> Client:
         user=authenticated_user,
         dni=12345678,
         sex="M",
-        phone="123456789",
+        phone="+12125552368",
         address="123 Test Street",
     )

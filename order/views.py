@@ -37,6 +37,7 @@ class CreateOrderView(LoginRequiredMixin, TemplateView):
     login_url = "/account/login/"
 
     def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
+        """Add client form to context data."""
         context = super().get_context_data(**kwargs)
         user = cast("User", self.request.user)
 
@@ -44,9 +45,9 @@ class CreateOrderView(LoginRequiredMixin, TemplateView):
         return context
 
     def get(self, request: HttpRequest, **kwargs: dict) -> HttpResponse:
+        """Render the order creation page if cart is not empty."""
         cart = Cart(request)
 
-        # If not products in cart redirect to catalog dashboard
         if not cart.cart:
             return redirect(reverse("web:index"))
 
@@ -70,7 +71,6 @@ class ConfirmOrderView(LoginRequiredMixin, FormView):
         """Add additional context data for the template."""
         context = super().get_context_data(**kwargs)
 
-        # Ensure the form is in context with the correct key
         if "form" in context:
             context["client_form"] = context["form"]
 
@@ -79,43 +79,33 @@ class ConfirmOrderView(LoginRequiredMixin, FormView):
     def form_valid(self, form: ClientForm) -> HttpResponse:
         """Process valid form data and create order."""
         user = cast("User", self.request.user)
-
-        # Update user data
         user.first_name = form.cleaned_data.get("name", "")
         user.last_name = form.cleaned_data.get("last_name", "")
         user.email = form.cleaned_data.get("email", "")
         user.save()
 
-        # Store client data in session
+        phone = str(form.cleaned_data.get("phone", ""))
+        address = form.cleaned_data.get("address", "")
         self.request.session["client_data"] = {
-            "phone": form.cleaned_data.get("phone", ""),
-            "address": form.cleaned_data.get("address", ""),
+            "phone": phone or "",
+            "address": address or "",
         }
-
-        # Get or create client
         client = self._get_or_create_client(user)
 
-        # Check cart
         order_cart = self.request.session.get("cart")
         if not order_cart:
             return redirect("cart:cart")
-
-        # Create order
         new_order = self._create_order(client, order_cart)
-
-        # Clean cart
         order_cart.clear()
 
         return redirect(reverse("order:order_summary", args=[new_order.pk]))
 
     def form_invalid(self, form: ClientForm) -> HttpResponse:
         """Handle invalid form data by re-rendering the order page with errors."""
-        # Check if cart still exists
         cart = Cart(self.request)
         if not cart.cart:
             return redirect("web:index")
 
-        # Return the form with errors and full context
         context = self.get_context_data()
         context["form"] = form
         return self.render_to_response(context)
@@ -188,7 +178,7 @@ class OrderSummaryView(LoginRequiredMixin, DetailView):
         return Order.objects.filter(client__user=self.request.user)
 
     def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
+        """Add order ID to session and return context data."""
         context = super().get_context_data(**kwargs)
-        # Store order ID in session for later use
         self.request.session["order_id"] = self.object.pk
         return context

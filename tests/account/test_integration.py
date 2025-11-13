@@ -113,7 +113,7 @@ class TestUserUpdateIntegration:
             "last_name": "Updated LastName",  # This updates User.last_name
             "dni": 87654321,  # Client field
             "sex": "F",  # Client field
-            "phone": "987654321",  # Client field
+            "phone": "+19122532338",  # Client field
             "birth": "1985-12-31",  # Client field
             "address": "456 Updated Street",  # Client field
         }

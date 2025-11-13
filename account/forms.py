@@ -19,6 +19,7 @@ from django.urls.base import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.views.decorators.debug import sensitive_variables
+from phonenumber_field.formfields import PhoneNumberField
 
 from account.backends import AccountBackend
 from account.emails import my_send_email
@@ -96,13 +97,38 @@ class ClientForm(forms.ModelForm):
     MAX_BIRTH_DATE = datetime.now(tz=UTC).date().isoformat()
 
     dni = forms.CharField(label="DNI", max_length=8, required=False)
-    name = forms.CharField(label="Name/s", max_length=100, required=True)
-    last_name = forms.CharField(label="Last Name", max_length=100, required=False)
-    sex = forms.ChoiceField(label="Sex", choices=SEX_CHOICES, required=False)
-    email = forms.EmailField(label="Email", required=True)
-    address = forms.CharField(label="Address", required=False, widget=forms.Textarea)
-    phone = forms.CharField(label="Phone", max_length=20, required=False)
-
+    name = forms.CharField(
+        label="Name/s",
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={"autocomplete": "name"}),
+    )
+    last_name = forms.CharField(
+        label="Last Name",
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={"autocomplete": "family-name"}),
+    )
+    sex = forms.ChoiceField(
+        label="Sex",
+        choices=SEX_CHOICES,
+        required=False,
+        widget=forms.Select(attrs={"autocomplete": "sex"}),
+    )
+    email = forms.EmailField(
+        label="Email",
+        required=True,
+        widget=forms.EmailInput(attrs={"autocomplete": "email"}),
+    )
+    address = forms.CharField(
+        label="Address",
+        required=False,
+        widget=forms.Textarea(attrs={"autocomplete": "address"}),
+    )
+    phone = PhoneNumberField(
+        widget=forms.TextInput(attrs={"autocomplete": "tel"}),
+        required=False,
+    )
     birth = forms.DateField(
         label="Birth Date",
         required=False,
@@ -112,6 +138,7 @@ class ClientForm(forms.ModelForm):
             attrs={
                 "min": "1900-01-01",
                 "max": MAX_BIRTH_DATE,
+                "autocomplete": "bday",
             },
         ),
     )

@@ -1,13 +1,14 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.RESTRICT)
     dni = models.PositiveSmallIntegerField(blank=True, default=0)
     sex = models.CharField(max_length=1, blank=True, default="N")
-    phone = models.CharField(max_length=20, blank=True, default="")
+    phone = PhoneNumberField(blank=True, null=False, default="")
     birth = models.DateField(blank=True, null=True)
     address = models.TextField(blank=True)
     created = models.DateField(auto_now_add=True)

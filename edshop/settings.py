@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     "stripe",
     "crispy_forms",
     "crispy_bootstrap5",
+    "phonenumber_field",
     # Local Apps
     "web",
     "account",

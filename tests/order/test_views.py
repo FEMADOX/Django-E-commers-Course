@@ -141,7 +141,7 @@ class TestConfirmOrderView:
             "name": "John",
             "last_name": "Doe",
             "email": "john@example.com",
-            "phone": "1234567890",
+            "phone": "+19122532338",
             "address": "123 Test St",
         }
         form = ClientForm(data=form_data)
@@ -192,7 +192,7 @@ class TestConfirmOrderView:
             "name": "John",
             "last_name": "Doe",
             "email": "john@example.com",
-            "phone": "1234567890",
+            "phone": "+19122532338",
             "address": "123 Test St",
         }
         form = ClientForm(data=form_data)

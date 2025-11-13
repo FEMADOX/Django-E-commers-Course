@@ -73,7 +73,7 @@ def account_client(user: User) -> Client:
     return Client.objects.create(
         user=user,
         dni=12345678,
-        phone="987654321",
+        phone="+19122532338",
         address="456 Test Avenue",
     )
 
