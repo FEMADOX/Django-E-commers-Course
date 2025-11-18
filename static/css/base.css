@@ -1539,10 +1539,13 @@ div.pending-data-details {
 
 .card-header i {
     color: var(--third-color);
-    /*height: 1.1rem;*/
     width: 16px;
     display: flex;
     align-items: center;
+
+    &.bi-truck {
+        margin-right: 4px;
+    }
 }
 
 .card-header i.bi-clipboard-check {

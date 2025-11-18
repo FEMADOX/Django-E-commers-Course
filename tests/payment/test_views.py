@@ -36,7 +36,6 @@ class TestPaymentViewsAuthentication:
     @pytest.mark.parametrize(
         "url_name",
         [
-            "payment:payment_process",
             "payment:payment_completed",
             "payment:payment_canceled",
         ],

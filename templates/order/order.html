@@ -14,7 +14,7 @@
     </li>
     <li>Order</li>
   </ul>
-  <form method="post" action="{% url 'order:confirm_order' %}" class="register">
+  <form method="post" action="{% url 'order:confirm_order' %}" class="register order-form">
     {% csrf_token %}
     <article class="page-cont">
       <div class="page-styling">

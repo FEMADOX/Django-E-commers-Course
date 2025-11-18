@@ -5,7 +5,7 @@ from account.models import Client as AccountClient
 from account.models import User
 from cart.cart import Decimal
 from order.models import Order, OrderDetail
-from web.models import Category, Product
+from web.models import Brand, Category, Product
 
 
 @pytest.fixture
@@ -36,12 +36,19 @@ def category() -> Category:
 
 
 @pytest.fixture
-def product(category: Category) -> Product:
+def brand() -> Brand:
+    """Create a test brand."""
+    return Brand.objects.create(name="Test Category")
+
+
+@pytest.fixture
+def product(category: Category, brand: Brand) -> Product:
     """Create a test product."""
     return Product.objects.create(
         title="Test Product",
         price=Decimal("29.99"),
         description="Test Description",
+        brand=brand,
         category=category,
     )
 
@@ -73,3 +80,26 @@ def authenticated_client(user: User) -> DjangoTestClient:
     client = DjangoTestClient()
     client.force_login(user)
     return client
+
+
+@pytest.fixture
+def authenticated_client_with_cart(
+    authenticated_client: DjangoTestClient,
+    product: Product,
+    order_detail: OrderDetail,
+) -> DjangoTestClient:
+    """Create an authenticated Django test client with items in the cart."""
+
+    # Initialize session and add cart data
+    session = authenticated_client.session
+    session["cart"] = {
+        str(product.pk): {
+            "quantity": order_detail.quantity,
+            "price": str(product.price),
+            "subtotal": str(order_detail.subtotal),
+        }
+    }
+    session["cart_total_price"] = str(order_detail.subtotal * order_detail.quantity)
+    session.save()
+
+    return authenticated_client

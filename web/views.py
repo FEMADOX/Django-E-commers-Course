@@ -46,7 +46,10 @@ class FilterByBaseView(ListView):
         return super().get_queryset()
 
     def get_context_data(
-        self, *, object_list: _SupportsPagination | None = None, **kwargs: dict
+        self,
+        *,
+        object_list: _SupportsPagination | None = None,
+        **kwargs: dict,
     ) -> dict[str, Any]:
         """Add categories and brands to context."""
         context = super().get_context_data(**kwargs)

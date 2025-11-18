@@ -60,7 +60,7 @@ class ConfirmOrderView(LoginRequiredMixin, FormView):
     """
 
     form_class = ClientForm
-    template_name = "order/order.html"  # For form errors
+    template_name = "order/order.html"
     login_url = "/account/login/"
 
     def get(self, request: HttpRequest, *args: tuple, **kwargs: dict) -> HttpResponse:
@@ -95,10 +95,27 @@ class ConfirmOrderView(LoginRequiredMixin, FormView):
         order_cart = self.request.session.get("cart")
         if not order_cart:
             return redirect("cart:cart")
-        new_order = self._create_order(client, order_cart)
-        order_cart.clear()
 
-        return redirect(reverse("order:order_summary", args=[new_order.pk]))
+        orders = Order.objects.filter(client=client, status="0")
+        if orders.exists():
+            [OrderDetail.objects.filter(order=order).delete() for order in orders]
+            orders.delete()
+
+        new_order = self._create_order(client, order_cart)
+
+        # Store order_id in session for payment processing
+        self.request.session["order_id"] = new_order.pk
+
+        if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return JsonResponse(
+                {
+                    "success": True,
+                    "payment_url": reverse("payment:payment_process"),
+                },
+                status=HTTP_200_OK,
+            )
+
+        return redirect(reverse("payment:payment_process"))
 
     def form_invalid(self, form: ClientForm) -> HttpResponse:
         """Handle invalid form data by re-rendering the order page with errors."""

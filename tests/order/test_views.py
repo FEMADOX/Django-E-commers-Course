@@ -120,20 +120,17 @@ class TestConfirmOrderView:
         assert view.form_class == ClientForm
 
     @patch("order.views.ConfirmOrderView._create_order")
-    @patch("order.views.ConfirmOrderView._get_or_create_client")
     def test_form_valid_updates_user_data(
         self,
-        mock_get_or_create_client: Mock,
         mock_create_order: Mock,
         user: User,
+        account_client: AccountClient,
     ) -> None:
         """Test that form_valid updates user data correctly."""
 
         # Setup mocks
-        mock_client = Mock(spec=AccountClient)
         mock_order = Mock(spec=Order)
         mock_order.pk = 1
-        mock_get_or_create_client.return_value = mock_client
         mock_create_order.return_value = mock_order
 
         # Create form data
@@ -153,17 +150,21 @@ class TestConfirmOrderView:
         request.user = user
 
         # Mock the session with proper support for item assignment
-        session_mock = Mock()
-        session_mock.__getitem__ = Mock(
-            side_effect=lambda key: {
-                "cart": {"1": {"product_id": 1, "quantity": 1, "subtotal": "10.00"}},
-                "cart_total_price": "10.00",
-            }[key],
+        client_data_mock: dict[str, str] = {}
+        session_mock = Mock(spec=SessionBase)
+        session_mock.get = Mock(
+            return_value={"1": {"product_id": 1, "quantity": 1, "subtotal": "10.00"}},
         )
-        session_mock.__setitem__ = Mock()
-        session_mock.__contains__ = Mock(
-            side_effect=lambda key: key in {"cart", "cart_total_price"},
-        )
+
+        def get_item(key: str) -> dict[str, str]:
+            return {"client_data": client_data_mock}.get(key, {})
+
+        def set_item(key: str, value: dict | str | int) -> None:
+            if key == "client_data":
+                client_data_mock.update(value)  # type: ignore[arg-type]
+
+        session_mock.__getitem__ = Mock(side_effect=get_item)
+        session_mock.__setitem__ = Mock(side_effect=set_item)
         request.session = session_mock
 
         view = ConfirmOrderView()
@@ -178,9 +179,18 @@ class TestConfirmOrderView:
         assert user.last_name == "Doe"
         assert user.email == "john@example.com"
 
+        # Verify client data stored in session
+        session_mock.__setitem__.assert_any_call(
+            "client_data", {"phone": "+19122532338", "address": "123 Test St"}
+        )
+
+        # Verify order created
+        mock_create_order.assert_called_once()
+
         # Verify response is redirect
         assert isinstance(response, HttpResponse)
         assert response.status_code == HTTP_302_REDIRECT
+        assert response["Location"] == reverse("payment:payment_process")
 
     def test_form_valid_empty_cart_redirects_to_cart(
         self,
@@ -236,6 +246,41 @@ class TestConfirmOrderView:
 
         assert response.status_code == HTTP_302_REDIRECT
         assert response["Location"] == reverse("cart:cart")
+
+    def test_form_valid_deletes_existing_pending_order(
+        self,
+        authenticated_client: DjangoTestClient,
+        user: User,
+        account_client: AccountClient,
+        order: Order,
+    ) -> None:
+        """Test form_valid deletes existing pending order before creating new one."""
+        # Ensure the initial order has status '0' (Pending)
+        order.status = "0"
+        order.save()
+        initial_order_id = order.pk
+
+        session = authenticated_client.session
+        session["cart"] = {"1": {"quantity": 1, "subtotal": "59.98"}}
+        session["cart_total_price"] = "59.98"
+        session.save()
+
+        # Real POST
+        response = authenticated_client.post(
+            reverse("order:confirm_order"),
+            data={
+                "name": user.username,
+                "last_name": user.last_name,
+                "email": user.email,
+                "phone": account_client.phone,
+                "address": account_client.address,
+            },
+        )
+
+        assert response.status_code == HTTP_302_REDIRECT
+        assert response["Location"] == reverse("payment:payment_process")
+        assert not Order.objects.filter(pk=initial_order_id).exists()
+        assert Order.objects.filter(client=account_client).count() == 1
 
     def test_get_or_create_client_existing_client(
         self,

@@ -69,30 +69,38 @@ class TestPaymentWorkflowIntegration:
         order.refresh_from_db()
         assert order.status == "1"  # PAID status
 
+        # Step 5: Verify cart is cleared from session
+        session = authenticated_client.session
+        assert "cart" not in session
+        assert "order_id" not in session
+
     def test_payment_cancellation_workflow(
         self,
-        authenticated_client: DjangoTestClient,
+        authenticated_client_with_cart: DjangoTestClient,
         order: Order,
         order_detail: OrderDetail,
     ) -> None:
         """Test payment cancellation workflow."""
 
         # Step 1: Add order to session
-        session = authenticated_client.session
+        session = authenticated_client_with_cart.session
         session["order_id"] = order.pk
         session.save()
 
-        # Step 2: Access payment process page
-        response = authenticated_client.get(reverse("payment:payment_process"))
+        # Step 2: Simulate payment cancellation
+        response = authenticated_client_with_cart.get(
+            reverse("payment:payment_canceled")
+        )
         assert response.status_code == HTTP_200_OK
 
-        # Step 3: Simulate payment cancellation
-        response = authenticated_client.get(reverse("payment:payment_canceled"))
-        assert response.status_code == HTTP_200_OK
-
-        # Step 4: Verify order status remains Pending
+        # Step 3: Verify order status remains Pending
         order.refresh_from_db()
         assert order.status == "0"  # Still Pending
+
+        # Step 4: Verify cart is intact in session
+        session = authenticated_client_with_cart.session
+        assert session.get("cart") is not None
+        assert session["order_id"] == order.pk
 
     @patch("stripe.checkout.Session.create")
     def test_stripe_integration_with_line_items(
@@ -175,15 +183,11 @@ class TestPaymentWorkflowIntegration:
         session["order_id"] = order.pk
         session.save()
 
-        # Step 2: Access process page
-        response = authenticated_client.get(reverse("payment:payment_process"))
-        assert response.status_code == HTTP_200_OK
-
         # Session should still contain order_id
         session = authenticated_client.session
         assert session.get("order_id") == order.pk
 
-        # Step 3: Complete payment (this should remove order_id from session)
+        # Step 2: Complete payment (this should remove order_id from session)
         response = authenticated_client.get(reverse("payment:payment_completed"))
         assert response.status_code == HTTP_200_OK
 

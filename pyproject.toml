@@ -30,13 +30,14 @@ types-stubs = [
 ]
 
 [dependency-groups]
-dev = [
- "ipython>=9.2.0",
- "ty>=0.0.1a20",
-]
+dev = ["ipython>=9.2.0", "ty>=0.0.1a20"]
 
 [tool.ruff]
-lint.select = [
+line-length = 88
+exclude = ["*/migrations/*"]
+
+[tool.ruff.lint]
+select = [
     "A",     # flake8-builtins
     "AIR",   # Airflow
     "ARG",   # flake8-unused-arguments
@@ -89,7 +90,7 @@ lint.select = [
     "YTT",   # flake8-2020
     "W",     # pycodestyle warning
 ]
-lint.ignore = [
+ignore = [
     "ARG002",  # Unused method argument
     "ARG003",  # Unused class method argument
     "PLR6301", # Method could be a function
@@ -101,12 +102,6 @@ lint.ignore = [
     "G004",    # Logging statement uses f-string
     "COM812",  # Missing trailing comma in a list or tuple
     "PLR0917", # Too many arguments in function definition
-]
-lint.exclude = [
-    "*/migrations/*",  # Ignore all files in migrations folders
-]
-format.exclude = [
-    "*/migrations/*",  # Ignore all files in migrations folders
 ]
 
 [tool.pytest.ini_options]

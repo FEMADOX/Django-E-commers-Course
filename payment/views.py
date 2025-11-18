@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-import contextlib
 import logging
 from typing import TYPE_CHECKING, Any
 
 import stripe
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views import View
@@ -18,8 +18,9 @@ from edshop.settings import STRIPE_API
 from order.models import Order, OrderDetail
 
 if TYPE_CHECKING:
-    from django.http import HttpRequest, HttpResponse
-    from django.http.response import HttpResponseRedirect
+    from django.http import HttpRequest
+
+    from cart.cart import Cart
 
 # Create your views here.
 
@@ -32,13 +33,32 @@ class PaymentProcessView(LoginRequiredMixin, View):
 
     login_url = "/account/login/"
 
-    def get(self, request: HttpRequest) -> HttpResponse:
-        """Display the payment form."""
-
-        return render(request, "order/shipping.html")
-
-    def post(self, request: HttpRequest) -> HttpResponse:  # noqa: PLR0911
+    def post(self, request: HttpRequest) -> HttpResponse:
         """Process payment and create Stripe checkout session."""
+
+        session_data = self.order_preprocessing(request)
+
+        if isinstance(session_data, (HttpResponseBadRequest, HttpResponseRedirect)):
+            return session_data
+
+        # Create STRIPE checkout session
+        try:
+            session = stripe.checkout.Session.create(**session_data)
+            return redirect(
+                session.url if session and session.url else reverse("web:index")
+            )
+        except Exception as e:
+            msg = f"Unexpected error during checkout session creation: {e}"
+            logger.exception(msg)
+            return HttpResponseBadRequest(
+                "An unexpected error occurred. Please try again later.",
+            )
+
+    def order_preprocessing(
+        self,
+        request: HttpRequest,
+    ) -> HttpResponseBadRequest | HttpResponseRedirect | dict[str, Any]:
+        """Perform any necessary preprocessing on the order before payment."""
 
         try:
             client = Client.objects.get(user=request.user)
@@ -90,20 +110,7 @@ class PaymentProcessView(LoginRequiredMixin, View):
                         "quantity": item.quantity,
                     },
                 )
-
-            # Create STRIPE checkout session
-            try:
-                session = stripe.checkout.Session.create(**session_data)
-                return redirect(
-                    session.url if session and session.url else reverse("web:index")
-                )
-            except Exception as e:
-                msg = f"Unexpected error during checkout session creation: {e}"
-                logger.exception(msg)
-                return HttpResponseBadRequest(
-                    "An unexpected error occurred. Please try again later.",
-                )
-
+            return session_data
         except (Client.DoesNotExist, Order.DoesNotExist) as e:
             return HttpResponseBadRequest(f"Error: {e}")
         except KeyError:
@@ -129,10 +136,12 @@ class PaymentCompletedView(LoginRequiredMixin, View):
             client = Client.objects.get(user=request.user)
             order_id = request.session.pop("order_id", "")
             order = Order.objects.get(pk=order_id)
+            order_cart: Cart | None = request.session.get("cart")
 
             # Changing the status of the order
             order.status = "1"  # PAID
             order.save()
+            order_cart.clear() if order_cart else None
 
             order_details_products = [
                 order_detail.product.title

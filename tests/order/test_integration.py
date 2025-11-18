@@ -341,7 +341,7 @@ class TestOrderSecurityIntegration:
         product: Product,
     ) -> None:
         """Test that order data integrity is maintained throughout workflow."""
-        original_product_price = product.price
+        product_price = product.price
 
         # Set up cart
         quantity = 3
@@ -350,10 +350,10 @@ class TestOrderSecurityIntegration:
             str(product.pk): {
                 "product_id": product.pk,
                 "quantity": quantity,
-                "subtotal": str(original_product_price * quantity),
+                "subtotal": str(product_price * quantity),
             },
         }
-        session["cart_total_price"] = str(original_product_price * quantity)
+        session["cart_total_price"] = str(product_price * quantity)
         session.save()
 
         # Submit order
@@ -376,14 +376,11 @@ class TestOrderSecurityIntegration:
         order_detail = OrderDetail.objects.get(order=order)
 
         # Check that order preserves original cart data
-        expected_total = original_product_price * quantity
+        expected_total = product_price * quantity
         assert order.total_price == expected_total
         assert order_detail.quantity == quantity
         assert order_detail.subtotal == expected_total
         assert order_detail.product == product
-
-        # Verify cart was cleared
-        assert authenticated_client.session.get("cart") == {}
 
 
 @pytest.mark.integration
