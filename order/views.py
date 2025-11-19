@@ -51,6 +51,9 @@ class CreateOrderView(LoginRequiredMixin, TemplateView):
         if not cart.cart:
             return redirect(reverse("web:index"))
 
+        if "cart_total_price" not in request.session:
+            request.session["cart_total_price"] = cart.get_total_price()
+
         return super().get(request)
 
 

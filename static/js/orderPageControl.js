@@ -225,6 +225,11 @@ const handleFormSubmit = () => {
     submitButton.disabled = true
     submitButton.textContent = 'Processing...'
 
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
+      document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+
+    if (!csrfToken) throw new Error('CSRF token not found in the DOM.')
+
     try {
       const response = await fetch(form.action, {
         method: 'POST',
@@ -235,9 +240,7 @@ const handleFormSubmit = () => {
         body: formData,
       })
 
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`)
-      }
+      if (!response.ok) throw new Error(`Response status: ${response.status}`)
 
       const data = await response.json()
 
@@ -248,11 +251,6 @@ const handleFormSubmit = () => {
       }
 
       if (!data.payment_url) throw new Error('Payment URL not provided in the response.')
-
-      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
-        document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
-
-      if (!csrfToken) throw new Error('CSRF token not found in the DOM.')
 
       const paymentForm = document.createElement('form')
       paymentForm.method = 'POST'

@@ -99,6 +99,26 @@ class TestCreateOrderView:
         assert context["client_form"] == mock_form
         mock_get_or_create_client_form.assert_called_once_with(user)
 
+    def test_get_sets_cart_total_price_in_session(
+        self,
+        authenticated_client_with_cart: tuple[DjangoTestClient, SessionBase],
+    ) -> None:
+        """Test that GET request sets cart_total_price in session if not present."""
+
+        client_with_cart = authenticated_client_with_cart[0]
+        session = client_with_cart.session
+
+        # Remove cart_total_price if it exists
+        if "cart_total_price" in session:
+            del session["cart_total_price"]
+        session.save()
+
+        response = client_with_cart.get(reverse("order:create_order"))
+
+        assert response.status_code == HTTP_200_OK
+        assert "cart_total_price" in client_with_cart.session
+        assert client_with_cart.session["cart_total_price"] is not None
+
 
 @pytest.mark.unit
 @pytest.mark.django_db
@@ -281,6 +301,41 @@ class TestConfirmOrderView:
         assert response["Location"] == reverse("payment:payment_process")
         assert not Order.objects.filter(pk=initial_order_id).exists()
         assert Order.objects.filter(client=account_client).count() == 1
+
+    def test_form_valid_ajax_request_returns_json(
+        self,
+        authenticated_client: DjangoTestClient,
+        user: User,
+        account_client: AccountClient,
+        product: Product,
+    ) -> None:
+        """Test that AJAX request returns JSON response with payment URL."""
+
+        session = authenticated_client.session
+        session["cart"] = {
+            str(product.pk): {"quantity": 1, "subtotal": str(product.price)},
+        }
+        session["cart_total_price"] = str(product.price)
+        session.save()
+
+        response = authenticated_client.post(
+            reverse("order:confirm_order"),
+            data={
+                "name": user.username,
+                "last_name": user.last_name,
+                "email": user.email,
+                "phone": account_client.phone,
+                "address": account_client.address,
+            },
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        assert response.status_code == HTTP_200_OK
+        assert response["Content-Type"] == "application/json"
+
+        data = response.json()
+        assert data["success"] is True
+        assert data["payment_url"] == reverse("payment:payment_process")
 
     def test_get_or_create_client_existing_client(
         self,

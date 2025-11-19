@@ -76,7 +76,7 @@ class AddProductCartView(LoginRequiredMixin, View):
         if actual_location:
             return redirect(actual_location)
 
-        return redirect("/")
+        return redirect("web:index")
 
 
 class DeleteProductCartView(LoginRequiredMixin, View):
@@ -159,10 +159,11 @@ class ClearCartView(LoginRequiredMixin, View):
         cart.clear()
 
         actual_location = request.POST.get("location-url")
-        if actual_location:
+        if actual_location and actual_location != reverse("cart:cart"):
             return redirect(actual_location)
 
-        return redirect("/cart/")
+        messages.success(request, "Your cart has been cleared.")
+        return redirect("web:index")
 
 
 class RestoreOrderPendingCartView(LoginRequiredMixin, View):

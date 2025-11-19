@@ -4,6 +4,7 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import stripe
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -21,6 +22,7 @@ if TYPE_CHECKING:
     from django.http import HttpRequest
 
     from cart.cart import Cart
+
 
 # Create your views here.
 
@@ -211,6 +213,8 @@ class PaymentCanceledView(LoginRequiredMixin, View):
     login_url = "/account/login/"
 
     def get(self, request: HttpRequest) -> HttpResponse:
-        """Display payment canceled page."""
+        """Redirect to order confirmation page on payment cancellation."""
 
-        return render(request, "payment/payment_canceled.html")
+        messages.warning(request, "Payment was canceled.")
+
+        return redirect("order:create_order")

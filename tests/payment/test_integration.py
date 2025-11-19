@@ -4,6 +4,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 from django.contrib.auth.models import User
+from django.contrib.messages import get_messages
 from django.core import mail
 from django.test import Client as DjangoTestClient
 from django.urls import reverse
@@ -91,7 +92,11 @@ class TestPaymentWorkflowIntegration:
         response = authenticated_client_with_cart.get(
             reverse("payment:payment_canceled")
         )
-        assert response.status_code == HTTP_200_OK
+
+        messages = list(get_messages(response.wsgi_request))
+        assert any("Payment was canceled." in str(message) for message in messages)
+        assert response.status_code == HTTP_302_REDIRECT
+        assert response["Location"] == reverse("order:create_order")
 
         # Step 3: Verify order status remains Pending
         order.refresh_from_db()

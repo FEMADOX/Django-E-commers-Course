@@ -52,7 +52,10 @@ class TestPaymentViewsAuthentication:
         assert response.status_code in {HTTP_200_OK, HTTP_302_REDIRECT}
 
         if response.status_code == HTTP_302_REDIRECT:
-            assert response["Location"] == reverse("web:index")
+            if url_name == "payment:payment_completed":
+                assert response["Location"] == reverse("web:index")
+            elif url_name == "payment:payment_canceled":
+                assert response["Location"] == reverse("order:create_order")
 
 
 @pytest.mark.django_db

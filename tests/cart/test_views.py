@@ -431,6 +431,27 @@ class TestClearCartView:
         assert len(cart.cart) == 0
         assert response.status_code == HTTP_302_REDIRECT
 
+    def test_clear_cart_redirects_to_index_with_message(
+        self,
+        authenticated_request: WSGIRequest,
+        product: Product,
+    ) -> None:
+        """Test that clearing cart redirects to index with success message."""
+
+        cart = Cart(authenticated_request)
+        cart.add(product, 2)
+
+        view = ClearCartView.as_view()
+        authenticated_request.method = "POST"
+        response = view(authenticated_request)
+
+        assert response.status_code == HTTP_302_REDIRECT
+        assert response["Location"] == reverse("web:index")
+
+        # Check that cart is cleared
+        cart = Cart(authenticated_request)
+        assert len(cart.cart) == 0
+
     def test_post_redirects_to_location_url(
         self,
         rf: RequestFactory,
@@ -454,6 +475,60 @@ class TestClearCartView:
 
         assert isinstance(response, HttpResponseRedirect)
         assert response.url == "/catalog/"
+
+    def test_clear_cart_with_location_url_not_cart_page(
+        self,
+        authenticated_request: WSGIRequest,
+        product: Product,
+    ) -> None:
+        """Test redirect to location-url if provided and not cart page."""
+
+        cart = Cart(authenticated_request)
+        cart.add(product, 1)
+
+        factory = RequestFactory()
+        request = factory.post(
+            reverse("cart:clear_cart"), {"location-url": "/some-other-page/"}
+        )
+        request.user = authenticated_request.user
+        _add_session_to_request(request)
+
+        # Add product to cart in new request
+        cart = Cart(request)
+        cart.add(product, 1)
+
+        view = ClearCartView.as_view()
+        response = view(request)
+
+        assert response.status_code == HTTP_302_REDIRECT
+        assert response["Location"] == "/some-other-page/"
+
+    def test_clear_cart_ignores_cart_page_location(
+        self,
+        authenticated_request: WSGIRequest,
+        product: Product,
+    ) -> None:
+        """Test that cart page location-url is ignored and redirects to index."""
+
+        cart = Cart(authenticated_request)
+        cart.add(product, 1)
+
+        factory = RequestFactory()
+        request = factory.post(
+            reverse("cart:clear_cart"), {"location-url": reverse("cart:cart")}
+        )
+        request.user = authenticated_request.user
+        _add_session_to_request(request)
+
+        # Add product to cart in new request
+        cart = Cart(request)
+        cart.add(product, 1)
+
+        view = ClearCartView.as_view()
+        response = view(request)
+
+        assert response.status_code == HTTP_302_REDIRECT
+        assert response["Location"] == reverse("web:index")
 
     def test_login_required(self, rf: RequestFactory) -> None:
         """Test that login is required to clear cart"""
