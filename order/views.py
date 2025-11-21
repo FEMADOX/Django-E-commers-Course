@@ -171,9 +171,7 @@ class ConfirmOrderView(LoginRequiredMixin, FormView):
                 continue
 
         # Update order metadata
-        new_order.order_num = (
-            f"Order #{new_order.pk} - Date {new_order.registration_date.strftime('%Y')}"
-        )
+        new_order.order_num = f"#{new_order.pk}"
         new_order.total_price = Decimal(
             self.request.session.pop("cart_total_price", "0.00"),
         )

@@ -1,16 +1,179 @@
 {% extends 'base.html' %}
-<!-- TODO(FENYXZ) Implement a good UI for Mobiles -->
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/payment_success.css' %}" />
+  <!-- Canvas Confetti Library (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <!-- Custom confetti script -->
+  <!-- <script src="{% static 'js/payment_success_confetti.js' %}"></script> -->
+{% endblock %}
+
 {% block content %}
-  <h1 class="main-cont-ttl">Checkout OK</h1>
-  <ul class="b-crumbs">
-    <li>
-      <a href="{% url 'web:index' %}">Home</a>
-    </li>
-    <li>
-      <a href="{% url 'web:index' %}">Buy</a>
-    </li>
-  </ul>
-  <h2>THANKS FOR YOUR BOUGHT</h2>
-  <h3>{{ order.order_num }}</h3>
-  <p>We'll send you an email to confirm you order {{ request.user.first_name }}</p>
+  <div class="success-page-container">
+    {# ========== SUCCESS HEADER ========== #}
+    <div class="success-header">
+      <div class="success-icon-wrapper">
+        <i class="bi bi-check-circle-fill success-icon"></i>
+      </div>
+      <h1 class="success-title">Payment Successful!</h1>
+      <p class="success-message">
+        Thank you {{ request.user.first_name }}! Your order has been confirmed and will be shipped soon.
+      </p>
+    </div>
+
+    {# ========== ORDER CONFIRMATION CARD ========== #}
+    <div class="order-card">
+      <div class="order-card-header border-bottom border-dark-subtle pb-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="">Order Confirmation</h2>
+          <span class="order-status-badge badge-confirmed">
+            <i class="bi bi-check-circle"></i> Confirmed
+          </span>
+        </div>
+        <p class="fs-5 text-secondary">
+          We'll send you a confirmation email shortly with your order details.
+        </p>
+      </div>
+
+      <div class="order-details-grid">
+        <div class="order-detail-item">
+          <span class="order-detail-label">
+            <i class="bi bi-hash"></i> Order Number
+          </span>
+          <span class="order-detail-value">{{ order.order_num }}</span>
+        </div>
+
+        <div class="order-detail-item">
+          <span class="order-detail-label">
+            <i class="bi bi-calendar-check"></i> Order Date
+          </span>
+          <span class="order-detail-value">
+            {{ order.registration_date|date:"F d, Y" }}
+          </span>
+          <span class="order-detail-value text-secondary fs-6">
+            {{ order.registration_date|date:"g:i A" }}
+          </span>
+        </div>
+
+        <div class="order-detail-item">
+          <span class="order-detail-label">
+            <i class="bi bi-credit-card"></i> Payment Method
+          </span>
+          <span class="order-detail-value">
+            Stripe ending in 4242
+          </span>
+        </div>
+
+        <div class="order-detail-item">
+          <span class="order-detail-label">
+            <i class="bi bi-truck"></i> Estimated Delivery
+          </span>
+          <span class="order-detail-value">3-5 business days</span>
+        </div>
+      </div>
+    </div>
+
+    {# ========== ORDER ITEMS SECTION ========== #}
+    <div class="order-items-card">
+      <h2 class="section-title">
+        <i class="bi bi-bag-check"></i> Order Items
+      </h2>
+
+      <div class="order-items-list">
+        {% for item in order_details %}
+          <div class="order-item">
+            <a class="order-item-image" href="{% url 'web:product_detail' item.product.pk %}">
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" />
+            </a>
+            <div class="order-item-info">
+              <div>
+                <a href="{% url 'web:product_detail' item.product.pk %}"><h3 class="order-item-title">{{ item.product.title }}</h3></a>
+                <span class="quantity-label text-secondary">Quantity: {{ item.quantity }}</span>
+              </div>
+              <div class="order-item-price">
+                <a class="order-item-category" href="{% url 'web:filter_by_category' item.product.category.pk %}">
+                  <i class="bi bi-tag"></i> {{ item.product.category.name }}
+                </a>
+                ${{ item.subtotal }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    {# ========== ORDER SUMMARY ========== #}
+    <div class="order-summary-card">
+      <h2 class="section-title">
+        <i class="bi bi-receipt"></i> Order Summary
+      </h2>
+
+      <div class="summary-row">
+        <span class="summary-label">Subtotal</span>
+        <span class="summary-value">${{ order.total_price }}</span>
+      </div>
+
+      <div class="summary-row">
+        <span class="summary-label">
+          Shipping
+          <span class="free-badge">FREE</span>
+        </span>
+        <span class="summary-value">$ 0.00</span>
+      </div>
+
+      <div class="summary-row">
+        <span class="summary-label">
+          Tax
+          <span class="free-badge">FREE</span>
+        </span>
+        <span class="summary-value">$ 0.00</span>
+      </div>
+
+      {% if discount > 0 %}
+        <div class="summary-row discount-row">
+          <span class="summary-label">Discount</span>
+          <span class="summary-value">None</span>
+        </div>
+      {% endif %}
+
+      <div class="summary-divider"></div>
+
+      <div class="summary-row summary-total">
+        <span class="summary-label">Total Paid</span>
+        <span class="summary-value">${{ order.total_price }}</span>
+      </div>
+    </div>
+
+    {# ========== SHIPPING ADDRESS ========== #}
+    <div class="shipping-card">
+      <h2 class="section-title">
+        <i class="bi bi-geo-alt"></i> Shipping Address
+      </h2>
+      <div class="shipping-details">
+        <p class="shipping-name">{{ request.user.get_full_name|default:request.user.username }}</p>
+        <p class="shipping-address">{{ client.address|default:"Address not provided" }}</p>
+        <p class="shipping-contact">
+          <i class="bi bi-telephone"></i> {{ client.phone|default:"N/A" }}
+        </p>
+        <p class="shipping-email">
+          <i class="bi bi-envelope"></i> {{ request.user.email }}
+        </p>
+      </div>
+    </div>
+
+    {# ========== ACTION BUTTONS ========== #}
+    <div class="action-buttons">
+      <a href="{% url 'web:index' %}" class="btn btn-primary btn-lg">
+        <i class="bi bi-file-text"></i> View Order Details
+      </a>
+      <a href="{% url 'web:index' %}" class="btn btn-outline-secondary btn-lg">
+        <i class="bi bi-house"></i> Return to Home
+      </a>
+      <a href="{% url 'web:index' %}" class="btn btn-outline-secondary btn-lg">
+        <i class="bi bi-cart"></i> Continue Shopping
+      </a>
+    </div>
+
+  </div>
 {% endblock content %}

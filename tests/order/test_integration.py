@@ -89,7 +89,7 @@ class TestOrderWorkflowIntegration:
         # Verify order was created
         order = Order.objects.get(client__user=user)
         assert order.total_price == Decimal(product.price) * 2
-        assert order.order_num.startswith("Order #")
+        assert order.order_num.startswith("#")
 
         # Verify order detail was created
         order_detail = OrderDetail.objects.get(order=order)

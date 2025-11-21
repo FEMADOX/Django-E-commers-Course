@@ -448,7 +448,7 @@ class TestConfirmOrderView:
         assert isinstance(order, Order)
         assert order.client == account_client
         assert order.total_price == expected_subtotal
-        assert order.order_num.startswith("Order #")
+        assert order.order_num.startswith("#")
 
         # Check order detail
         order_detail = OrderDetail.objects.get(order=order)
