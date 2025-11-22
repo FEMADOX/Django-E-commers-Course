@@ -53,13 +53,11 @@
     margin-bottom: 1.5rem;
     box-shadow: var(--shadow-sm);
     transition: box-shadow 0.3s ease;
-}
+    animation: fadeInUp 0.6s ease-out;
 
-.order-card:hover,
-.order-items-card:hover,
-.order-summary-card:hover,
-.shipping-card:hover {
-    box-shadow: var(--shadow-md);
+    &:hover {
+        box-shadow: var(--shadow-md);
+    }
 }
 
 .section-title {
@@ -70,10 +68,10 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-}
 
-.section-title i {
-    color: var(--third-color);
+    i {
+        color: var(--third-color);
+    }
 }
 
 /* ========== ORDER CONFIRMATION CARD ========== */
@@ -120,11 +118,11 @@
     font-size: 1.3rem;
     color: var(--secondary-text-color);
     font-weight: 500;
-}
 
-.order-detail-label i {
-    font-size: 1.5rem;
-    color: var(--third-color);
+    i {
+        font-size: 1.5rem;
+        color: var(--third-color);
+    }
 }
 
 .order-detail-value {
@@ -152,13 +150,17 @@
     transition: all 0.3s ease;
     background: var(--secondary-color);
     align-items: center;
-}
 
-.order-item:hover {
-    background-color: rgba(0, 0, 0, 0.02);
-    border-color: rgba(18, 145, 238, 0.3);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.02);
+        border-color: rgba(18, 145, 238, 0.3);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+
+        .order-item-image img {
+            transform: scale(1.05);
+        }
+    }
 }
 
 .darkmode .order-item {
@@ -184,26 +186,25 @@
 
     &:hover {
         transform: scale(1.05);
+
         img {
             transition: filter 0.3s ease;
             filter: opacity(85%);
         }
     }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
 }
 
-.darkmode .order-item-image {
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-.order-item-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.order-item:hover .order-item-image img {
-    transform: scale(1.05);
+.darkmode {
+    .order-item-image {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
 }
 
 .order-item-info {
@@ -234,12 +235,12 @@
     display: flex;
     align-items: center;
     gap: 0.375rem;
-}
 
-.order-item-category i {
-    font-size: 1.5rem;
-    color: var(--secondary-text-color);
-    transition: color 0.2s ease;
+    i {
+        font-size: 1.5rem;
+        color: var(--secondary-text-color);
+        transition: color 0.2s ease;
+    }
 }
 
 .order-item-title,
@@ -310,7 +311,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 0;
-    font-size: 1rem;
+    font-size: 1.3rem;
 }
 
 .summary-label {
@@ -337,11 +338,6 @@
     text-transform: uppercase;
 }
 
-.darkmode .free-badge {
-    background: rgba(34, 197, 94, 0.2);
-    color: #4ade80;
-}
-
 .discount-row .summary-value {
     color: #16a34a;
 }
@@ -352,23 +348,30 @@
     margin: 1rem 0;
 }
 
-.darkmode .summary-divider {
-    background: rgba(255, 255, 255, 0.1);
+.darkmode {
+    .free-badge {
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+    }
+
+    .summary-divider {
+        background: rgba(255, 255, 255, 0.1);
+    }
 }
 
 .summary-total {
     padding: 1rem 0 0;
-}
 
-.summary-total .summary-label,
-.summary-total .summary-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--base-text-color);
-}
+    .summary-label,
+    .summary-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--base-text-color);
+    }
 
-.summary-total .summary-value {
-    color: var(--third-color);
+    .summary-value {
+        color: var(--third-color);
+    }
 }
 
 /* ========== SHIPPING ADDRESS ========== */
@@ -376,12 +379,23 @@
     padding: 1rem;
     background: var(--base-color);
     border-radius: 8px;
-}
 
-.shipping-details p {
-    margin: 0.5rem 0;
-    font-size: 1rem;
-    color: var(--base-text-color);
+    p {
+        margin: 0.5rem 0;
+        font-size: 1rem;
+        color: var(--base-text-color);
+    }
+
+    [class^="shipping-"] {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.2rem;
+
+        i {
+            color: var(--third-color);
+        }
+    }
 }
 
 .shipping-name {
@@ -393,117 +407,70 @@
     color: var(--secondary-text-color);
 }
 
-.shipping-contact,
-.shipping-email {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-}
-
-.shipping-contact i,
-.shipping-email i {
-    color: var(--third-color);
-}
-
 /* ========== ACTION BUTTONS ========== */
 .action-buttons {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     margin: 2rem 0;
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        width: 100%;
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+    }
+
+    .btn-primary {
+        background: var(--third-color);
+        color: white;
+        border: none;
+
+        &:hover {
+            background: #0e7dd1;
+        }
+    }
+
+    .btn-outline-secondary {
+        background: var(--base-color);
+        color: var(--base-text-color);
+        border: 2px solid rgba(0, 0, 0, 0.15);
+
+        &:hover {
+            filter: contrast(80%);
+            border-color: var(--third-color);
+        }
+    }
+
+    .view-order-details,
+    .continue-shopping {
+        &::after {
+            content: "\F138";
+            font-family: 'bootstrap-icons';
+            transition: transform 0.3s ease;
+        }
+
+        &:hover::after {
+            transform: translateX(5px);
+        }
+    }
 }
 
-.action-buttons .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    width: 100%;
-}
-
-.action-buttons .btn-primary {
-    background: var(--third-color);
-    color: white;
-    border: none;
-}
-
-.action-buttons .btn-primary:hover {
-    background: #0e7dd1;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-}
-
-.action-buttons .btn-outline-secondary {
-    background: transparent;
-    color: var(--base-text-color);
-    border: 2px solid rgba(0, 0, 0, 0.15);
-}
-
-.action-buttons .btn-outline-secondary:hover {
-    background: var(--base-color);
-    border-color: var(--third-color);
-    color: var(--third-color);
-}
-
-.darkmode .action-buttons .btn-outline-secondary {
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-/* ========== HELP SECTION ========== */
-.help-section {
-    text-align: center;
-    padding: 2rem;
-    background: var(--base-color);
-    border-radius: 12px;
-    margin-top: 2rem;
-}
-
-.help-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--base-text-color);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.help-title i {
-    color: var(--third-color);
-    font-size: 1.5rem;
-}
-
-.help-links {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
-}
-
-.help-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--third-color);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s ease;
-}
-
-.help-link:hover {
-    color: #0e7dd1;
-    text-decoration: underline;
-}
-
-.help-link i {
-    font-size: 1.125rem;
+.darkmode {
+    .action-buttons .btn-outline-secondary {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
 }
 
 /* ========== CONFETTI CANVAS ========== */
@@ -545,7 +512,55 @@ canvas {
     }
 }
 
-/* ========== RESPONSIVE - TABLET ========== */
+/* ==========================================================================
+   LG - Large Screens (>1024px)
+   Tablets landscape & Small desktops
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+    .success-title {
+        font-size: 2.5rem;
+    }
+
+    .order-details-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .order-item {
+        grid-template-columns: 100px 1fr auto auto;
+        gap: 1.25rem;
+        padding: 1.25rem;
+    }
+
+    .order-item-image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .order-item-title {
+        font-size: 1.125rem;
+    }
+
+    .order-item-quantity {
+        padding: 0.625rem 1.25rem;
+        min-width: 70px;
+    }
+
+    .quantity-value {
+        font-size: 1.375rem;
+    }
+
+    .order-item-price {
+        font-size: 1.375rem;
+        min-width: 100px;
+    }
+}
+
+/* ==========================================================================
+   MD - Medium Tablets (768px - 1023px)
+   Tablets portrait mode
+   ========================================================================== */
+
 @media (min-width: 768px) {
     .success-page-container {
         padding: 0 1.5rem;
@@ -616,10 +631,10 @@ canvas {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-    }
 
-    .action-buttons .btn {
-        width: auto;
+        .btn {
+            width: auto;
+        }
     }
 
     .help-links {
@@ -627,45 +642,5 @@ canvas {
         flex-wrap: wrap;
         gap: 1.5rem;
         justify-content: center;
-    }
-}
-
-/* ========== RESPONSIVE - DESKTOP ========== */
-@media (min-width: 1024px) {
-    .success-title {
-        font-size: 2.5rem;
-    }
-
-    .order-details-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-
-    .order-item {
-        grid-template-columns: 100px 1fr auto auto;
-        gap: 1.25rem;
-        padding: 1.25rem;
-    }
-
-    .order-item-image {
-        width: 100px;
-        height: 100px;
-    }
-
-    .order-item-title {
-        font-size: 1.125rem;
-    }
-
-    .order-item-quantity {
-        padding: 0.625rem 1.25rem;
-        min-width: 70px;
-    }
-
-    .quantity-value {
-        font-size: 1.375rem;
-    }
-
-    .order-item-price {
-        font-size: 1.375rem;
-        min-width: 100px;
     }
 }

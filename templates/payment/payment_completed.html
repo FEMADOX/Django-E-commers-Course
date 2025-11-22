@@ -151,8 +151,14 @@
         <i class="bi bi-geo-alt"></i> Shipping Address
       </h2>
       <div class="shipping-details">
-        <p class="shipping-name">{{ request.user.get_full_name|default:request.user.username }}</p>
-        <p class="shipping-address">{{ client.address|default:"Address not provided" }}</p>
+        <p class="shipping-name">
+          <i class="bi bi-person-circle"></i>
+          {{ request.user.username }}
+        </p>
+        <p class="shipping-address">
+          <i class="bi bi-house-door"></i>
+          {{ client.address|default:"Address not provided" }}
+        </p>
         <p class="shipping-contact">
           <i class="bi bi-telephone"></i> {{ client.phone|default:"N/A" }}
         </p>
@@ -164,13 +170,13 @@
 
     {# ========== ACTION BUTTONS ========== #}
     <div class="action-buttons">
-      <a href="{% url 'web:index' %}" class="btn btn-primary btn-lg">
+      <a href="{% url 'web:index' %}" class="btn btn-outline-secondary view-order-details">
         <i class="bi bi-file-text"></i> View Order Details
       </a>
-      <a href="{% url 'web:index' %}" class="btn btn-outline-secondary btn-lg">
+      <a href="{% url 'web:landing' %}" class="btn btn-outline-secondary return-home">
         <i class="bi bi-house"></i> Return to Home
       </a>
-      <a href="{% url 'web:index' %}" class="btn btn-outline-secondary btn-lg">
+      <a href="{% url 'web:index' %}" class="btn btn-primary btn-lg continue-shopping">
         <i class="bi bi-cart"></i> Continue Shopping
       </a>
     </div>
