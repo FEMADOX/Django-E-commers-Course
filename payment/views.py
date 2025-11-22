@@ -7,7 +7,7 @@ import stripe
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -16,7 +16,7 @@ from django.views import View
 from account.models import Client
 from edshop import settings
 from edshop.settings import STRIPE_API
-from order.models import Order, OrderDetail
+from order.models import Order
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -72,8 +72,8 @@ class PaymentProcessView(LoginRequiredMixin, View):
                 error_msg = "No order found in session"
                 return HttpResponseBadRequest(error_msg)
 
-            order = Order.objects.get(pk=order_id)
-            order_detail = OrderDetail.objects.filter(order=order)
+            order = Order.objects.prefetch_related("order_details").get(pk=order_id)
+            order_detail = order.order_details.all()
             if not order_detail.exists():
                 error_msg = "Order has no items"
                 return HttpResponseBadRequest(error_msg)
@@ -132,12 +132,12 @@ class PaymentCompletedView(LoginRequiredMixin, View):
         """Process completed payment and send confirmation email."""
 
         if not request.session.get("order_id"):
-            return redirect(reverse("web:index"))
+            return HttpResponseNotFound()
 
         try:
             client = Client.objects.get(user=request.user)
             order_id = request.session.pop("order_id", "")
-            order = Order.objects.get(pk=order_id)
+            order = Order.objects.prefetch_related("order_details").get(pk=order_id)
             order_cart: Cart | None = request.session.get("cart")
 
             # Changing the status of the order
@@ -145,9 +145,9 @@ class PaymentCompletedView(LoginRequiredMixin, View):
             order.save()
             order_cart.clear() if order_cart else None
 
+            order_details = order.order_details.all()
             order_details_products = [
-                order_detail.product.title
-                for order_detail in order.order_details.all()  # type: ignore
+                order_detail.product.title for order_detail in order.order_details.all()
             ]
 
             # Sending Mail
@@ -157,7 +157,11 @@ class PaymentCompletedView(LoginRequiredMixin, View):
                 order_details_products=order_details_products,
             )
 
-            return render(request, "payment/payment_completed.html", {"order": order})
+            return render(
+                request,
+                "payment/payment_completed.html",
+                {"order": order, "order_details": order_details, "client": client},
+            )
 
         except (Client.DoesNotExist, Order.DoesNotExist):
             # Clean up session and redirect to home
@@ -214,6 +218,10 @@ class PaymentCanceledView(LoginRequiredMixin, View):
 
     def get(self, request: HttpRequest) -> HttpResponse:
         """Redirect to order confirmation page on payment cancellation."""
+        if not request.session.get("order_id"):
+            return HttpResponseNotFound()
+
+        request.session.pop("order_id", None)
 
         messages.warning(request, "Payment was canceled.")
 

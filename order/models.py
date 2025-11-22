@@ -1,4 +1,5 @@
 from collections.abc import Iterable
+from typing import TYPE_CHECKING
 
 from django.db import models
 from django.db.models.base import ModelBase
@@ -33,6 +34,9 @@ class Order(models.Model):
 
     def __str__(self) -> str:
         return f"{self.client} - {self.order_num} - {self.status}"
+
+    if TYPE_CHECKING:
+        order_details: models.QuerySet["OrderDetail"]
 
 
 class OrderDetail(models.Model):

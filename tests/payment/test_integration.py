@@ -102,10 +102,11 @@ class TestPaymentWorkflowIntegration:
         order.refresh_from_db()
         assert order.status == "0"  # Still Pending
 
-        # Step 4: Verify cart is intact in session
+        # Step 4: Verify cart is intact but order_id was removed
         session = authenticated_client_with_cart.session
         assert session.get("cart") is not None
-        assert session["order_id"] == order.pk
+        # order_id is popped by PaymentCanceledView
+        assert "order_id" not in session
 
     @patch("stripe.checkout.Session.create")
     def test_stripe_integration_with_line_items(

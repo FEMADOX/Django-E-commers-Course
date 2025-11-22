@@ -18,7 +18,12 @@ from django.urls import reverse
 
 from account.models import Client as AccountClient
 from order.models import Order, OrderDetail
-from tests.common.status import HTTP_200_OK, HTTP_302_REDIRECT, HTTP_400_BAD_REQUEST
+from tests.common.status import (
+    HTTP_200_OK,
+    HTTP_302_REDIRECT,
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+)
 from web.models import Category, Product
 
 if TYPE_CHECKING:
@@ -194,15 +199,15 @@ class TestPaymentCanceledViewEdgeCases:
         self,
         authenticated_client: DjangoTestClient,
     ) -> None:
-        """Test GET request multiple times to ensure idempotency."""
+        """Test GET request multiple times returns 404 without order_id."""
         url = reverse("payment:payment_canceled")
 
         response1 = authenticated_client.get(url)
         response2 = authenticated_client.get(url)
 
-        # Both requests should succeed
-        assert response1.status_code in {HTTP_200_OK, HTTP_302_REDIRECT}
-        assert response2.status_code in {HTTP_200_OK, HTTP_302_REDIRECT}
+        # Both requests should return 404 since no order_id in session
+        assert response1.status_code == HTTP_404_NOT_FOUND
+        assert response2.status_code == HTTP_404_NOT_FOUND
 
 
 @pytest.mark.django_db

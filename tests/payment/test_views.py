@@ -10,7 +10,12 @@ from django.urls import reverse
 from account.models import Client as AccountClient
 from edshop.settings import EMAIL_BACKEND, EMAIL_HOST_USER
 from order.models import Order, OrderDetail
-from tests.common.status import HTTP_200_OK, HTTP_302_REDIRECT, HTTP_400_BAD_REQUEST
+from tests.common.status import (
+    HTTP_200_OK,
+    HTTP_302_REDIRECT,
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+)
 
 
 @pytest.mark.django_db
@@ -40,22 +45,54 @@ class TestPaymentViewsAuthentication:
             "payment:payment_canceled",
         ],
     )
-    def test_all_views_accessible_when_authenticated(
+    def test_all_views_not_accessible_when_authenticated_with_no_order_id(
         self,
         url_name: str,
         authenticated_client: DjangoTestClient,
     ) -> None:
-        """Test that all payment views are accessible when authenticated."""
+        """Test that all payment views are accessible when authenticated.
+
+        Tests views without order ID in session.
+        """
+
+        response = authenticated_client.get(reverse(url_name))
+        # Views should be accessible (may redirect based on business logic)
+        assert response.status_code == HTTP_404_NOT_FOUND
+
+    @pytest.mark.parametrize(
+        "url_name",
+        [
+            "payment:payment_completed",
+            "payment:payment_canceled",
+        ],
+    )
+    def test_all_views_accessible_when_authenticated_with_order_id(
+        self,
+        url_name: str,
+        authenticated_client: DjangoTestClient,
+    ) -> None:
+        """Test that all payment views are accessible when authenticated.
+
+        Tests views with order ID in session.
+        """
+
+        # Add dummy order_id to session
+        session = authenticated_client.session
+        session["order_id"] = 1
+        session.save()
 
         response = authenticated_client.get(reverse(url_name))
         # Views should be accessible (may redirect based on business logic)
         assert response.status_code in {HTTP_200_OK, HTTP_302_REDIRECT}
 
-        if response.status_code == HTTP_302_REDIRECT:
-            if url_name == "payment:payment_completed":
-                assert response["Location"] == reverse("web:index")
-            elif url_name == "payment:payment_canceled":
-                assert response["Location"] == reverse("order:create_order")
+        if response.status_code == HTTP_200_OK:
+            assert response.status_code == HTTP_200_OK
+
+        if url_name == "payment:payment_completed":
+            assert response["Location"] == reverse("web:index")
+        elif url_name == "payment:payment_canceled":
+            assert authenticated_client.session.get("order_id") is None
+            assert response["Location"] == reverse("order:create_order")
 
 
 @pytest.mark.django_db
@@ -142,8 +179,8 @@ class TestPaymentCompletedView:
         """Test GET request without order in session."""
 
         response = authenticated_client.get(reverse("payment:payment_completed"))
-        # Should redirect to index when no order
-        assert response.status_code in {HTTP_200_OK, HTTP_302_REDIRECT}
+        # Should return 404 when no order
+        assert response.status_code == HTTP_404_NOT_FOUND
 
     @override_settings(
         EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
@@ -254,13 +291,8 @@ class TestPaymentCanceledView:
         self,
         authenticated_client: DjangoTestClient,
     ) -> None:
-        """Test that cancellation page is displayed."""
+        """Test that cancellation page returns 404 without order_id."""
 
         response = authenticated_client.get(reverse("payment:payment_canceled"))
-        # Accept either 200 OK or redirect behavior
-        assert response.status_code in {HTTP_200_OK, HTTP_302_REDIRECT}
-
-        # Only check templates if response is 200 OK
-        if response.status_code == HTTP_200_OK:
-            template_names = [t.name for t in response.templates]
-            assert "payment/payment_canceled.html" in template_names
+        # Should return 404 when no order_id in session
+        assert response.status_code == HTTP_404_NOT_FOUND
