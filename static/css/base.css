@@ -1302,8 +1302,8 @@ div.email-reset>form.email-validation>#resend-button {
 
     &:active,
     &:hover {
-       transform: translateY(-2px);
-       box-shadow: var(--shadow-lg);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
     }
 }
 
@@ -1508,21 +1508,226 @@ i.icon.ion-android-cart:hover {
     color: var(--third-color)
 }
 
-.pending-data .restore,
-.pending-data .order-summary {
-    padding-bottom: 15px;
+/* Pending Orders Section */
+.pending-orders-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--secondary-color);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
 }
 
-div.pending-data-container {
-    padding: 30px 50px;
+.pending-orders-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--base-text-color);
 }
 
-h5.pending-data-h5 {
-    margin-bottom: 0;
+.pending-orders-title i {
+    color: var(--third-color);
 }
 
-div.pending-data-details {
-    padding-left: 30px;
+.pending-orders-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+.pending-order-card {
+    background: var(--base-color);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.pending-card-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(90, 90, 90, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.order-id {
+    font-weight: 700;
+    font-size: 1.5rem !important;
+    color: var(--base-text-color);
+    transition: color 0.2s;
+
+    &:active,
+    &:hover {
+        cursor: pointer;
+        color: var(--third-color);
+    }
+}
+
+.order-date {
+    font-size: 1.1rem;
+    color: var(--secondary-text-color);
+}
+
+.order-status-badge {
+    background: #fff3cd;
+    color: #856404;
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.darkmode .order-status-badge {
+    background: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+}
+
+.pending-card-body {
+    padding: 1.25rem;
+    flex: 1;
+}
+
+.order-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.order-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.05);
+}
+
+.order-item-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.item-name {
+    font-weight: 500;
+    color: var(--base-text-color);
+    font-size: 1.3rem;
+    transition: color 0.2s;
+
+    &:active,
+    &:hover {
+        cursor: pointer;
+        color: var(--third-color);
+    }
+}
+
+.item-meta {
+    font-size: 1.1rem;
+    color: var(--secondary-text-color);
+}
+
+.item-total {
+    font-weight: 600;
+    color: var(--base-text-color);
+    font-size: 1.5rem;
+}
+
+.pending-card-footer {
+    padding: 1.25rem;
+    border-top: 1px solid rgba(90, 90, 90, 0.1);
+}
+
+.order-coupon,
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    font-weight: 700;
+    color: var(--base-text-color);
+}
+
+.total-value {
+    color: var(--third-color);
+    font-size: 1.8rem;
+}
+
+.order-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.restore-form {
+    flex: 1;
+}
+
+.btn-restore {
+    width: 100%;
+    padding: 0.6rem;
+    background: var(--third-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease-in, filter 0.3s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    &:hover,
+    &:active {
+        filter: brightness(115%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(18, 145, 238, 0.2);
+    }
+}
+
+.btn-delete-order {
+    width: 100%;
+    height: 100%;
+    padding: 0.6rem;
+    background: transparent;
+    color: red;
+    border: 1px solid red;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    &:hover,
+    &:active {
+        background-color: red;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
+    }
 }
 
 .card-header {
@@ -1850,6 +2055,7 @@ input.logout-account:active {
     right: 5px;
 }
 
+.cart-coupon-ttl,
 .cart-totals-ttl {
     font-weight: bold;
     color: var(--base-text-color);
@@ -1858,6 +2064,11 @@ input.logout-account:active {
     padding: 0 5px 0;
 }
 
+.cart-coupon-val {
+    background-color: var(--secondary-color);
+}
+
+.cart-coupon-val,
 .cart-totals-val {
     text-align: end;
     color: var(--base-text-color);
@@ -1866,15 +2077,19 @@ input.logout-account:active {
     padding: 0 0 0 5px;
 }
 
-.cart-actions .order-total::before {
-    content: '';
-    position: absolute;
-    width: 80%;
-    height: 1px;
-    background-color: var(--secondary-text-color);
-    top: 50%;
-    left: 10%;
-    z-index: 0;
+.cart-actions {
+
+    .order-coupon::before,
+    .order-total::before {
+        content: '';
+        position: absolute;
+        width: 80%;
+        height: 1px;
+        background-color: var(--secondary-text-color);
+        top: 50%;
+        left: 10%;
+        z-index: 0;
+    }
 }
 
 form.cart-actions input.checkout-button.clear-cart-btn {

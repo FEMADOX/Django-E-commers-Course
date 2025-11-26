@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/order_summary.css' %}">
+{% endblock head %}
+
+{% block content %}
+  <div class="order-summary-page">
+    <div class="order-summary-card">
+      <div class="summary-header">
+        <div class="header-content">
+          <h1 class="summary-title">
+            <span class="summary-id">{{ order.order_num }}</span>
+            <span class="summary-date">{{ order.registration_date|date:"M d, Y, g:i a" }}</span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="summary-body">
+        <div class="summary-items-list">
+          {% for detail in order.order_details.all %}
+            <div class="summary-item">
+              <div class="item-image">
+                <a href="{% url 'web:product_detail' detail.product.id %}">
+                  <img src="{{ detail.product.image.url }}" alt="{{ detail.product.title }}" />
+                </a>
+              </div>
+              <div class="item-details">
+                <div class="item-main-info">
+                  <span class="item-category">{{ detail.product.category }}</span>
+                  <a href="{% url 'web:product_detail' detail.product.id %}" class="item-title">
+                    {{ detail.product.title }}
+                  </a>
+                  <span class="item-brand">{{ detail.product.brand }}</span>
+                </div>
+                <div class="item-pricing">
+                  <div class="price-row">
+                    <span class="price-label">Price</span>
+                    <span class="price-value">$ {{ detail.product.price }}</span>
+                  </div>
+                  <div class="total-row">
+                    <span class="total-label">Total</span>
+                    <span class="total-value">$ {{ detail.subtotal }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="summary-footer">
+        <div class="summary-total-section">
+          <span class="grand-total-label">Total Amount</span>
+          <span class="grand-total-value">$ {{ order.total_price }}</span>
+        </div>
+
+        <form action="{% url 'payment:payment_process' %}" method="post" class="payment-form">
+          {% csrf_token %}
+          <button type="submit" class="btn-pay-now">
+            Pay Now
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

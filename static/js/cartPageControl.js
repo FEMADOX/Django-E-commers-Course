@@ -65,7 +65,11 @@ const updateCartTotals = (serverData) => {
 
 // Update cart data both in UI
 const updateCartData = async (productOrderContainer, quantity) => {
-    const cartTotalElement = document.querySelector('p.cart-totals-val')
+    const cartTotalElement = document.querySelector('.cart-totals-val')
+    if (!cartTotalElement) {
+        console.error('Cart total element not found in the DOM.')
+        return
+    }
 
     const productId = productOrderContainer.dataset.productId
     if (!productId) {

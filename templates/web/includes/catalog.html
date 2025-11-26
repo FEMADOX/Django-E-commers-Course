@@ -1,7 +1,7 @@
 {% load static %}
 <script src="{% static 'js/catalogIntersectionObserver.js' %}" defer></script>
 
-<div class="row prod-items prod-items-2" id="catalog-section">
+<div class="row prod-items prod-items-2 mb-4" id="catalog-section">
   {% for product in products %}
     <form class="cart-actions" action="{% url 'cart:add_product_cart' product.id %}" method="post">
       {% csrf_token %}

@@ -82,9 +82,13 @@
         <input type="text" id="coupon-code-input" placeholder="Coupon code" />
         <input type="submit" class="button coupon-apply-btn" value="Apply" />
       </div>
+      <div class="order-coupon">
+        <p class="cart-totals-ttl cart-coupon-ttl">Coupon</p>
+        <p class="text-success fw-bold z-1 ps-1 cart-coupon-val">- $ 0.00</p>
+      </div>
       <div class="order-total">
         <p class="cart-totals-ttl">Total</p>
-        <p class="cart-totals-val">${{ request.session.cart_total_price|floatformat:2 }}</p>
+        <span class="cart-totals-val">$ {{ request.session.cart_total_price|floatformat:2 }}</span>
       </div>
       <div class="cart-collaterals">
         <form class="cart-actions cart" action="{% url 'cart:clear_cart' %}" method="post">

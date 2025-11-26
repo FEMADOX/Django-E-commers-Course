@@ -1,13 +1,14 @@
 from __future__ import annotations
 
-import json
 from decimal import Decimal
 from typing import TYPE_CHECKING, Any, cast
 
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.views import View
 from django.views.generic import DetailView, FormView, TemplateView
 
 from account.forms import ClientForm
@@ -15,7 +16,7 @@ from account.models import Client
 from cart.cart import Cart
 from common.views.client import get_or_create_client_form
 from order.models import Order, OrderDetail
-from tests.common.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from tests.common.status import HTTP_200_OK
 from web.models import Product
 
 if TYPE_CHECKING:
@@ -180,13 +181,45 @@ class ConfirmOrderView(LoginRequiredMixin, FormView):
         return new_order
 
 
+class DeletePendingOrderView(LoginRequiredMixin, View):
+    """
+    This view is accessed from cart.html to clean up pending orders
+    before creating a new one.
+    """
+
+    http_method_names = ["post"]
+    login_url = "/account/login/"
+
+    def post(
+        self, request: HttpRequest, order_id: int, *args: tuple, **kwargs: dict
+    ) -> HttpResponseRedirect:
+        """Delete all pending orders for the current user."""
+
+        user = cast("User", request.user)
+
+        try:
+            pending_order = Order.objects.get(
+                pk=order_id, client__user=user, status="0"
+            )
+
+            pending_order.order_details.delete()
+            pending_order.delete()
+
+            messages.success(request, "Pending order has been deleted successfully.")
+            return redirect("cart:cart")
+
+        except Order.DoesNotExist:
+            messages.error(request, "No pending order found to delete.")
+            return redirect("cart:cart")
+
+
 class OrderSummaryView(LoginRequiredMixin, DetailView):
     """
     Displays order summary and stores order ID in session.
     """
 
     model = Order
-    template_name = "order/shipping.html"
+    template_name = "order/order_summary.html"
     context_object_name = "order"
     pk_url_kwarg = "order_id"
     login_url = "/account/login/"

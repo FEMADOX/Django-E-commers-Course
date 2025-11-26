@@ -1,42 +1,61 @@
-<!-- TODO(FENYXZ) Implement a good UI for Mobiles -->
-<div class="page-styling">
-  <div class="woocommerce prod-litems section-list">
-    <article class="prod-li sectls" id="pending-orders">
-      <h2>Pending Orders:</h2>
-      {% for pending_order in pending_orders %}
-        <div class="pending-data-container">
-          <h5>Order ID: {{ pending_order.id }}</h5>
-          <h5>Order Date: {{ pending_order.registration_date }}</h5>
-          <h5 class="pending-data-h5">Details:</h5>
-          <div class="pending-data-details">
+<div class="pending-orders-section">
+  <h3 class="pending-orders-title">
+    <i class="bi bi-clock-history"></i> Pending Orders
+  </h3>
+
+  <div class="pending-orders-grid">
+    {% for pending_order in pending_orders %}
+      <div class="pending-order-card">
+        <div class="pending-card-header">
+          <div class="order-meta">
+            <!-- TODO(FENYXZ): Change order ID with order number -->
+            <a href="{% url 'order:order_summary' pending_order.id %}" class="order-id">Order #{{ pending_order.id }}</a>
+            <span class="order-date">{{ pending_order.registration_date|date:"M d, Y" }}</span>
+          </div>
+          <div class="order-status-badge">Pending</div>
+        </div>
+
+        <div class="pending-card-body">
+          <div class="order-items-list">
             {% for order_detail in pending_order.order_details.all %}
-              <ul>
-                <li>Product: {{ order_detail.product.title }}</li>
-                <li>Price: $ {{ order_detail.product.price }}</li>
-                <li>Quantity: {{ order_detail.quantity }}</li>
-                <li>Subtotal: $ {{ order_detail.subtotal }}</li>
-              </ul>
+              <div class="order-item-row">
+                <div class="item-info">
+                  <a class="item-name" href="{% url 'web:product_detail' order_detail.product.id %}">
+                    {{ order_detail.product.title }}
+                  </a>
+                  <span class="item-meta">{{ order_detail.quantity }} x ${{ order_detail.product.price }}</span>
+                </div>
+                <div class="item-total">${{ order_detail.subtotal }}</div>
+              </div>
             {% endfor %}
           </div>
-          <h5>Total Amount: $ {{ pending_order.total_price }}</h5>
-          <div class="pending-data restore">
+        </div>
+
+        <div class="pending-card-footer">
+          <div class="order-total">
+            <span class="total-label">Total Amount</span>
+            <span class="total-value">$ {{ pending_order.total_price }}</span>
+          </div>
+
+          <div class="order-actions">
+            <form action="{% url 'order:delete_pending_order' pending_order.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn-delete-order" title="Delete Pending Order">
+                Delete Order
+              </button>
+            </form>
+
             <form action="{% url 'cart:restore_order_pending_cart' pending_order.id %}" method="post">
               {% csrf_token %}
               <input type="hidden" name="location-url" value="{{ request.get_full_path }}" />
-              <button type="submit" value="Add all this order to the CART again">
-                Add all this order to the CART again
+              <button type="submit" class="btn-restore" title="Restore to Cart">
+                <i class="bi bi-cart-plus"></i>
+                Restore
               </button>
             </form>
           </div>
-          <div class="pending-data order-summary">
-            <form action="{% url 'order:order_summary' pending_order.id %}" method="post">
-              {% csrf_token %}
-              <input type="hidden" name="location-url" value="{{ request.get_full_path }}" />
-              <button type="submit" value="Add all the order to the SUMMARY"></button>
-            </form>
-          </div>
         </div>
-      {% endfor %}
-    </article>
+      </div>
+    {% endfor %}
   </div>
 </div>

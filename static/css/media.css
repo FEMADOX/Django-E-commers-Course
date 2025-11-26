@@ -2022,13 +2022,17 @@ XL (Extra Large):  ≥ 1200px    Standard desktops & up
         float: none;
     }
 
-    .cart-actions .order-total {
-        width: 100%;
-        float: none;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 15px;
-        padding: 0 10px;
+    .cart-actions {
+
+        .order-coupon,
+        .order-total {
+            width: 100%;
+            float: none;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 0 10px;
+        }
     }
 
     .cart-actions .cart-subtotal:after {
