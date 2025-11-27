@@ -202,7 +202,7 @@ class DeletePendingOrderView(LoginRequiredMixin, View):
                 pk=order_id, client__user=user, status="0"
             )
 
-            pending_order.order_details.delete()
+            pending_order.order_details.all().delete()
             pending_order.delete()
 
             messages.success(request, "Pending order has been deleted successfully.")

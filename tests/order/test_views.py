@@ -5,6 +5,7 @@ This module contains unit tests for individual order view components,
 focusing on isolated functionality testing with mocked dependencies.
 """
 
+from decimal import Decimal
 from unittest.mock import Mock, patch
 
 import pytest
@@ -521,3 +522,140 @@ class TestOrderSummaryView:
             reverse("order:order_summary", args=[99999]),
         )
         assert response.status_code == HTTP_404_NOT_FOUND
+
+
+@pytest.mark.unit
+@pytest.mark.django_db
+class TestDeletePendingOrderView:
+    """Unit tests for DeletePendingOrderView."""
+
+    def test_requires_authentication(self, order: Order) -> None:
+        """Test that unauthenticated users are redirected to login."""
+        client = DjangoTestClient()
+        response = client.post(reverse("order:delete_pending_order", args=[order.pk]))
+
+        assert response.status_code == HTTP_302_REDIRECT
+        assert "/account/login/" in response["Location"]
+
+    def test_delete_pending_order_success(
+        self,
+        authenticated_client: DjangoTestClient,
+        order: Order,
+        products: tuple[Product, Product],
+    ) -> None:
+        """Test successful deletion of pending order with order details."""
+        product_1, product_2 = products
+
+        # Create order details
+        OrderDetail.objects.create(
+            order=order,
+            product=product_1,
+            quantity=2,
+            subtotal=Decimal("20.00"),
+        )
+        OrderDetail.objects.create(
+            order=order,
+            product=product_2,
+            quantity=1,
+            subtotal=Decimal("20.00"),
+        )
+
+        # Verify order exists before deletion
+        expected_order_details_count = 2
+        assert Order.objects.filter(pk=order.pk).exists()
+        assert (
+            OrderDetail.objects.filter(order=order).count()
+            == expected_order_details_count
+        )
+
+        response = authenticated_client.post(
+            reverse("order:delete_pending_order", args=[order.pk]),
+            follow=True,
+        )
+
+        # Verify redirect and deletion
+        assert response.status_code == HTTP_200_OK
+        assert not Order.objects.filter(pk=order.pk).exists()
+        assert OrderDetail.objects.filter(order=order).count() == 0
+
+        # Verify success message
+        messages = list(response.context["messages"])
+        assert any(
+            "Pending order has been deleted successfully." in str(msg)
+            for msg in messages
+        )
+
+    def test_delete_nonexistent_order(
+        self,
+        authenticated_client: DjangoTestClient,
+        account_client: AccountClient,
+    ) -> None:
+        """Test deleting nonexistent order shows error message."""
+        response = authenticated_client.post(
+            reverse("order:delete_pending_order", args=[99999]),
+            follow=True,
+        )
+
+        assert response.status_code == HTTP_200_OK
+
+        # Check for error message
+        messages = list(response.context["messages"])
+        assert any("No pending order found to delete." in str(msg) for msg in messages)
+
+    def test_delete_non_pending_order(
+        self,
+        authenticated_client: DjangoTestClient,
+        account_client: AccountClient,
+        order: Order,
+    ) -> None:
+        """Test that non-pending orders cannot be deleted."""
+        # Change order status to PAID
+        order.status = "1"
+        order.save()
+
+        response = authenticated_client.post(
+            reverse("order:delete_pending_order", args=[order.pk]),
+            follow=True,
+        )
+
+        # Verify order still exists (not deleted)
+        assert Order.objects.filter(pk=order.pk).exists()
+
+        # Check for error message
+        messages = list(response.context["messages"])
+        assert any("No pending order found to delete." in str(msg) for msg in messages)
+
+    def test_delete_order_from_different_user(
+        self,
+        authenticated_client: DjangoTestClient,
+    ) -> None:
+        """Test that users cannot delete orders from other users."""
+        # Create a different user's order
+        other_user = User.objects.create_user(
+            username="otheruser",
+            email="other@example.com",
+            password="otherpass123_",
+        )
+        other_client = AccountClient.objects.create(
+            user=other_user,
+            dni=87654321,
+            phone="+19122532339",
+            address="789 Other Street",
+        )
+        other_order = Order.objects.create(
+            client=other_client,
+            total_price=Decimal("100.00"),
+            status="0",
+        )
+
+        response = authenticated_client.post(
+            reverse("order:delete_pending_order", args=[other_order.pk]),
+            follow=True,
+        )
+
+        # Verify order still exists (not deleted)
+        assert Order.objects.filter(pk=other_order.pk).exists()
+
+        # Check for error message
+        messages = list(response.context["messages"])
+        assert any("No pending order found to delete." in str(msg) for msg in messages)
