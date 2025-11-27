@@ -8,7 +8,6 @@
       <div class="pending-order-card">
         <div class="pending-card-header">
           <div class="order-meta">
-            <!-- TODO(FENYXZ): Change order ID with order number -->
             <a href="{% url 'order:order_summary' pending_order.id %}" class="order-id">Order #{{ pending_order.id }}</a>
             <span class="order-date">{{ pending_order.registration_date|date:"M d, Y" }}</span>
           </div>
