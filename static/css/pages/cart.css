@@ -456,6 +456,42 @@ form.cart-actions input.checkout-button {
             color: var(--base-text-color);
         }
     }
+
+    div.product {
+        margin-bottom: 49px;
+
+        &.prod {
+            .prod-cont .stock {
+                color: var(--third-color);
+                margin: -16px 0 18px;
+                font-size: 15px;
+            }
+
+            form.cart .group_table td {
+                vertical-align: middle;
+                border: 0;
+                padding-bottom: 13px;
+            }
+
+            .prod-add {
+                p.stock {
+                    font-size: 15px;
+                    text-transform: none;
+                    font-weight: normal;
+                    margin: 0;
+                }
+
+                form.cart .group_table .button {
+                    background-color: transparent;
+                    color: var(--third-color);
+                    padding: 0;
+                    display: inline-block;
+                    border-radius: 0;
+                    margin: 0;
+                }
+            }
+        }
+    }
 }
 
 /* ==========================================================================

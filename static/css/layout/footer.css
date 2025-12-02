@@ -6,7 +6,7 @@
 .site-footer {
     display: flex;
     flex-direction: column;
-    padding: 15px 3% 10px;
+    padding: 15px 30px;
     background-color: var(--secondary-color);
     align-items: center;
 
@@ -271,7 +271,6 @@
     color: var(--secondary-text-color);
     font-size: 1.5rem;
     margin-top: 1rem;
-    border-top: 1px solid var(--base-color);
     padding-top: 1rem;
     width: 100%;
 }

@@ -279,12 +279,6 @@ TABLE OF CONTENTS:
     color: var(--text-muted);
     font-weight: 400;
 
-    &:after {
-        content: '';
-        display: block;
-        clear: both;
-    }
-
     a {
         color: var(--third-color);
         text-decoration: none;
