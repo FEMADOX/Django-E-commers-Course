@@ -1,0 +1,318 @@
+/* ==========================================================================
+   Pending Orders Page Styles
+   Extracted from base.css - Pending Orders section
+   ========================================================================== */
+
+/* ==========================================================================
+   Section Container
+   ========================================================================== */
+
+.pending-orders-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--secondary-color);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+/* ==========================================================================
+   Section Title
+   ========================================================================== */
+
+.pending-orders-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--base-text-color);
+}
+
+.pending-orders-title i {
+    color: var(--third-color);
+}
+
+/* ==========================================================================
+   Grid Layout
+   ========================================================================== */
+
+.pending-orders-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+/* ==========================================================================
+   Order Card
+   ========================================================================== */
+
+.pending-order-card {
+    background: var(--base-color);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   Card Header
+   ========================================================================== */
+
+.pending-card-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(90, 90, 90, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.order-id {
+    font-weight: 700;
+    font-size: 1.5rem !important;
+    color: var(--base-text-color);
+    transition: color 0.2s;
+}
+
+.order-id:active,
+.order-id:hover {
+    cursor: pointer;
+    color: var(--third-color);
+}
+
+.order-date {
+    font-size: 1.1rem;
+    color: var(--secondary-text-color);
+}
+
+/* ==========================================================================
+   Status Badge
+   ========================================================================== */
+
+.order-status-badge {
+    background: #fff3cd;
+    color: #856404;
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.darkmode .order-status-badge {
+    background: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+}
+
+/* ==========================================================================
+   Card Body
+   ========================================================================== */
+
+.pending-card-body {
+    padding: 1.25rem;
+    flex: 1;
+}
+
+/* ==========================================================================
+   Order Items List
+   ========================================================================== */
+
+.order-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.order-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.05);
+}
+
+.order-item-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.item-name {
+    font-weight: 500;
+    color: var(--base-text-color);
+    font-size: 1.3rem;
+    transition: color 0.2s;
+}
+
+.item-name:active,
+.item-name:hover {
+    cursor: pointer;
+    color: var(--third-color);
+}
+
+.item-meta {
+    font-size: 1.1rem;
+    color: var(--secondary-text-color);
+}
+
+.item-total {
+    font-weight: 600;
+    color: var(--base-text-color);
+    font-size: 1.5rem;
+}
+
+/* ==========================================================================
+   Card Footer
+   ========================================================================== */
+
+.pending-card-footer {
+    padding: 1.25rem;
+    border-top: 1px solid rgba(90, 90, 90, 0.1);
+}
+
+.order-coupon,
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    font-weight: 700;
+    color: var(--base-text-color);
+}
+
+.total-value {
+    color: var(--third-color);
+    font-size: 1.8rem;
+}
+
+/* ==========================================================================
+   Order Actions
+   ========================================================================== */
+
+.order-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.restore-form {
+    flex: 1;
+}
+
+/* ==========================================================================
+   Action Buttons
+   ========================================================================== */
+
+.btn-restore {
+    width: 100%;
+    padding: 0.6rem;
+    background: var(--third-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease-in, filter 0.3s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-restore:hover,
+.btn-restore:active {
+    filter: brightness(115%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(18, 145, 238, 0.2);
+}
+
+.btn-delete-order {
+    width: 100%;
+    height: 100%;
+    padding: 0.6rem;
+    background: transparent;
+    color: red;
+    border: 1px solid red;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-delete-order:hover,
+.btn-delete-order:active {
+    background-color: red;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
+}
+
+/* ==========================================================================
+   Article Container
+   ========================================================================== */
+
+article#pending-orders {
+    border-radius: 0 0 20px 20px;
+}
+
+article#pending-orders h2 {
+    padding: 30px 30px 10px;
+}
+
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .pending-orders-section {
+        padding: 1rem;
+    }
+
+    .pending-orders-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .order-actions {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pending-orders-title {
+        font-size: 1.25rem;
+    }
+
+    .order-id {
+        font-size: 1.25rem !important;
+    }
+
+    .item-total {
+        font-size: 1.25rem;
+    }
+
+    .total-value {
+        font-size: 1.5rem;
+    }
+}

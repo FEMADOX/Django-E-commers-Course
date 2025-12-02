@@ -1,0 +1,179 @@
+/* ==========================================================================
+   Footer Styles
+   Extracted from style.css - Footer section
+   ========================================================================== */
+
+.site-footer {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 5% 10px;
+    background-color: var(--secondary-color);
+    align-items: center;
+}
+
+.site-footer .widget {
+    margin-bottom: 20px;
+}
+
+.site-footer .widget .widget-title {
+    color: #9292b4;
+    font-size: 18px;
+    margin: 0 0 25px;
+}
+
+.site-footer .widget li,
+.site-footer .widget p {
+    line-height: 170%;
+}
+
+.site-footer .widget .button {
+    background-color: var(--third-color);
+    color: #fff;
+    font-size: 15px;
+    border-radius: 60px;
+    padding: 11px 70px 12px;
+    border: none;
+    font-weight: 600;
+}
+
+.site-footer .widget .button:hover {
+    background-color: #7dcd8c;
+    color: #fff;
+}
+
+.site-footer .widget a {
+    text-decoration: none;
+}
+
+.site-footer .widget a:hover {
+    text-decoration: none;
+}
+
+.site-footer .widget .menu {
+    list-style: none;
+    margin: 0 0 10px;
+}
+
+.site-footer .widget .menu li {
+    list-style: none;
+    margin: 0 0 13px;
+}
+
+.site-footer .widget .menu li a {
+    color: #283346;
+    border: none;
+}
+
+.site-footer .widget .menu li a:hover {
+    color: var(--third-color);
+}
+
+.site-footer .f-logo-wrap {
+    margin-bottom: 20px;
+}
+
+.site-footer .f-logo {
+    border: none;
+    display: block;
+}
+
+.site-footer .f-logo img {
+    max-width: 10%;
+    max-height: 10%;
+    margin-bottom: 1rem;
+    filter: var(--image-invert-color);
+}
+
+/* Footer Container - from base.css */
+.footer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-link-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-link-list a {
+    color: var(--secondary-text-color);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-link-list a:hover {
+    color: var(--third-color);
+}
+
+.social-links-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--base-color);
+    color: var(--base-text-color);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.social-links a:hover {
+    background: var(--third-color);
+    color: white;
+}
+
+.social-links i {
+    font-size: 1.2rem;
+}
+
+.copyright {
+    text-align: center;
+    color: var(--secondary-text-color);
+    font-size: 0.875rem;
+    margin-top: 1rem;
+}
+
+/* ==========================================================================
+   Footer Responsive Styles
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .site-footer {
+        padding: 15px 3% 10px;
+    }
+
+    .site-footer .f-logo img {
+        max-width: 20%;
+    }
+
+    .footer-link-list {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+}

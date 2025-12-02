@@ -1,0 +1,78 @@
+/* ==========================================================================
+   Breadcrumbs Component
+   Extracted from style.css
+   ========================================================================== */
+
+.site-content .b-crumbs {
+    position: relative;
+    padding: 0 0 0 65px;
+    margin: 0 0 24px;
+}
+
+.b-crumbs li {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 13px;
+    text-transform: uppercase;
+    margin: 0 8px 10px 0;
+    font-weight: 600;
+    padding: 0 16px 0 0;
+    position: relative;
+    color: #9292b4;
+}
+
+.b-crumbs li:after {
+    position: absolute;
+    content: '/';
+    font-size: 13px;
+    color: #9292b4;
+    top: 0;
+    right: 0;
+    display: block;
+    font-weight: 600;
+}
+
+.b-crumbs li:last-child:after {
+    display: none;
+}
+
+.b-crumbs li:last-child {
+    margin-right: 0;
+    padding-right: 0;
+}
+
+.b-crumbs li a {
+    border-bottom: 1px solid transparent;
+    color: var(--base-text-color);
+    transition: all 0.2s;
+}
+
+.b-crumbs li a:hover {
+    border-bottom: 1px solid var(--secondary-text-color);
+    color: var(--third-color);
+}
+
+.b-crumbs li span {
+    color: #9292b4;
+}
+
+.single-product .site-content .b-crumbs {
+    padding: 7px 0 0;
+}
+
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .site-content .b-crumbs {
+        padding: 0;
+        margin: 0 0 15px;
+    }
+
+    .b-crumbs li {
+        font-size: 12px;
+        margin: 0 5px 8px 0;
+        padding: 0 10px 0 0;
+    }
+}

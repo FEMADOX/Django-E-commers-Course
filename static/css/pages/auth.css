@@ -1,0 +1,302 @@
+/* ==========================================================================
+   Auth Page Styles
+   Extracted from style.css and base.css - Authentication section
+   ========================================================================== */
+
+/* ==========================================================================
+   Auth Layout
+   ========================================================================== */
+
+.auth-wrap .auth-col {
+    width: 46%;
+    margin: 0 5px;
+    float: left;
+}
+
+.auth-wrap .auth-col:nth-child(2n) {
+    margin-right: 0;
+}
+
+/* ==========================================================================
+   Auth Header
+   ========================================================================== */
+
+.auth-header {
+    text-align: center;
+}
+
+.auth-header h2 {
+    margin-bottom: 1rem;
+}
+
+.auth-header p {
+    color: #718096;
+    font-size: 1.3rem;
+}
+
+/* ==========================================================================
+   Checkbox Styles
+   ========================================================================== */
+
+.auth-wrap .auth-submit input[type=checkbox] {
+    display: none;
+}
+
+.auth-wrap .auth-submit input[type=checkbox]+label {
+    padding: 4px 0 0 25px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.auth-wrap .auth-submit input[type=checkbox]+label:hover {
+    color: var(--third-color);
+}
+
+.auth-wrap .auth-submit input[type=checkbox]+label:after {
+    content: "\f00c";
+    width: 14px;
+    height: 14px;
+    display: block;
+    position: absolute;
+    top: 50%;
+    margin: -7px 0 0;
+    left: 0;
+    border: 2px solid var(--third-color);
+    border-radius: 4px;
+    background-color: #fff;
+    color: #fff;
+    font-size: 10px;
+    padding: 0 0 0 1px;
+    text-align: center;
+    font-family: FontAwesome, serif;
+    line-height: 13px;
+}
+
+.auth-wrap .auth-submit input[type=checkbox]:checked+label:after {
+    border-color: var(--third-color);
+    background-color: var(--third-color);
+}
+
+/* ==========================================================================
+   Form Spacing
+   ========================================================================== */
+
+div.auth-col form.login div.mb-3,
+div.auth-col form.signup div.mb-3 {
+    margin: 1rem 0 2rem !important;
+}
+
+/* ==========================================================================
+   Divider
+   ========================================================================== */
+
+.divider {
+    text-align: center;
+    position: relative;
+    margin: 1rem 0;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background: #e2e8f0;
+}
+
+.divider span {
+    background: var(--secondary-color);
+    padding: 0 15px;
+    color: var(--base-text-color);
+    position: relative;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   Email Wrapper
+   ========================================================================== */
+
+.email-wrapper {
+    position: relative;
+}
+
+.email-wrapper span {
+    position: absolute;
+    bottom: 25%;
+    left: 8%;
+    font-size: 15px;
+    color: var(--secondary-text-color);
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.email-wrapper input:focus:valid {
+    box-shadow: 0 0 0 .25rem rgba(0, 120, 0, .25);
+}
+
+.email-wrapper input:not(:placeholder-shown):focus:invalid {
+    box-shadow: 0 0 0 .25rem rgba(120, 0, 0, .25);
+}
+
+.email-wrapper input:focus~span,
+.email-wrapper input:not(:placeholder-shown)~span {
+    font-size: 12px;
+    color: var(--third-color);
+    transform: translate(-10px, -25px);
+    backdrop-filter: blur(4px);
+}
+
+/* ==========================================================================
+   Password Wrapper
+   ========================================================================== */
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    padding-right: 40px !important;
+    width: 100%;
+}
+
+.password-wrapper span {
+    position: absolute;
+    bottom: 25%;
+    left: 8%;
+    font-size: 15px;
+    color: var(--secondary-text-color);
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.password-wrapper input:focus:valid {
+    box-shadow: 0 0 0 .25rem rgba(0, 120, 0, .25);
+}
+
+.password-wrapper input:not(:placeholder-shown):focus:invalid {
+    box-shadow: 0 0 0 .25rem rgba(120, 0, 0, .25);
+}
+
+.password-wrapper input:focus~span,
+.password-wrapper input:not(:placeholder-shown)~span {
+    font-size: 12px;
+    color: var(--third-color);
+    transform: translate(-10px, -25px);
+    backdrop-filter: blur(4px);
+}
+
+/* ==========================================================================
+   Password Toggle Icon
+   ========================================================================== */
+
+.password-toggle-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+    transition: color 0.2s;
+    user-select: none;
+}
+
+.password-toggle-icon:hover {
+    color: #495057;
+}
+
+/* ==========================================================================
+   Error Messages
+   ========================================================================== */
+
+ul.text-muted {
+    font-weight: bold;
+}
+
+ul.text-muted p {
+    color: red;
+}
+
+ul.text-muted li {
+    color: red;
+    margin: 0;
+    font-size: .875em;
+    margin-left: 10px;
+}
+
+label[for="alert-danger"] {
+    color: red;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* ==========================================================================
+   Register Form
+   ========================================================================== */
+
+form.register ul.errorlist {
+    margin-bottom: 0;
+}
+
+form.register.update-account-details p.auth-submit input[type=submit] {
+    margin-top: 10px;
+}
+
+form.register.update-account-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form.register.update-account-details * {
+    width: 100%;
+}
+
+/* ==========================================================================
+   Logout Button
+   ========================================================================== */
+
+input.logout-account {
+    background-color: transparent !important;
+    border: 2px solid #e53e3e !important;
+    color: #e53e3e !important;
+}
+
+input.logout-account:hover,
+input.logout-account:active {
+    background-color: #e53e3e !important;
+    color: white !important;
+    box-shadow: 0 10px 25px rgba(229, 62, 62, 0.3);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   Form Fields
+   ========================================================================== */
+
+#id_sex,
+#id_birth {
+    color: var(--base-text-color) !important;
+    background-color: var(--base-color) !important;
+}
+
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .auth-wrap .auth-col {
+        width: 100%;
+        margin: 0 0 20px;
+        float: none;
+    }
+
+    .auth-header p {
+        font-size: 1.1rem;
+    }
+}

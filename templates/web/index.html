@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block head %}
-  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/components/breadcrumbs.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/components/filter.css' %}" />
+  <!-- <link rel="stylesheet" href="{% static 'css/components/pagination.css' %}" /> -->
+  <link rel="stylesheet" href="{% static 'css/pages/catalog.css' %}" />
   <link rel="stylesheet" href="{% static 'css/media.css' %}" />
 {% endblock head %}
 
@@ -20,9 +24,6 @@
   <div class="section-wrap-withsb">
     <aside class="blog-sb-widgets section-sb" id="section-sb">
       <div class="theiaStickySidebar">
-        <p class="section-filter-toggle filter_hidden">
-          <a href="#" id="section-filter-toggle-btn">Filters</a>
-        </p>
         <div class="section-filter">
           <div class="section-filter">
             {% include 'web/includes/categories.html' %}

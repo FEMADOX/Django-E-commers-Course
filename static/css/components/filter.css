@@ -1,0 +1,265 @@
+/* ==========================================================================
+   Section Filter Container
+   ========================================================================== */
+
+.section-filter {
+    background-color: var(--secondary-color);
+    border-radius: 7px;
+}
+
+/* SHORTCODE */
+.page-full .row-wrap-container .section-filter-shortcode {
+    padding: 0 15px;
+    z-index: 1;
+    position: relative;
+}
+/* SHORTCODE */
+
+/* ==========================================================================
+   IRS Range Slider
+   ========================================================================== */
+
+.section-filter .irs-from,
+.section-filter .irs-to,
+.section-filter .irs-single {
+    background: var(--third-color);
+}
+
+.section-filter .irs-from:after,
+.section-filter .irs-to:after,
+.section-filter .irs-single:after {
+    border-top-color: var(--third-color);
+}
+
+.section-filter .irs-line-mid,
+.section-filter .irs-line-left,
+.section-filter .irs-line-right,
+.section-filter .irs-bar,
+.section-filter .irs-bar-edge,
+.section-filter .irs-slider {
+    background-repeat: repeat-x;
+}
+
+.section-filter .irs-slider {
+    top: 22px;
+}
+
+.section-filter .irs-line {
+    height: 2px;
+}
+
+.section-filter .irs-bar {
+    height: 2px;
+    background-image: none;
+    background-color: var(--third-color);
+}
+
+.section-filter .irs-grid {
+    bottom: 13px;
+}
+
+.section-filter .irs-slider.from {
+    background-image: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 8px;
+    background: var(--third-color);
+    margin: 0;
+    cursor: pointer;
+}
+
+.section-filter .irs-slider.to {
+    background-image: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 8px;
+    background: var(--third-color);
+    margin: 0;
+    cursor: pointer;
+}
+
+.section-filter .irs-grid-pol.small {
+    display: none;
+}
+
+/* ==========================================================================
+   Opened Filters Bar
+   ========================================================================== */
+
+.section-sb-current h3 {
+    margin: 0 0 18px;
+    padding: 0;
+    color: #9292b4;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.section-sb-current .section-sb-list {
+    margin: -9px 0 0;
+}
+
+.section-sb-current .section-sb-list li {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.section-sb-current .section-sb-list li a {
+    color: #9292b4;
+    transition: color 0.2s;
+    display: block;
+    border-top: 1px solid #f2f2f2;
+    position: relative;
+    padding: 14px 30px 14px 0;
+}
+
+.section-sb-current .section-sb-list>li:first-child>a {
+    border-top: none;
+}
+
+.section-sb-current .section-sb-list li a:hover {
+    text-decoration: none;
+    color: var(--third-color);
+}
+
+.section-sb-current .section-sb-list li .count {
+    color: #9292b4;
+    font-size: 14px;
+    font-weight: 600;
+    position: absolute;
+    top: 12px;
+    right: 0;
+}
+
+.section-sb-current .section-sb-list li .children {
+    padding: 0;
+}
+
+.section-sb-current .section-sb-list li .children a {
+    padding-left: 20px;
+}
+
+.section-sb-current .section-sb-list li .children .children a {
+    padding-left: 40px;
+}
+
+.section-sb-current .section-sb-list li .children .children .children a {
+    padding-left: 60px;
+}
+
+.section-sb-current .section-sb-list li .children .children .children .children a {
+    padding-left: 80px;
+}
+
+/* ==========================================================================
+   Filter Toggle
+   ========================================================================== */
+
+.main-cont .section-filter-toggle {
+    text-align: center;
+    color: #283346;
+    font-size: 15px;
+    margin: 0 0 30px;
+    padding: 0;
+}
+
+.main-cont .section-filter-toggle a {
+    display: inline-block;
+    color: #283346;
+    transition: all 0.2s;
+    border-bottom: 1px dashed #283346;
+    padding: 0;
+    position: relative;
+    margin: 0 10px 0 0;
+}
+
+.main-cont .section-filter-toggle a:hover {
+    border-color: transparent;
+}
+
+.main-cont .section-filter-toggle a:after {
+    content: '';
+    background: url(../img/arr1.png) no-repeat left bottom;
+    display: inline-block;
+    width: 14px;
+    height: 8px;
+    overflow: hidden;
+    margin: -5px 15px 0 15px;
+    position: absolute;
+    top: 50%;
+    right: -44px;
+}
+
+.main-cont .section-filter-toggle.filter_hidden a:after {
+    background-position: left top;
+}
+
+.main-cont .section-filter-toggle.filter_hidden+.section-filter .woof_redraw_zone {
+    display: none;
+}
+
+/* ==========================================================================
+   Brands List Sidebar
+   ========================================================================== */
+
+.blog-sb-widgets ul.brands-list-sb li {
+    line-height: 1.42857143;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 7px;
+}
+
+.blog-sb-widgets ul.brands-list-sb li a {
+    text-transform: uppercase;
+    color: #283346;
+    border: 0;
+    transition: all .2s;
+    text-decoration: none;
+    position: relative;
+    display: block;
+    padding: 0 30px 0 0;
+}
+
+.blog-sb-widgets ul.brands-list-sb li a:hover {
+    color: #9292b4;
+    text-decoration: none;
+}
+
+.blog-sb-widgets ul.brands-list-sb li.active a {
+    color: #9292b4;
+}
+
+.blog-sb-widgets ul.brands-list-sb li .count {
+    vertical-align: middle;
+    display: inline-block;
+    color: #fff;
+    background: #c0c4d7;
+    border-radius: 20px;
+    padding: 3px 8px 4px;
+    margin: 0 0 1px 5px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 100%;
+    position: absolute;
+    top: 1px;
+    right: 0;
+}
+
+.blog-sb-widgets .blog-sb-widget {
+    padding: 0;
+}
+
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .section-filter {
+        padding: 15px;
+    }
+
+    .main-cont .section-filter-toggle {
+        margin: 0 0 20px;
+    }
+}
