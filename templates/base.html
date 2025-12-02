@@ -50,9 +50,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
-    <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}" /> -->
+    <link rel="stylesheet" href="{% static 'css/components/toast.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/components/breadcrumbs.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <!-- <link rel="stylesheet" href="{% static 'css/media.css' %}" /> -->
-
+    <link rel="stylesheet" href="{% static 'css/layout/header.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/layout/footer.css' %}" />
     <!-- jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" defer></script>
 
@@ -66,7 +69,7 @@
 
   <body>
     <div id="page" class="site">
-      {% include 'includes/top_info.html' %}
+      {% include 'includes/top-info.html' %}
       {% include 'includes/header.html' %}
       <div id="content" class="site-content">
         <div id="primary" class="content-area">

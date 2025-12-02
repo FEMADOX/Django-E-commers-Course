@@ -1,0 +1,333 @@
+/* ==========================================================================
+   Landing Page Styles
+   Mobile First Approach
+   ========================================================================== */
+
+/* ==========================================================================
+   Main Slider
+   ========================================================================== */
+
+.main-slider {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 30px;
+
+    @media (min-width: 768px) {
+        margin: 0 0 50px;
+    }
+
+    @media (min-width: 992px) {
+        margin: 0 0 60px;
+    }
+
+    .slides {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li {
+            position: relative;
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            height: 300px;
+
+            @media (min-width: 576px) {
+                height: 400px;
+            }
+
+            @media (min-width: 768px) {
+                height: 500px;
+            }
+
+            @media (min-width: 992px) {
+                height: 600px;
+            }
+
+            @media (min-width: 1200px) {
+                height: 700px;
+            }
+        }
+    }
+
+    .main-slider-cont {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+        text-align: center;
+        color: #fff;
+        padding: 0 15px;
+
+        h3 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0 0 10px;
+            color: #fff;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.2s;
+
+            @media (min-width: 768px) {
+                font-size: 16px;
+                margin: 0 0 15px;
+            }
+
+            @media (min-width: 992px) {
+                font-size: 18px;
+                margin: 0 0 20px;
+            }
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 15px;
+            color: #fff;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.4s;
+
+            @media (min-width: 576px) {
+                font-size: 40px;
+            }
+
+            @media (min-width: 768px) {
+                font-size: 50px;
+                margin: 0 0 20px;
+            }
+
+            @media (min-width: 992px) {
+                font-size: 60px;
+                margin: 0 0 30px;
+            }
+
+            @media (min-width: 1200px) {
+                font-size: 70px;
+            }
+        }
+
+        p {
+            font-size: 14px;
+            margin: 0 0 20px;
+            color: #fff;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.6s;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+
+            @media (min-width: 768px) {
+                font-size: 16px;
+                margin: 0 0 30px;
+            }
+
+            @media (min-width: 992px) {
+                font-size: 18px;
+                margin: 0 0 40px;
+            }
+        }
+
+        .btn-cont {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.8s;
+        }
+    }
+
+    /* Active Slide Animation */
+    .flex-active-slide {
+        .main-slider-cont {
+            h3, h1, p, .btn-cont {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    }
+}
+
+/* ==========================================================================
+   Banners Section
+   ========================================================================== */
+
+.banners-section {
+    margin: 0 0 30px;
+
+    @media (min-width: 768px) {
+        margin: 0 0 50px;
+    }
+
+    .banner-item {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        margin: 0 0 20px;
+        border-radius: 10px;
+
+        @media (min-width: 768px) {
+            margin: 0;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.5s ease;
+        }
+
+        &:hover {
+            img {
+                transform: scale(1.05);
+            }
+        }
+
+        .banner-cont {
+            position: absolute;
+            top: 50%;
+            left: 30px;
+            transform: translateY(-50%);
+            z-index: 1;
+
+            h3 {
+                font-size: 20px;
+                font-weight: 700;
+                margin: 0 0 10px;
+                color: var(--heading-color);
+
+                @media (min-width: 992px) {
+                    font-size: 24px;
+                }
+            }
+
+            p {
+                font-size: 14px;
+                margin: 0 0 15px;
+                color: var(--base-text-color);
+
+                @media (min-width: 992px) {
+                    font-size: 16px;
+                }
+            }
+
+            .btn-link {
+                font-weight: 600;
+                color: var(--third-color);
+                text-decoration: none;
+                position: relative;
+
+                &:after {
+                    content: '';
+                    position: absolute;
+                    bottom: -2px;
+                    left: 0;
+                    width: 0;
+                    height: 2px;
+                    background-color: var(--third-color);
+                    transition: width 0.3s ease;
+                }
+
+                &:hover:after {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+/* ==========================================================================
+   Popular Categories
+   ========================================================================== */
+
+.popular-categories {
+    margin: 0 0 30px;
+
+    @media (min-width: 768px) {
+        margin: 0 0 50px;
+    }
+
+    .categ-item {
+        display: block;
+        text-align: center;
+        padding: 20px;
+        background-color: var(--secondary-color);
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        margin: 0 0 20px;
+        text-decoration: none;
+
+        @media (min-width: 768px) {
+            margin: 0;
+        }
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .categ-img {
+            margin: 0 0 15px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            img {
+                max-height: 100%;
+                width: auto;
+            }
+        }
+
+        .categ-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin: 0;
+        }
+    }
+}
+
+/* ==========================================================================
+   Features Section
+   ========================================================================== */
+
+.features-section {
+    padding: 30px 0;
+    background-color: var(--secondary-color);
+    margin: 0 0 30px;
+
+    @media (min-width: 768px) {
+        padding: 50px 0;
+        margin: 0 0 50px;
+    }
+
+    .feature-item {
+        text-align: center;
+        margin: 0 0 30px;
+
+        @media (min-width: 768px) {
+            margin: 0;
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            color: var(--third-color);
+            margin: 0 0 15px;
+        }
+
+        h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 10px;
+            color: var(--heading-color);
+        }
+
+        p {
+            font-size: 14px;
+            color: var(--base-text-color);
+            margin: 0;
+        }
+    }
+}

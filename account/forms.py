@@ -201,7 +201,7 @@ class CustomPasswordResetForm(PasswordResetForm):
         # Add activation link to context
         context["activation_link"] = activation_link
         html_email_template_name = render_to_string(
-            "account/password/reset_email.html",
+            "account/password/reset-email.html",
             context,
         )
 

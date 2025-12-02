@@ -65,7 +65,7 @@ class TestPasswordResetIntegration:
         )
         response = client.get(response["Location"])
         assert response.status_code == HTTP_200_OK
-        assert "account/password/reset_confirm.html" in [
+        assert "account/password/reset-confirm.html" in [
             t.name for t in response.templates
         ]
 
@@ -355,7 +355,7 @@ class TestUserSignupActivationIntegration:
         # Step 2: Verify redirect to email validation page
         response = client.get(redirect_url)
         assert response.status_code == HTTP_200_OK
-        assert "account/activation/account_activation.html" in [
+        assert "account/activation/account-activation.html" in [
             t.name for t in response.templates
         ]
 

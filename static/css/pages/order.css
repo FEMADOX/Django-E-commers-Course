@@ -7,41 +7,45 @@
    Select2 Form Controls
    ========================================================================== */
 
-.select2-container .select2-selection {
-    padding: 2px 0 0 0;
-    border: 1px solid #e0e4f6;
-    background-color: #f4f5fb;
-    height: 35px;
-    font-size: 15px;
-    color: #9fa4bb;
-    outline: none;
-}
+.select2-container {
+    & .select2-selection {
+        padding: 2px 0 0 0;
+        border: 1px solid #e0e4f6;
+        background-color: #f4f5fb;
+        height: 35px;
+        font-size: 15px;
+        color: #9fa4bb;
+        outline: none;
+    }
 
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-    top: 3px;
-    right: 3px;
-}
+    &.select2-container--default {
+        & .select2-selection--single .select2-selection__arrow {
+            top: 3px;
+            right: 3px;
+        }
 
-.select2-container--open .select2-dropdown {
-    border: 1px solid #e0e4f6;
-    border-top: none;
-    background-color: #f4f5fb;
-    font-size: 15px;
-    color: #9fa4bb;
-}
+        & .select2-search--dropdown input.select2-search__field {
+            border: 1px solid #e0e4f6;
+            border-radius: 3px;
+        }
+    }
 
-.select2-container--default .select2-search--dropdown input.select2-search__field {
-    border: 1px solid #e0e4f6;
-    border-radius: 3px;
-}
+    &.select2-container--open .select2-dropdown {
+        border: 1px solid #e0e4f6;
+        border-top: none;
+        background-color: #f4f5fb;
+        font-size: 15px;
+        color: #9fa4bb;
+    }
 
-.select2-container .select2-choice {
-    padding: 6px 0 0 8px;
-    border: 1px solid #e0e4f6;
-    background-color: #f4f5fb;
-    height: 35px;
-    font-size: 15px;
-    color: #9fa4bb;
+    & .select2-choice {
+        padding: 6px 0 0 8px;
+        border: 1px solid #e0e4f6;
+        background-color: #f4f5fb;
+        height: 35px;
+        font-size: 15px;
+        color: #9fa4bb;
+    }
 }
 
 .select2-drop-active {
@@ -63,58 +67,62 @@
 
 .order-confirm-button {
     position: relative;
-    background: var(--third-color, #007bff);
-    color: white !important;
-    padding: 15px 30px;
+    background: var(--third-color);
+    color: var(--secondary-color) !important;
+    padding: 12px 20px;
     border: none;
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     overflow: hidden;
     transition: color 0.3s ease;
     z-index: 1;
-}
-
-.order-confirm-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
     width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, #28a745, #20c997);
-    transition: left 1s ease-out;
-    z-index: -1;
-}
 
-.order-confirm-button:hover::before,
-.order-confirm-button:active::before {
-    left: 0;
-}
+    @media (min-width: 768px) {
+        width: auto;
+        padding: 15px 30px;
+        font-size: 16px;
+    }
 
-.order-confirm-button:hover,
-.order-confirm-button:active {
-    background-color: var(--third-color, #007bff) !important;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
-}
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, var(--success-color), #20c997);
+        transition: left 1s ease-out;
+        z-index: -1;
+    }
 
-/* Pseudo-element for Bootstrap Icon */
-.order-confirm-button::after {
-    content: '\F1BE';
-    font-family: 'bootstrap-icons' !important;
-    font-size: 16px;
-    margin-left: 10px;
-    position: relative;
-    transition: transform .3s ease;
-    color: white;
-}
+    &:hover,
+    &:active {
+        background-color: var(--third-color) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
 
-/* Animation for the icon on hover */
-.order-confirm-button:hover::after,
-.order-confirm-button:active::after {
-    transform: translateX(5px);
+        &::before {
+            left: 0;
+        }
+
+        &::after {
+            transform: translateX(5px);
+        }
+    }
+
+    /* Pseudo-element for Bootstrap Icon */
+    &::after {
+        content: '\F1BE';
+        font-family: 'bootstrap-icons' !important;
+        font-size: 16px;
+        margin-left: 10px;
+        position: relative;
+        transition: transform .3s ease;
+        color: var(--secondary-color);
+    }
 }
 
 /* ==========================================================================
@@ -126,49 +134,59 @@
     align-items: center;
     gap: .5rem;
     height: 100%;
-    margin-bottom: 24px;
-}
+    margin-bottom: 16px;
 
-.card-header h2 {
-    margin-bottom: 0;
-}
+    @media (min-width: 768px) {
+        margin-bottom: 24px;
+    }
 
-.card-header i {
-    color: var(--third-color);
-    width: 16px;
-    display: flex;
-    align-items: center;
-}
+    & h2 {
+        margin-bottom: 0;
+    }
 
-.card-header i.bi-truck {
-    margin-right: 4px;
-}
+    & i {
+        color: var(--third-color);
+        width: 16px;
+        display: flex;
+        align-items: center;
 
-.card-header i.bi-clipboard-check {
-    height: 1.3rem;
-}
+        &.bi-truck {
+            margin-right: 4px;
 
-.card-header i::before {
-    font-weight: bolder;
-    font-size: 1.9rem;
-    height: 16px;
-    width: 16px;
-}
+            &::before {
+                font-size: 2rem;
+            }
+        }
 
-.card-header i.bi-truck::before {
-    font-size: 2rem;
+        &.bi-clipboard-check {
+            height: 1.3rem;
+        }
+
+        &::before {
+            font-weight: bolder;
+            font-size: 1.5rem;
+            height: 16px;
+            width: 16px;
+
+            @media (min-width: 768px) {
+                font-size: 1.9rem;
+            }
+        }
+    }
 }
 
 /* ==========================================================================
    Product Details Section
    ========================================================================== */
 
-div#product-details h1 {
-    margin: 30px 0;
-}
+div#product-details {
+    & h1 {
+        margin: 30px 0;
+    }
 
-div#product-details form {
-    padding: 60px 0 0;
+    & form {
+        padding: 60px 0 0;
+    }
 }
 
 /* ==========================================================================
@@ -182,11 +200,11 @@ ul.list-group.list-group-flush {
 .list-group-item {
     background-color: transparent;
     color: var(--base-text-color);
-}
 
-.list-group-item .cart-actions-confirm {
-    background-color: transparent;
-    border-radius: 0;
+    & .cart-actions-confirm {
+        background-color: transparent;
+        border-radius: 0;
+    }
 }
 
 /* ==========================================================================
@@ -194,7 +212,7 @@ ul.list-group.list-group-flush {
    ========================================================================== */
 
 .cart-actions-confirm {
-    background: #fff;
+    background: var(--secondary-color);
     padding: 20px 29px 35px;
     border-radius: 0 0 20px 20px;
 }
@@ -213,34 +231,26 @@ ul.list-group.list-group-flush {
     color: var(--base-text-color);
 }
 
-.cart-actions .order-coupon::before,
-.cart-actions .order-total::before {
-    content: '';
-    position: absolute;
-    width: 80%;
-    height: 1px;
-    background-color: var(--secondary-text-color);
-    top: 50%;
-    left: 10%;
-    z-index: 0;
+.cart-actions {
+    & .order-coupon,
+    & .order-total {
+        &::before {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 1px;
+            background-color: var(--secondary-text-color);
+            top: 50%;
+            left: 10%;
+            z-index: 0;
+        }
+    }
 }
 
 /* ==========================================================================
-   Responsive Styles
+   Checkout Coupon Form
    ========================================================================== */
 
-@media (max-width: 767px) {
-    .order-confirm-button {
-        width: 100%;
-        padding: 12px 20px;
-        font-size: 14px;
-    }
-
-    .card-header {
-        margin-bottom: 16px;
-    }
-
-    .card-header i::before {
-        font-size: 1.5rem;
-    }
+.checkout-cont form.checkout_coupon .form-row {
+    width: 100%;
 }

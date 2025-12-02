@@ -664,7 +664,7 @@ class TestEmailActivationView:
             response = client.get(reverse("account:email_validation"))
             assert response.status_code == HTTP_200_OK
 
-        assert "account/activation/account_activation.html" in [
+        assert "account/activation/account-activation.html" in [
             t.name for t in response.templates
         ]
 
@@ -829,7 +829,7 @@ class TestPasswordResetDoneView:
 
         assert response.status_code == HTTP_200_OK
         template_names = [t.name for t in response.templates]
-        assert "account/password/reset_done.html" in template_names
+        assert "account/password/reset-done.html" in template_names
 
     @patch("account.views.send_password_reset_email")
     def test_password_reset_done_view_post(
@@ -879,7 +879,7 @@ class TestPasswordResetDoneView:
         response = client.get(reverse("account:password_reset_done"))
 
         template_names = [t.name for t in response.templates]
-        assert "account/password/reset_done.html" in template_names
+        assert "account/password/reset-done.html" in template_names
 
     @patch("account.views.send_password_reset_email")
     def test_password_reset_done_view_post_email_sent_message(
@@ -1121,7 +1121,7 @@ class TestEmailActivationViewAdditional:
 
         response = client.get(reverse("account:email_validation"))
 
-        template_name = "account/activation/account_activation.html"
+        template_name = "account/activation/account-activation.html"
         assert template_name in [t.name for t in response.templates]
 
 
@@ -1191,7 +1191,7 @@ class TestCustomPasswordResetConfirmView:
         )
 
         assert response.status_code == HTTP_200_OK
-        assert "account/password/reset_confirm.html" in [
+        assert "account/password/reset-confirm.html" in [
             t.name for t in response.templates
         ]
         assert response.context["form"]

@@ -219,7 +219,7 @@ class OrderSummaryView(LoginRequiredMixin, DetailView):
     """
 
     model = Order
-    template_name = "order/order_summary.html"
+    template_name = "order/order-summary.html"
     context_object_name = "order"
     pk_url_kwarg = "order_id"
     login_url = "/account/login/"

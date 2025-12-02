@@ -1,0 +1,123 @@
+/* ==========================================================================
+   Pagination Component Styles
+   Extracted from style.css - Pagination section
+   ========================================================================== */
+
+/* ==========================================================================
+   Page Numbers List
+   ========================================================================== */
+
+ul.page-numbers {
+    clear: both;
+    text-align: center;
+    padding: 10px 0;
+
+    @media (min-width: 577px) {
+        padding: 10px 8px;
+    }
+
+    li {
+        display: inline-block;
+        margin: 0 2px 10px;
+        vertical-align: middle;
+        font-size: 12px;
+        font-weight: 700;
+
+        a {
+            transition: all 0.2s;
+            color: var(--heading-color);
+            text-align: center;
+            display: block;
+            position: relative;
+            padding: 1px 12px;
+
+            &:hover {
+                color: var(--third-color);
+            }
+
+            &.prev,
+            &.next {
+                font-size: 17px;
+            }
+        }
+
+        span {
+            color: var(--heading-color);
+            text-align: center;
+            display: block;
+            position: relative;
+            padding: 1px 12px;
+
+            &.current {
+                border-radius: 30px;
+                background: var(--third-color);
+                color: var(--secondary-color);
+            }
+
+            &.dots {
+                color: var(--text-muted);
+            }
+        }
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 767px) {
+        padding: 10px 4px;
+
+        li a,
+        li span {
+            padding: 1px 8px;
+        }
+    }
+}
+
+/* ==========================================================================
+   Link Pages (Alternative Pagination)
+   ========================================================================== */
+
+p.link-pages,
+.s-post p.link-pages {
+    text-align: center;
+    margin: 0;
+}
+
+.link-pages {
+    > span {
+        text-align: center;
+        display: inline-block;
+        position: relative;
+        padding: 1px 12px;
+        border-radius: 30px;
+        background: #c0c4d7;
+        color: var(--secondary-color);
+        margin: 0 2px 10px;
+        font-size: 12px;
+        font-weight: 700;
+        vertical-align: top;
+    }
+
+    a {
+        vertical-align: top;
+        display: inline-block;
+        margin: 0 2px 10px;
+        font-size: 12px;
+        font-weight: 700;
+
+        &:hover {
+            color: var(--third-color);
+        }
+
+        span {
+            color: var(--heading-color);
+            text-align: center;
+            display: block;
+            position: relative;
+            padding: 1px 12px;
+            transition: all 0.2s;
+
+            &:hover {
+                color: var(--third-color);
+            }
+        }
+    }
+}

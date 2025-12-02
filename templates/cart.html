@@ -2,12 +2,10 @@
 {% load static %}
 
 {% block head %}
-  <link rel="stylesheet" href="{% static 'css/components/breadcrumbs.css' %}" />
   <link rel="stylesheet" href="{% static 'css/components/forms.css' %}" />
   <link rel="stylesheet" href="{% static 'css/pages/cart.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/media.css' %}" />
   <script type="text/javascript" src="{% static 'js/cartPageControl.js' %}" defer></script>
-{% endblock %}
+{% endblock head %}
 
 {% block content %}
   <h1 class="main-cont-ttl">Cart</h1>
@@ -106,6 +104,6 @@
     </div>
   </div>
   {% if pending_orders %}
-    {% include 'includes/pending_orders.html' %}
+    {% include 'includes/pending-orders.html' %}
   {% endif %}
 {% endblock %}

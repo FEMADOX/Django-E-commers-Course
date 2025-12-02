@@ -1,4 +1,3 @@
-{% load static %}
 <div class="site-header">
   <div class="h-logo d-flex align-items-center justify-content-between">
     <a class="header-logo align-items-center" href="{% url 'web:index' %}">
@@ -35,7 +34,7 @@
             </ul>
           </li>
           {% if user.is_authenticated %}
-            {% include 'includes/header_cart.html' %}
+            {% include 'includes/header-cart.html' %}
           {% endif %}
         </ul>
       </div>

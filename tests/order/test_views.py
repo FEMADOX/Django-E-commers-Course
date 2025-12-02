@@ -476,7 +476,7 @@ class TestOrderSummaryView:
 
         view = OrderSummaryView()
         assert view.model == Order
-        assert view.template_name == "order/order_summary.html"
+        assert view.template_name == "order/order-summary.html"
         assert view.context_object_name == "order"
         assert view.pk_url_kwarg == "order_id"
 

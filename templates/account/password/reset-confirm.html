@@ -28,8 +28,8 @@
       <form class="email-reset-confirm" method="post">
         {% csrf_token %}
         <div class="email-reset-confirm-form">
-          {% include "includes/crispy_fields/new_password.html" %}
-          {% include "includes/crispy_fields/new_password2.html" %}
+          {% include "includes/crispy_fields/new-password.html" %}
+          {% include "includes/crispy_fields/new-password2.html" %}
         </div>
         <input class="email-reset-confirm" type="submit" value="Change my password" />
       </form>

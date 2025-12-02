@@ -52,7 +52,7 @@ def send_account_activation_email(
     )
     recipient = email
     html_email_template_name = render_to_string(
-        "account/activation/account_activation_email.html",
+        "account/activation/account-activation-email.html",
         {
             "activation_link": activation_link,
         },
@@ -85,7 +85,7 @@ def send_password_reset_email(
         ),
     )
     html_email_template_name = render_to_string(
-        "account/password/reset_email.html",
+        "account/password/reset-email.html",
         {
             "activation_link": activation_link,
         },

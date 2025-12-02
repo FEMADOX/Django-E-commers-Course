@@ -1,6 +1,6 @@
 /* ==========================================================================
    Toast Component Styles
-   Toast notifications for user feedback
+   Toast notifications for user feedback (Django messages)
    ========================================================================== */
 
 /* ==========================================================================
@@ -9,10 +9,9 @@
 
 .toast-container {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
-    max-width: 350px;
+    bottom: 5%;
+    right: 0;
+    z-index: 20;
 }
 
 /* ==========================================================================
@@ -20,126 +19,166 @@
    ========================================================================== */
 
 .toast {
-    background: var(--secondary-color);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    padding: 16px 20px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    animation: slideIn 0.3s ease-out;
-    border-left: 4px solid var(--third-color);
-}
+    width: auto;
+    opacity: 0;
+    display: inline-block;
+    transform: translateY(100%);
+    animation: moveUp 0.5s ease-out forwards;
+    border-radius: 5px;
+    padding: 0 10px;
+    position: relative;
+    overflow: hidden;
 
-.toast.hiding {
-    animation: slideOut 0.3s ease-out forwards;
+    &.closed {
+        animation: dismissToast 0.3s ease-in forwards;
+    }
+
+    button.btn-close {
+        font-size: 1.4rem;
+        --bs-btn-close-opacity: 0.8;
+    }
+
+    .toast-content {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        align-items: center;
+
+        &::before {
+            font-family: 'bootstrap-icons' !important;
+            font-size: 2rem;
+        }
+    }
+
+    .toast-body {
+        font-size: 1.2rem;
+    }
+
+    /* ==========================================================================
+       Toast Types (Light Mode)
+       ========================================================================== */
+
+    &.success,
+    &.error,
+    &.info {
+        color: var(--secondary-color);
+    }
+
+    &.success {
+        background-color: var(--success-color);
+
+        .toast-content::before {
+            content: '\F26D';
+        }
+    }
+
+    &.error {
+        background-color: var(--danger-color);
+
+        .toast-content::before {
+            content: '\F339';
+        }
+    }
+
+    &.info {
+        background-color: var(--third-color);
+
+        .toast-content::before {
+            content: '\F433';
+        }
+    }
+
+    &.warning {
+        background-color: #fcd34d;
+
+        .toast-body {
+            color: var(--base-text-color);
+        }
+
+        .btn-close {
+            filter: invert(0);
+        }
+
+        .toast-content::before {
+            content: '\F33B';
+            color: #000000;
+        }
+    }
+
+    /* ==========================================================================
+       Toast Progress Bar
+       ========================================================================== */
+
+    &::after {
+        content: '';
+        width: 100%;
+        height: 10%;
+        background-color: rgba(0, 0, 0, 0.3);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        animation: autoHide 5s linear forwards;
+    }
 }
 
 /* ==========================================================================
-   Toast Types
+   Toast Types (Dark Mode)
    ========================================================================== */
 
-.toast.toast-success {
-    border-left-color: #28a745;
-}
+body.darkmode {
+    .toast {
+        &.info {
+            background-color: #31318A;
+        }
 
-.toast.toast-success i {
-    color: #28a745;
-}
+        &.success {
+            background-color: #4b984b;
+        }
 
-.toast.toast-error {
-    border-left-color: #dc3545;
-}
+        &.error {
+            background-color: #a30029;
+        }
 
-.toast.toast-error i {
-    color: #dc3545;
-}
-
-.toast.toast-warning {
-    border-left-color: #ffc107;
-}
-
-.toast.toast-warning i {
-    color: #856404;
-}
-
-.toast.toast-info {
-    border-left-color: var(--third-color);
-}
-
-.toast.toast-info i {
-    color: var(--third-color);
-}
-
-/* ==========================================================================
-   Toast Content
-   ========================================================================== */
-
-.toast-icon {
-    font-size: 1.5rem;
-    flex-shrink: 0;
-}
-
-.toast-message {
-    flex: 1;
-    color: var(--base-text-color);
-    font-size: 0.95rem;
-    line-height: 1.4;
-}
-
-.toast-close {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    color: var(--secondary-text-color);
-    font-size: 1.25rem;
-    transition: color 0.2s;
-}
-
-.toast-close:hover {
-    color: var(--base-text-color);
+        &.warning {
+            background-color: #cf8510;
+        }
+    }
 }
 
 /* ==========================================================================
    Animations
    ========================================================================== */
 
-@keyframes slideIn {
+@keyframes moveUp {
     from {
-        transform: translateX(100%);
+        transform: translateY(100%);
         opacity: 0;
     }
+
     to {
-        transform: translateX(0);
+        transform: translateY(0);
         opacity: 1;
     }
 }
 
-@keyframes slideOut {
+@keyframes dismissToast {
     from {
         transform: translateX(0);
         opacity: 1;
     }
+
     to {
         transform: translateX(100%);
         opacity: 0;
     }
 }
 
-/* ==========================================================================
-   Responsive Styles
-   ========================================================================== */
-
-@media (max-width: 480px) {
-    .toast-container {
-        left: 10px;
-        right: 10px;
-        max-width: none;
+@keyframes autoHide {
+    from {
+        width: 100%;
     }
 
-    .toast {
-        padding: 12px 16px;
+    to {
+        width: 0%;
     }
 }

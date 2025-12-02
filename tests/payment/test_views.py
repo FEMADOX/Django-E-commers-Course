@@ -271,7 +271,7 @@ class TestPaymentCompletedView:
             # Verify the order page is still rendered correctly
             assert "order" in response.context
             assert response.context["order"] == order
-            assert "payment/payment_completed.html" in [
+            assert "payment/payment-completed.html" in [
                 t.name for t in response.templates
             ]
 

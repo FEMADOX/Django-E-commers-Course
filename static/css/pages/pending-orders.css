@@ -9,10 +9,14 @@
 
 .pending-orders-section {
     margin-top: 2rem;
-    padding: 1.5rem;
+    padding: 1rem;
     background: var(--secondary-color);
     border-radius: 16px;
     box-shadow: var(--shadow-sm);
+
+    @media (min-width: 768px) {
+        padding: 1.5rem;
+    }
 }
 
 /* ==========================================================================
@@ -20,17 +24,21 @@
    ========================================================================== */
 
 .pending-orders-title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
     gap: 0.75rem;
     color: var(--base-text-color);
-}
 
-.pending-orders-title i {
-    color: var(--third-color);
+    @media (min-width: 481px) {
+        font-size: 1.5rem;
+    }
+
+    & i {
+        color: var(--third-color);
+    }
 }
 
 /* ==========================================================================
@@ -40,7 +48,11 @@
 .pending-orders-grid {
     display: grid;
     gap: 1.5rem;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: 1fr;
+
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
 }
 
 /* ==========================================================================
@@ -55,217 +67,234 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
-}
 
-/* ==========================================================================
-   Card Header
-   ========================================================================== */
+    /* ==========================================================================
+       Card Header
+       ========================================================================== */
 
-.pending-card-header {
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid rgba(90, 90, 90, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+    & .pending-card-header {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid rgba(90, 90, 90, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-.order-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
+        & .order-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
 
-.order-id {
-    font-weight: 700;
-    font-size: 1.5rem !important;
-    color: var(--base-text-color);
-    transition: color 0.2s;
-}
+        & .order-id {
+            font-weight: 700;
+            font-size: 1.25rem !important;
+            color: var(--base-text-color);
+            transition: color 0.2s;
 
-.order-id:active,
-.order-id:hover {
-    cursor: pointer;
-    color: var(--third-color);
-}
+            @media (min-width: 481px) {
+                font-size: 1.5rem !important;
+            }
 
-.order-date {
-    font-size: 1.1rem;
-    color: var(--secondary-text-color);
-}
+            &:active,
+            &:hover {
+                cursor: pointer;
+                color: var(--third-color);
+            }
+        }
 
-/* ==========================================================================
-   Status Badge
-   ========================================================================== */
+        & .order-date {
+            font-size: 1.1rem;
+            color: var(--secondary-text-color);
+        }
+    }
 
-.order-status-badge {
-    background: #fff3cd;
-    color: #856404;
-    padding: 0.35rem 0.85rem;
-    border-radius: 20px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
+    /* ==========================================================================
+       Status Badge
+       ========================================================================== */
 
-.darkmode .order-status-badge {
-    background: rgba(255, 193, 7, 0.15);
-    color: #ffc107;
-}
+    & .order-status-badge {
+        background: #fff3cd;
+        color: #856404;
+        padding: 0.35rem 0.85rem;
+        border-radius: 20px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
 
-/* ==========================================================================
-   Card Body
-   ========================================================================== */
+        .darkmode & {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+        }
+    }
 
-.pending-card-body {
-    padding: 1.25rem;
-    flex: 1;
-}
+    /* ==========================================================================
+       Card Body
+       ========================================================================== */
 
-/* ==========================================================================
-   Order Items List
-   ========================================================================== */
+    & .pending-card-body {
+        padding: 1.25rem;
+        flex: 1;
 
-.order-items-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
+        /* ==========================================================================
+           Order Items List
+           ========================================================================== */
 
-.order-item-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px dashed rgba(0, 0, 0, 0.05);
-}
+        & .order-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
 
-.order-item-row:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-}
+        & .order-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.05);
 
-.item-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
+            &:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
 
-.item-name {
-    font-weight: 500;
-    color: var(--base-text-color);
-    font-size: 1.3rem;
-    transition: color 0.2s;
-}
+            & .item-info {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+            }
 
-.item-name:active,
-.item-name:hover {
-    cursor: pointer;
-    color: var(--third-color);
-}
+            & .item-name {
+                font-weight: 500;
+                color: var(--base-text-color);
+                font-size: 1.3rem;
+                transition: color 0.2s;
 
-.item-meta {
-    font-size: 1.1rem;
-    color: var(--secondary-text-color);
-}
+                &:active,
+                &:hover {
+                    cursor: pointer;
+                    color: var(--third-color);
+                }
+            }
 
-.item-total {
-    font-weight: 600;
-    color: var(--base-text-color);
-    font-size: 1.5rem;
-}
+            & .item-meta {
+                font-size: 1.1rem;
+                color: var(--secondary-text-color);
+            }
 
-/* ==========================================================================
-   Card Footer
-   ========================================================================== */
+            & .item-total {
+                font-weight: 600;
+                color: var(--base-text-color);
+                font-size: 1.25rem;
 
-.pending-card-footer {
-    padding: 1.25rem;
-    border-top: 1px solid rgba(90, 90, 90, 0.1);
-}
+                @media (min-width: 481px) {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+    }
 
-.order-coupon,
-.order-total {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.25rem;
-    font-weight: 700;
-    color: var(--base-text-color);
-}
+    /* ==========================================================================
+       Card Footer
+       ========================================================================== */
 
-.total-value {
-    color: var(--third-color);
-    font-size: 1.8rem;
-}
+    & .pending-card-footer {
+        padding: 1.25rem;
+        border-top: 1px solid rgba(90, 90, 90, 0.1);
 
-/* ==========================================================================
-   Order Actions
-   ========================================================================== */
+        & .order-coupon,
+        & .order-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            font-weight: 700;
+            color: var(--base-text-color);
+        }
 
-.order-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
+        & .total-value {
+            color: var(--third-color);
+            font-size: 1.5rem;
 
-.restore-form {
-    flex: 1;
-}
+            @media (min-width: 481px) {
+                font-size: 1.8rem;
+            }
+        }
 
-/* ==========================================================================
-   Action Buttons
-   ========================================================================== */
+        /* ==========================================================================
+           Order Actions
+           ========================================================================== */
 
-.btn-restore {
-    width: 100%;
-    padding: 0.6rem;
-    background: var(--third-color);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-weight: 600;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: transform 0.2s ease-in, filter 0.3s, box-shadow 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
+        & .order-actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
 
-.btn-restore:hover,
-.btn-restore:active {
-    filter: brightness(115%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(18, 145, 238, 0.2);
-}
+            @media (min-width: 768px) {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
 
-.btn-delete-order {
-    width: 100%;
-    height: 100%;
-    padding: 0.6rem;
-    background: transparent;
-    color: red;
-    border: 1px solid red;
-    border-radius: 5px;
-    font-weight: 600;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
+            & .restore-form {
+                flex: 1;
+            }
 
-.btn-delete-order:hover,
-.btn-delete-order:active {
-    background-color: red;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
+            /* ==========================================================================
+               Action Buttons
+               ========================================================================== */
+
+            & .btn-restore {
+                width: 100%;
+                padding: 0.6rem;
+                background: var(--third-color);
+                color: var(--secondary-color);
+                border: none;
+                border-radius: 5px;
+                font-weight: 600;
+                font-size: 1.5rem;
+                cursor: pointer;
+                transition: transform 0.2s ease-in, filter 0.3s, box-shadow 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+
+                &:hover,
+                &:active {
+                    filter: brightness(115%);
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(18, 145, 238, 0.2);
+                }
+            }
+
+            & .btn-delete-order {
+                width: 100%;
+                height: 100%;
+                padding: 0.6rem;
+                background: transparent;
+                color: var(--danger-color);
+                border: 1px solid var(--danger-color);
+                border-radius: 5px;
+                font-weight: 600;
+                font-size: 1.5rem;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+
+                &:hover,
+                &:active {
+                    background-color: var(--danger-color);
+                    color: var(--secondary-color);
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
+                }
+            }
+        }
+    }
 }
 
 /* ==========================================================================
@@ -274,45 +303,8 @@
 
 article#pending-orders {
     border-radius: 0 0 20px 20px;
-}
 
-article#pending-orders h2 {
-    padding: 30px 30px 10px;
-}
-
-/* ==========================================================================
-   Responsive Styles
-   ========================================================================== */
-
-@media (max-width: 767px) {
-    .pending-orders-section {
-        padding: 1rem;
-    }
-
-    .pending-orders-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .order-actions {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .pending-orders-title {
-        font-size: 1.25rem;
-    }
-
-    .order-id {
-        font-size: 1.25rem !important;
-    }
-
-    .item-total {
-        font-size: 1.25rem;
-    }
-
-    .total-value {
-        font-size: 1.5rem;
+    & h2 {
+        padding: 30px 30px 10px;
     }
 }

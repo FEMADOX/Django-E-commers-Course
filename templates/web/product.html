@@ -9,11 +9,11 @@
   <!-- Box -->
   <link rel="stylesheet" href="{% static 'css/jquery.fancybox.css' %}" />
   <!-- Page-specific styles -->
-  <link rel="stylesheet" href="{% static 'css/components/breadcrumbs.css' %}" />
   <link rel="stylesheet" href="{% static 'css/pages/product.css' %}" />
 {% endblock %}
 
 {% block content %}
+  <h1 class="main-cont-ttl">Product</h1>
   <ul class="b-crumbs">
     <li>
       <a href="{% url 'web:index' %}">Home</a>

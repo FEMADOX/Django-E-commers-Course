@@ -261,7 +261,7 @@ class UserLoginView(LoginView):
 
 @method_decorator(csrf_protect, "dispatch")
 class EmailActivationView(TemplateView):
-    template_name = "account/activation/account_activation.html"
+    template_name = "account/activation/account-activation.html"
 
     def post(self, request: HttpRequest) -> HttpResponse:
         pending_registration = request.session.get("pending_registration")
@@ -288,7 +288,7 @@ class EmailActivationView(TemplateView):
 
 
 class CustomPasswordResetView(PasswordResetView):
-    email_template_name = "account/password/reset_email.html"
+    email_template_name = "account/password/reset-email.html"
     form_class = CustomPasswordResetForm
     template_name = "account/password/reset.html"
     success_url = "/account/password-reset/done/"
@@ -308,7 +308,7 @@ class CustomPasswordResetView(PasswordResetView):
 
 
 class CustomPasswordResetDoneView(PasswordResetDoneView):
-    template_name = "account/password/reset_done.html"
+    template_name = "account/password/reset-done.html"
 
     def post(
         self,
@@ -327,7 +327,7 @@ class CustomPasswordResetDoneView(PasswordResetDoneView):
 
 
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):
-    template_name = "account/password/reset_confirm.html"
+    template_name = "account/password/reset-confirm.html"
     success_url = "/account/login/"
     form_class = CustomSetPasswordForm
 

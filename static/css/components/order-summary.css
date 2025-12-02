@@ -70,7 +70,7 @@
                 flex-direction: row;
                 gap: 1rem;
                 padding-bottom: 1.5rem;
-                border-bottom: 1px solid rgba(90, 90, 90, 0.1);
+                border-bottom: 1px solid var(--border-color);
                 align-items: center;
 
                 &:last-child {
@@ -214,7 +214,7 @@
     .summary-footer {
         background: var(--secondary-color);
         padding: 1rem 2rem 2rem;
-        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        border-top: 1px solid var(--border-color);
 
         .summary-total-section {
             display: flex;
@@ -296,7 +296,7 @@
             .btn-pay-now,
             .btn-restore {
                 background: var(--third-color);
-                color: white;
+                color: var(--secondary-color);
                 border: none;
 
                 &:hover {
@@ -304,8 +304,6 @@
                     box-shadow: 0 4px 12px rgba(18, 145, 238, 0.3);
                 }
             }
-
         }
-
     }
 }

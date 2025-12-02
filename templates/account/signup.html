@@ -7,7 +7,6 @@
 {% endblock title %}
 
 {% block head %}
-  <link rel="stylesheet" href="{% static 'css/components/breadcrumbs.css' %}" />
   <link rel="stylesheet" href="{% static 'css/components/forms.css' %}" />
   <link rel="stylesheet" href="{% static 'css/pages/auth.css' %}" />
   <script src="{% static 'js/passwordTypeToggle.js' %}" defer></script>
@@ -30,7 +29,7 @@
             {% csrf_token %}
             {% include 'includes/crispy_fields/email.html' %}
             {% include 'includes/crispy_fields/password.html' %}
-            {% include 'includes/crispy_fields/confirm_password.html' %}
+            {% include 'includes/crispy_fields/confirm-password.html' %}
             <div class="my-4 d-flex gap-2">
               <input type="checkbox" id="terms" required />
               <label for="terms">I agree to the <a href="">Terms and Conditions</a></label>

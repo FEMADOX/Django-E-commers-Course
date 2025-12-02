@@ -159,7 +159,7 @@ class PaymentCompletedView(LoginRequiredMixin, View):
 
             return render(
                 request,
-                "payment/payment_completed.html",
+                "payment/payment-completed.html",
                 {"order": order, "order_details": order_details, "client": client},
             )
 

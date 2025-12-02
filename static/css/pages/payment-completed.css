@@ -7,6 +7,11 @@
     max-width: 900px;
     margin: 2rem auto;
     padding: 0 1rem;
+
+    @media (min-width: 768px) {
+        padding: 0 1.5rem;
+        margin: 3rem auto;
+    }
 }
 
 /* ========== SUCCESS HEADER ========== */
@@ -22,9 +27,12 @@
 
 .success-icon {
     font-size: 4rem;
-    color: #22c55e;
-    /* Green success color */
+    color: var(--success-color);
     animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    @media (min-width: 768px) {
+        font-size: 5rem;
+    }
 }
 
 .success-title {
@@ -32,6 +40,14 @@
     font-weight: 700;
     color: var(--base-text-color);
     margin-bottom: 0.75rem;
+
+    @media (min-width: 768px) {
+        font-size: 2rem;
+    }
+
+    @media (min-width: 1024px) {
+        font-size: 2.5rem;
+    }
 }
 
 .success-message {
@@ -51,12 +67,16 @@
     border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-light);
     transition: box-shadow 0.3s ease;
     animation: fadeInUp 0.6s ease-out;
 
+    @media (min-width: 768px) {
+        padding: 2rem;
+    }
+
     &:hover {
-        box-shadow: var(--shadow-md);
+        box-shadow: var(--shadow-medium);
     }
 }
 
@@ -69,7 +89,11 @@
     align-items: center;
     gap: 0.5rem;
 
-    i {
+    @media (min-width: 768px) {
+        font-size: 1.5rem;
+    }
+
+    & i {
         color: var(--third-color);
     }
 }
@@ -92,17 +116,26 @@
 .badge-confirmed {
     background-color: #dcfce7;
     color: #16a34a;
-}
 
-.darkmode .badge-confirmed {
-    background-color: rgba(34, 197, 94, 0.2);
-    color: #4ade80;
+    .darkmode & {
+        background-color: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+    }
 }
 
 .order-details-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    @media (min-width: 1024px) {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
 }
 
 .order-detail-item {
@@ -119,7 +152,7 @@
     color: var(--secondary-text-color);
     font-weight: 500;
 
-    i {
+    & i {
         font-size: 1.5rem;
         color: var(--third-color);
     }
@@ -151,26 +184,40 @@
     background: var(--secondary-color);
     align-items: center;
 
+    @media (min-width: 768px) {
+        grid-template-columns: 80px 1fr auto auto;
+        grid-template-rows: 1fr;
+        gap: 1rem;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    @media (min-width: 1024px) {
+        grid-template-columns: 100px 1fr auto auto;
+        gap: 1.25rem;
+        padding: 1.25rem;
+    }
+
+    .darkmode & {
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+
     &:hover {
         background-color: rgba(0, 0, 0, 0.02);
         border-color: rgba(18, 145, 238, 0.3);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         transform: translateY(-2px);
 
-        .order-item-image img {
+        & .order-item-image img {
             transform: scale(1.05);
         }
+
+        .darkmode & {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-color: rgba(18, 145, 238, 0.4);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+        }
     }
-}
-
-.darkmode .order-item {
-    border-color: rgba(255, 255, 255, 0.08);
-}
-
-.darkmode .order-item:hover {
-    background-color: rgba(255, 255, 255, 0.03);
-    border-color: rgba(18, 145, 238, 0.4);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 .order-item-image {
@@ -184,26 +231,35 @@
     grid-row: 1 / 3;
     transition: transform 0.4s ease;
 
+    @media (min-width: 768px) {
+        width: 80px;
+        height: 80px;
+        grid-row: 1;
+    }
+
+    @media (min-width: 1024px) {
+        width: 100px;
+        height: 100px;
+    }
+
+    .darkmode & {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
     &:hover {
         transform: scale(1.05);
 
-        img {
+        & img {
             transition: filter 0.3s ease;
             filter: opacity(85%);
         }
     }
 
-    img {
+    & img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         transition: transform 0.3s ease;
-    }
-}
-
-.darkmode {
-    .order-item-image {
-        border-color: rgba(255, 255, 255, 0.1);
     }
 }
 
@@ -212,6 +268,11 @@
     gap: 0.5rem;
     justify-content: space-between;
     align-items: center;
+
+    @media (min-width: 768px) {
+        grid-column: 2;
+        grid-row: 1;
+    }
 }
 
 .order-item-title {
@@ -226,6 +287,16 @@
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
+
+    @media (min-width: 1024px) {
+        font-size: 1.125rem;
+    }
+
+    &:hover,
+    &:active {
+        color: var(--third-color);
+        cursor: pointer;
+    }
 }
 
 .order-item-category {
@@ -236,23 +307,18 @@
     align-items: center;
     gap: 0.375rem;
 
-    i {
+    & i {
         font-size: 1.5rem;
         color: var(--secondary-text-color);
         transition: color 0.2s ease;
     }
-}
-
-.order-item-title,
-.order-item-category {
-    transition: color 0.2s ease;
 
     &:hover,
     &:active {
         color: var(--third-color);
         cursor: pointer;
 
-        i {
+        & i {
             color: var(--third-color);
             cursor: pointer;
         }
@@ -272,11 +338,23 @@
     grid-column: 2;
     grid-row: 2;
     justify-self: start;
-}
 
-.darkmode .order-item-quantity {
-    background: linear-gradient(135deg, rgba(18, 145, 238, 0.15), rgba(18, 145, 238, 0.08));
-    border-color: rgba(18, 145, 238, 0.3);
+    @media (min-width: 768px) {
+        grid-column: 3;
+        grid-row: 1;
+        padding: 0.5rem 1rem;
+        min-width: 60px;
+    }
+
+    @media (min-width: 1024px) {
+        padding: 0.625rem 1.25rem;
+        min-width: 70px;
+    }
+
+    .darkmode & {
+        background: linear-gradient(135deg, rgba(18, 145, 238, 0.15), rgba(18, 145, 238, 0.08));
+        border-color: rgba(18, 145, 238, 0.3);
+    }
 }
 
 .quantity-label {
@@ -292,6 +370,14 @@
     font-weight: 700;
     color: var(--third-color);
     line-height: 1;
+
+    @media (min-width: 768px) {
+        font-size: 1.125rem;
+    }
+
+    @media (min-width: 1024px) {
+        font-size: 1.375rem;
+    }
 }
 
 .order-item-price {
@@ -303,6 +389,17 @@
     grid-column: 2;
     grid-row: 2;
     justify-self: end;
+
+    @media (min-width: 768px) {
+        grid-column: 4;
+        grid-row: 1;
+        font-size: 1.25rem;
+    }
+
+    @media (min-width: 1024px) {
+        font-size: 1.375rem;
+        min-width: 100px;
+    }
 }
 
 /* ========== ORDER SUMMARY ========== */
@@ -336,6 +433,11 @@
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
+
+    .darkmode & {
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+    }
 }
 
 .discount-row .summary-value {
@@ -346,15 +448,8 @@
     height: 1px;
     background: rgba(0, 0, 0, 0.1);
     margin: 1rem 0;
-}
 
-.darkmode {
-    .free-badge {
-        background: rgba(34, 197, 94, 0.2);
-        color: #4ade80;
-    }
-
-    .summary-divider {
+    .darkmode & {
         background: rgba(255, 255, 255, 0.1);
     }
 }
@@ -362,14 +457,14 @@
 .summary-total {
     padding: 1rem 0 0;
 
-    .summary-label,
-    .summary-value {
+    & .summary-label,
+    & .summary-value {
         font-size: 1.5rem;
         font-weight: 700;
         color: var(--base-text-color);
     }
 
-    .summary-value {
+    & .summary-value {
         color: var(--third-color);
     }
 }
@@ -380,19 +475,19 @@
     background: var(--base-color);
     border-radius: 8px;
 
-    p {
+    & p {
         margin: 0.5rem 0;
         font-size: 1rem;
         color: var(--base-text-color);
     }
 
-    [class^="shipping-"] {
+    & [class^="shipping-"] {
         display: flex;
         align-items: center;
         gap: 0.5rem;
         font-size: 1.2rem;
 
-        i {
+        & i {
             color: var(--third-color);
         }
     }
@@ -414,7 +509,13 @@
     gap: 1rem;
     margin: 2rem 0;
 
-    .btn {
+    @media (min-width: 768px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    & .btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -426,13 +527,17 @@
         transition: all 0.3s ease;
         width: 100%;
 
+        @media (min-width: 768px) {
+            width: auto;
+        }
+
         &:hover {
             transform: translateY(-1px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-medium);
         }
     }
 
-    .btn-primary {
+    & .btn-primary {
         background: var(--third-color);
         color: white;
         border: none;
@@ -442,7 +547,7 @@
         }
     }
 
-    .btn-outline-secondary {
+    & .btn-outline-secondary {
         background: var(--base-color);
         color: var(--base-text-color);
         border: 2px solid rgba(0, 0, 0, 0.15);
@@ -451,10 +556,14 @@
             filter: contrast(80%);
             border-color: var(--third-color);
         }
+
+        .darkmode & {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
     }
 
-    .view-order-details,
-    .continue-shopping {
+    & .view-order-details,
+    & .continue-shopping {
         &::after {
             content: "\F138";
             font-family: 'bootstrap-icons';
@@ -467,9 +576,12 @@
     }
 }
 
-.darkmode {
-    .action-buttons .btn-outline-secondary {
-        border-color: rgba(255, 255, 255, 0.2);
+.help-links {
+    @media (min-width: 768px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        justify-content: center;
     }
 }
 
@@ -509,138 +621,5 @@ canvas {
 
     to {
         transform: scale(1);
-    }
-}
-
-/* ==========================================================================
-   LG - Large Screens (>1024px)
-   Tablets landscape & Small desktops
-   ========================================================================== */
-
-@media (min-width: 1024px) {
-    .success-title {
-        font-size: 2.5rem;
-    }
-
-    .order-details-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-
-    .order-item {
-        grid-template-columns: 100px 1fr auto auto;
-        gap: 1.25rem;
-        padding: 1.25rem;
-    }
-
-    .order-item-image {
-        width: 100px;
-        height: 100px;
-    }
-
-    .order-item-title {
-        font-size: 1.125rem;
-    }
-
-    .order-item-quantity {
-        padding: 0.625rem 1.25rem;
-        min-width: 70px;
-    }
-
-    .quantity-value {
-        font-size: 1.375rem;
-    }
-
-    .order-item-price {
-        font-size: 1.375rem;
-        min-width: 100px;
-    }
-}
-
-/* ==========================================================================
-   MD - Medium Tablets (768px - 1023px)
-   Tablets portrait mode
-   ========================================================================== */
-
-@media (min-width: 768px) {
-    .success-page-container {
-        padding: 0 1.5rem;
-        margin: 3rem auto;
-    }
-
-    .success-title {
-        font-size: 2rem;
-    }
-
-    .success-icon {
-        font-size: 5rem;
-    }
-
-    .section-title {
-        font-size: 1.5rem;
-    }
-
-    .order-card,
-    .order-items-card,
-    .order-summary-card,
-    .shipping-card {
-        padding: 2rem;
-    }
-
-    .order-details-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-    }
-
-    .order-item {
-        grid-template-columns: 80px 1fr auto auto;
-        grid-template-rows: 1fr;
-        gap: 1rem;
-        align-items: center;
-        padding: 1rem;
-    }
-
-    .order-item-image {
-        width: 80px;
-        height: 80px;
-        grid-row: 1;
-    }
-
-    .order-item-info {
-        grid-column: 2;
-        grid-row: 1;
-    }
-
-    .order-item-quantity {
-        grid-column: 3;
-        grid-row: 1;
-        padding: 0.5rem 1rem;
-        min-width: 60px;
-    }
-
-    .quantity-value {
-        font-size: 1.125rem;
-    }
-
-    .order-item-price {
-        grid-column: 4;
-        grid-row: 1;
-        font-size: 1.25rem;
-    }
-
-    .action-buttons {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-
-        .btn {
-            width: auto;
-        }
-    }
-
-    .help-links {
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 1.5rem;
-        justify-content: center;
     }
 }

@@ -2,7 +2,7 @@
  * Advanced confetti animation with multiple effects
  * Alternative to basic confetti for more celebration
  *
- * To use this version, replace the script reference in payment_completed.html:
+ * To use this version, replace the script reference in payment-completed.html:
  * <script src="{% static 'js/payment_success_confetti_advanced.js' %}" defer></script>
  */
 
