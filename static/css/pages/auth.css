@@ -280,6 +280,7 @@ form.register {
 
         .auth-submit input[type=submit] {
             margin-top: 10px;
+            color: white;
         }
 
         * {
@@ -302,14 +303,14 @@ form.register {
 
     input.logout-account {
         border-radius: 10px;
-        background-color: transparent !important;
-        border: 2px solid var(--danger-color) !important;
-        color: var(--danger-color) !important;
+        background-color: transparent;
+        border: 2px solid var(--danger-color);
+        color: var(--danger-color);
 
         &:hover,
         &:active {
-            background-color: var(--danger-color) !important;
-            color: var(--secondary-color) !important;
+            background-color: var(--danger-color);
+            color: white;
             box-shadow: 0 10px 25px rgba(229, 62, 62, 0.3);
             transform: translateY(-2px);
         }

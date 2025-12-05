@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="{% static 'css/jquery.fancybox.css' %}" />
   <!-- Page-specific styles -->
   <link rel="stylesheet" href="{% static 'css/pages/product.css' %}" />
+  <script src="{% static 'js/shareButton.js' %}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -187,7 +188,7 @@
                     <i class="bi bi-heart"></i>
                     <i class="bi bi-heart-fill"></i>
                   </label>
-                  <button type="button" class="btn-share" id="btn-share" data-url="{{ request.build_absolute_uri }}">
+                  <button type="button" class="btn-share" id="btn-share" data-url="{{ request.build_absolute_uri }}" data-title="{{ product.title|escapejs }}">
                     <i class="bi bi-share"></i>
                   </button>
                 </div>
@@ -307,47 +308,6 @@
       const discountPercentage = 10 // 10% discount
       const discountedPrice = (originalPrice / (1 - discountPercentage / 100)).toFixed(2)
       discountPrice.textContent = `$${discountedPrice}`
-
-      // Share Button Functionality
-      const shareBtn = document.getElementById('btn-share')
-
-      shareBtn.addEventListener('click', async () => {
-        const url = shareBtn.dataset.url
-        const title = '{{ product.title|escapejs }}'
-
-        // Check if Web Share API is supported
-        if (!navigator.share) {
-          try {
-            await navigator.share({
-              title: title,
-              text: `Check out this product: ${title}`,
-              url: url,
-            })
-          } catch (err) {
-            if (err.name !== 'AbortError') {
-              console.error('Error sharing:', err)
-            }
-          }
-        } else {
-          // Fallback: Copy to clipboard
-          try {
-            await navigator.clipboard.writeText(url)
-
-            // Show feedback
-            const originalIcon = shareBtn.innerHTML
-            shareBtn.innerHTML = '<i class="bi bi-check"></i>'
-            shareBtn.classList.add('success')
-
-            setTimeout(() => {
-              shareBtn.innerHTML = originalIcon
-              shareBtn.classList.remove('success')
-            }, 2000)
-          } catch (err) {
-            console.error('Failed to copy:', err)
-            alert('Failed to copy link')
-          }
-        }
-      })
     })
   </script>
 {% endblock %}

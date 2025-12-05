@@ -9,9 +9,10 @@
 
 .toast-container {
     position: fixed;
-    bottom: 5%;
+    bottom: 0;
     right: 0;
     z-index: 20;
+    padding: 1rem;
 }
 
 /* ==========================================================================
@@ -21,13 +22,15 @@
 .toast {
     width: auto;
     opacity: 0;
-    display: inline-block;
+    display: flex;
     transform: translateY(100%);
     animation: moveUp 0.5s ease-out forwards;
     border-radius: 5px;
+    border: 0;
     padding: 0 10px;
     position: relative;
     overflow: hidden;
+    align-items: center;
 
     &.closed {
         animation: dismissToast 0.3s ease-in forwards;
@@ -61,7 +64,7 @@
     &.success,
     &.error,
     &.info {
-        color: var(--secondary-color);
+        color: white;
     }
 
     &.success {
@@ -125,7 +128,7 @@
    Toast Types (Dark Mode)
    ========================================================================== */
 
-body.darkmode {
+.darkmode {
     .toast {
         &.info {
             background-color: #31318A;
