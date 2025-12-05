@@ -1036,7 +1036,7 @@
 
     .buttons-container {
         display: grid;
-        grid-template-columns: 1fr auto auto;
+        grid-template-columns: 1fr repeat(2, auto);
         width: 100%;
         gap: 20px;
         align-items: center;
@@ -1073,7 +1073,8 @@
             font-size: 1.5rem;
             color: var(--base-text-color);
             cursor: pointer;
-            padding: 0 10px;
+            margin: 0 5px;
+            padding: 0;
             border-radius: 5px;
             transition: all 0.3s ease;
             will-change: transform, color;
@@ -1091,8 +1092,45 @@
             }
         }
 
-        .btn-share:hover {
-            color: var(--third-color);
+        .btn-share {
+            display: grid;
+            place-items: center;
+
+            > i {
+                grid-area: 1 / 1;
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+
+            .bi-share {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+
+            .bi-check-lg {
+                opacity: 0;
+                font-size: 1.5rem;
+                transform: scale(0) rotate(-180deg);
+                color: var(--third-color);
+            }
+
+            &:hover {
+                color: var(--third-color);
+            }
+
+            #share-checkbox {
+                &:checked {
+                    &~.bi-share {
+                        opacity: 0;
+                        transform: scale(0) rotate(180deg);
+                    }
+
+                    &~.bi-check-lg {
+                        opacity: 1;
+                        display: inline-flex;
+                        transform: scale(1) rotate(0deg);
+                    }
+                }
+            }
         }
 
         .btn-wish-list:hover {

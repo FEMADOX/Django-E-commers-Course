@@ -71,6 +71,16 @@
             }
         }
     }
+
+    .terms-conditions-container {
+        display: flex;
+        margin: 1.5rem 0;
+        gap: .5rem;
+
+        .conditions-text {
+            width: fit-content;
+        }
+    }
 }
 
 /* ==========================================================================

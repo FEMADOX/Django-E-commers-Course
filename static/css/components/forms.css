@@ -90,12 +90,12 @@ form.register {
         margin: 0;
     }
 
-    & p.auth-submit input,
-    & input.logout-account {
+    & .auth-submit input,
+    & .logout-account {
         border-radius: 10px;
     }
 
-    & p.auth-submit input {
+    & .auth-submit input {
         &:hover,
         &:active {
             box-shadow: 0 10px 25px rgba(102, 234, 144, 0.4);
