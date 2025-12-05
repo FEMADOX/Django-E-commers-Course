@@ -35,8 +35,8 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
     from django.forms import Form
+    from django.http import HttpResponse
     from django.test.client import Client as DjangoClient
-    from django.test.client import _MonkeyPatchedWSGIResponse
 
 
 @pytest.mark.unit
@@ -389,7 +389,7 @@ class TestAccountActivationView:
     def account_email_activation(
         email: str,
         client: DjangoClient,
-    ) -> _MonkeyPatchedWSGIResponse:
+    ) -> HttpResponse:
         uidb64 = urlsafe_base64_encode(force_bytes(email))
         token = hashlib.sha256(email.encode()).hexdigest()
 
@@ -402,7 +402,7 @@ class TestAccountActivationView:
 
     @staticmethod
     def assert_activation_error_redirect(
-        response: _MonkeyPatchedWSGIResponse,
+        response: HttpResponse,
         email: str,
         expected_message: str,
     ) -> None:

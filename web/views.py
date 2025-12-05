@@ -8,7 +8,6 @@ from django.views.generic import DetailView, ListView, TemplateView
 from web.models import Brand, Category, Product
 
 if TYPE_CHECKING:
-    from django.core.paginator import _SupportsPagination
     from django.db.models import QuerySet
     from django.http import HttpRequest, HttpResponse
 
@@ -45,12 +44,7 @@ class FilterByBaseView(ListView):
         """Get filtered products queryset."""
         return super().get_queryset()
 
-    def get_context_data(
-        self,
-        *,
-        object_list: _SupportsPagination | None = None,
-        **kwargs: dict,
-    ) -> dict[str, Any]:
+    def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
         """Add categories and brands to context."""
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all()

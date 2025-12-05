@@ -16,6 +16,7 @@ from django.contrib.auth.views import (
     PasswordResetView,
 )
 from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.http.request import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_str
@@ -41,7 +42,7 @@ if TYPE_CHECKING:
     from django.forms import Form
     from django.forms.models import BaseModelForm
     from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-    from django.http.response import HttpResponseBase
+    from django.template.response import TemplateResponse
 
 
 class UserAccountView(LoginRequiredMixin, TemplateView):
@@ -115,7 +116,9 @@ class UserSignupView(AnonymousRequiredMixin, CreateView):
 
 
 class CustomLogoutView(LogoutView):
-    def post(self, request: HttpRequest, *args: tuple, **kwargs: dict) -> HttpResponse:
+    def post(
+        self, request: HttpRequest, *args: tuple, **kwargs: dict
+    ) -> TemplateResponse:
         messages.success(request, "You have been logged out successfully.")
         return super().post(request)
 
@@ -336,7 +339,7 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
         request: HttpRequest,
         *args: tuple,
         **kwargs: dict,
-    ) -> HttpResponseBase:
+    ) -> HttpResponse:
         if "uidb64" not in kwargs or "token" not in kwargs:
             msg = "The URL path must contain 'uidb64' and 'token' parameters."
             raise ImproperlyConfigured(msg)

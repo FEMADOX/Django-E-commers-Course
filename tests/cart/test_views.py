@@ -4,6 +4,7 @@ import json
 
 import pytest
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser as User
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
@@ -24,8 +25,6 @@ from order.models import Order
 from tests.cart.conftest import WSGIRequest
 from tests.common.status import HTTP_200_OK, HTTP_302_REDIRECT, HTTP_400_BAD_REQUEST
 from web.models import Product
-
-User = get_user_model()
 
 pytestmark = [pytest.mark.django_db, pytest.mark.unit]
 

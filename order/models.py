@@ -1,4 +1,5 @@
 from collections.abc import Iterable
+from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from django.db import models
@@ -22,7 +23,7 @@ class Order(models.Model):
     total_price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        default=0,
+        default=Decimal("0.00"),
     )
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="0")
 
@@ -51,7 +52,9 @@ class OrderDetail(models.Model):
         on_delete=models.RESTRICT,
     )
     quantity = models.PositiveIntegerField(blank=True, default=1)
-    subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    subtotal = models.DecimalField(
+        max_digits=10, decimal_places=2, default=Decimal("0.00")
+    )
 
     class Meta:
         verbose_name = "Order Detail"
@@ -65,8 +68,7 @@ class OrderDetail(models.Model):
 
     def save(
         self,
-        *,
-        force_insert: bool | tuple[ModelBase, ...] = False,
+        force_insert: bool = False,
         force_update: bool = False,
         using: str | None = None,
         update_fields: Iterable[str] | None = None,

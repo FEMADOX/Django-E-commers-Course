@@ -5,7 +5,13 @@ from typing import TYPE_CHECKING, Any, cast
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import (
+    HttpRequest,
+    HttpResponse,
+    HttpResponsePermanentRedirect,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import View
@@ -67,7 +73,7 @@ class ConfirmOrderView(LoginRequiredMixin, FormView):
     template_name = "order/order.html"
     login_url = "/account/login/"
 
-    def get(self, request: HttpRequest, *args: tuple, **kwargs: dict) -> HttpResponse:
+    def get(self, request: HttpRequest, *args: str, **kwargs: dict) -> HttpResponse:
         """Redirect GET requests to create order page."""
         return redirect("order:create_order")
 
@@ -206,11 +212,11 @@ class DeletePendingOrderView(LoginRequiredMixin, View):
             pending_order.delete()
 
             messages.success(request, "Pending order has been deleted successfully.")
-            return redirect("cart:cart")
+            return redirect("cart:cart")  # type: ignore
 
         except Order.DoesNotExist:
             messages.error(request, "No pending order found to delete.")
-            return redirect("cart:cart")
+            return redirect("cart:cart")  # type: ignore
 
 
 class OrderSummaryView(LoginRequiredMixin, DetailView):
@@ -231,5 +237,5 @@ class OrderSummaryView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
         """Add order ID to session and return context data."""
         context = super().get_context_data(**kwargs)
-        self.request.session["order_id"] = self.object.pk
+        self.request.session["order_id"] = self.get_object().pk
         return context

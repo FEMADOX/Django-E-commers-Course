@@ -7,7 +7,12 @@ import stripe
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
+from django.http import (
+    HttpResponse,
+    HttpResponseBadRequest,
+    HttpResponseNotFound,
+    HttpResponsePermanentRedirect,
+)
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -120,7 +125,7 @@ class PaymentProcessView(LoginRequiredMixin, View):
             return HttpResponseBadRequest("Invalid session data")
         except (ValueError, TypeError):
             # Handle other specific errors
-            return redirect("/")
+            return redirect("/")  # type: ignore
 
 
 class PaymentCompletedView(LoginRequiredMixin, View):

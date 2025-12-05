@@ -20,4 +20,4 @@ class AnonymousRequiredMixin(UserPassesTestMixin):
     def handle_no_permission(
         self,
     ) -> HttpResponseRedirect:
-        return redirect(self.login_redirect_url)
+        return redirect(self.login_redirect_url)  # type: ignore
