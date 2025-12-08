@@ -30,6 +30,9 @@ self.cart = self.session.get("cart", {})  # Dictionary stored in session
 - UID: base64-encoded email
 - See `account/emails.py` and `account/views.AccountActivationView`
 
+**CSS styling**: Like TailwindCSS, using Mobile First Philosophy.
+- Using SCSS syntax for nested styles in CSS files.
+
 ## Development Workflow
 
 ### Environment Setup

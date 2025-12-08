@@ -20,7 +20,7 @@
       <h2>Your Items</h2>
       {% for product_id, product_order_detail in request.session.cart.items %}
         <article class="prod-li sectls" data-product-id="{{ product_id }}">
-          <div class="prod-li-inner d-flex gap-4">
+          <div class="prod-li-inner">
             <a href="{% url 'web:product_detail' product_id %}" class="prod-li-img"><img src="{{ product_order_detail.image }}" alt="" /></a>
             <div class="cart-item">
               <div class="card-header product-cart">
@@ -57,7 +57,9 @@
                     </p>
                   </div>
                   <p class="prod-li-information">
-                    <a href="#" class="hover-label"><i class="icon ion-more"></i><span>Show Information</span></a>
+                    <a href="#" class="hover-label">
+                      <i class="icon ion-more"></i><span class="show-more-helptext">Show Information</span>
+                    </a>
                   </p>
                 </div>
               </div>
