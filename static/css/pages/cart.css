@@ -8,6 +8,10 @@
    ========================================================================== */
 
 .main-cont .prod-litems {
+    h2 {
+        font-size: 2rem;
+    }
+
     .prod-li {
         margin: 0 0 26px;
         position: relative;
@@ -484,7 +488,7 @@ form.cart-actions input.checkout-button {
     text-transform: uppercase;
     display: block;
     border: none;
-    margin: 0 0 20px;
+    margin: 0;
     padding: 10px 22px;
     cursor: pointer;
     width: auto;
