@@ -399,15 +399,14 @@ hr {
     display: none;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 992px) {
     .container-fluid {
         display: flex;
-        justify-content: right;
-        flex-direction: row;
-        margin-right: auto;
-        margin-left: auto;
-        padding-left: 15px;
-        padding-right: 15px;
+        justify-content: end;
+
+        .row {
+            margin: 0;
+        }
     }
 }
 
@@ -856,30 +855,6 @@ ul.footer-link-list.social-links {
     height: 100%;
 }
 
-.h-nav {
-    display: flex;
-    align-items: center;
-    height: 2.5rem;
-}
-
-.bi-sun::before,
-.bi-moon::before {
-    display: block;
-}
-
-.bi-moon::before {
-    font-size: 1.6rem;
-}
-
-.bi-sun::before {
-    font-size: 1.8rem;
-    font-weight: bolder !important;
-}
-
-.header-logo {
-    font-size: 2rem;
-    height: 90%;
-}
 
 /* CART */
 

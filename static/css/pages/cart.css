@@ -1000,7 +1000,7 @@ form.cart-actions input.checkout-button {
    Responsive Styles
    ========================================================================== */
 
-@media (min-width: 769px) {
+@media (min-width: 768px) {
     .cart-actions {
         .cart-collaterals {
             float: left;

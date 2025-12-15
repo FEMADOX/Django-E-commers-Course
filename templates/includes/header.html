@@ -2,7 +2,9 @@
   <div class="h-logo d-flex align-items-center justify-content-between">
     <a class="header-logo align-items-center" href="{% url 'web:index' %}">
       <i class="bi bi-github"></i>
+      <span class="header-title">Django E-commerce</span>
     </a>
+    <!-- <a class="header-title" href="{% url 'web:index' %}">Django E-commerce</a> -->
     <div class="h-nav">
       <div class="h-shop position-static">
         <ul class="h-shop-links d-flex">
@@ -18,24 +20,22 @@
           </li>
           <li class="h-shop-icon h-profile">
             <a href="{% url 'account:user_account' %}" title="My Account"><i class="ion-android-person"></i></a>
-            <ul class="h-profile-links">
-              {% if request.user.is_authenticated %}
-                <li>
-                  <form action="{% url 'account:logout' %}" method="post">
-                    {% csrf_token %}
-                    <input type="submit" class="" value="LogOut" />
-                  </form>
-                </li>
-              {% else %}
-                <li>
-                  <a href="{% url 'account:user_account' %}">LogIn / SignUp</a>
-                </li>
-              {% endif %}
-            </ul>
           </li>
           {% if user.is_authenticated %}
             {% include 'includes/header-cart.html' %}
           {% endif %}
+          <li class="registration-container">
+            {% if not user.is_authenticated %}
+              <a class="header-login" href="{% url 'account:login' %}">Login</a>
+              <a class="header-signup" href="{% url 'account:signup' %}">SignUp</a>
+            {% else %}
+              <form class="header-logout" action="{% url 'account:logout' %}" method="post">
+                {% csrf_token %}
+                <input type="submit" class="" value="LogOut" />
+              </form>
+            {% endif %}
+          </li>
+
         </ul>
       </div>
       <button id="theme-switch" class="position-static">

@@ -420,7 +420,7 @@ XL (Extra Large):  ≥ 1200px    Standard desktops & up
     }
 }
 
-@media only screen and (min-width: 769px) and (max-width: 992px) {
+@media only screen and (min-width: 768px) and (max-width: 992px) {
 
     .prod {
         .prod-li-qnt {
@@ -1340,7 +1340,7 @@ XL (Extra Large):  ≥ 1200px    Standard desktops & up
     /* Reserved for future use */
 }
 
-@media only screen and (min-width: 769px) {
+@media only screen and (min-width: 768px) {
     /* Reserved for future use */
 }
 
