@@ -113,8 +113,9 @@
     /* SM - Small devices (≥ 576px) */
     @media (min-width: 576px) {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
+        grid-auto-columns: 1fr;
+        grid-auto-flow: column;
+        gap: 0;
         text-align: left;
 
         h4 {
@@ -124,7 +125,6 @@
 
     /* MD - Medium devices (≥ 768px) */
     @media (min-width: 768px) {
-        gap: 4rem;
     }
 }
 
@@ -138,6 +138,7 @@
     margin: 0;
     padding: 0;
     gap: 2px;
+    width: max-content;
 
     a {
         color: var(--secondary-text-color);
@@ -151,9 +152,53 @@
         }
     }
 
+    &.contact-info {
+        margin: auto;
+        margin-bottom: 20px;
+
+        li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary-text-color);
+            overflow: hidden;
+            width: 100%;
+
+            a {
+                max-width: 8rem;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                color: var(--third-color);
+                overflow: hidden;
+            }
+        }
+    }
+
     /* SM - Small devices (≥ 576px) */
     @media (min-width: 576px) {
-        align-items: flex-start;
+        &.contact-info {
+            margin: 0 0 20px 0;
+
+            li a {
+                max-width: 12rem;
+            }
+        }
+    }
+
+    /* MD - Medium devices (≥ 768px) */
+    @media (min-width: 768px) {
+        &.contact-info {
+
+            li {
+                flex-direction: row;
+                gap: 10px;
+
+                a {
+                    max-width: none;
+                }
+            }
+        }
     }
 }
 
@@ -273,4 +318,33 @@
     margin-top: 1rem;
     padding-top: 1rem;
     width: 100%;
+}
+
+.footer-title-container {
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+
+    h3 {
+        margin: 0;
+        font-size: 2rem;
+    }
+
+    svg {
+        max-width: auto;
+        max-height: 25px;
+
+        .darkmode & {
+            path {
+                fill: #ffffff;
+            }
+        }
+    }
+
+    @media screen and (min-width: 992px) {
+        display: flex;
+        min-width: 28rem;
+        margin-right: 5rem;
+    }
 }
