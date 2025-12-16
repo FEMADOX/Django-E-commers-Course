@@ -202,7 +202,7 @@
 
             i {
                 height: auto;
-                display: inline-block;
+                display: inline-flex;
             }
         }
 
@@ -218,6 +218,10 @@
                 max-width: none;
                 min-width: auto;
             }
+        }
+
+        .bi-github {
+            font-size: 2.3rem;
         }
 
         .header-title {

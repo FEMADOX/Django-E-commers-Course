@@ -153,24 +153,35 @@
     }
 
     &.contact-info {
-        margin: auto;
+        /* margin: auto; */
         margin-bottom: 20px;
 
         li {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--secondary-text-color);
-            overflow: hidden;
             width: 100%;
 
             a {
+                overflow: hidden;
                 max-width: 8rem;
                 white-space: nowrap;
                 text-overflow: ellipsis;
-                color: var(--third-color);
+                color: var(--secondary-text-color);
                 overflow: hidden;
+
+                &:hover, &:active {
+                    color: var(--third-color);
+
+                    i {
+                        color: var(--third-color);
+                    }
+                }
+
+                i {
+                    display: block;
+                    color: var(--secondary-text-color);
+                    text-align: center;
+                    transition: color 0.2s;
+                }
             }
         }
     }
@@ -180,8 +191,10 @@
         &.contact-info {
             margin: 0 0 20px 0;
 
-            li a {
-                max-width: 12rem;
+            li {
+                a {
+                    max-width: 12rem;
+                }
             }
         }
     }
@@ -191,11 +204,13 @@
         &.contact-info {
 
             li {
-                flex-direction: row;
-                gap: 10px;
-
                 a {
                     max-width: none;
+
+                    i {
+                        display: inline;
+                        margin-right: 5px;
+                    }
                 }
             }
         }
@@ -323,21 +338,39 @@
 .footer-title-container {
     display: none;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     gap: 1rem;
 
-    h3 {
+    .footer-title {
         margin: 0;
         font-size: 2rem;
+        transition: color 0.2s;
     }
 
     svg {
         max-width: auto;
         max-height: 25px;
 
-        .darkmode & {
-            path {
+        path {
+            transition: fill 0.2s;
+
+            .darkmode & {
                 fill: #ffffff;
+            }
+        }
+
+    }
+
+    &:hover, &:active {
+        cursor: pointer;
+
+        .footer-title {
+            color: var(--third-color);
+        }
+
+        svg {
+            path {
+                fill: #1291ee;
             }
         }
     }

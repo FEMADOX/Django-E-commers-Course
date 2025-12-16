@@ -1299,36 +1299,41 @@ ul.links_list {
 		display: inline-block;
 		list-style: none;
 		margin: 0;
-		/*margin: 0 22px;*/
 		padding: 0;
 		vertical-align: middle;
+		margin-bottom: 10px;
 
-		& p {
+		/* Icon transition and hover effect */
+		i {
+			transition: color 0.2s;
+		}
+
+		&:hover i {
+			color: #1291ee;
+		}
+
+		& .links_list-value {
 			display: inline-block;
 			color: #868ca7;
 			vertical-align: middle;
-			margin: 0 0 10px;
 			line-height: 1.4;
+			margin: 0;
+
+			a {
+				color: inherit;
+				text-decoration: none;
+				transition: color 0.2s;
+				border: none;
+			}
+
+			&:hover, &:active {
+				a {
+					text-decoration: none;
+					color: #1291ee;
+				}
+			}
 		}
 
-		& img {
-			display: inline-block;
-			vertical-align: middle;
-			margin: 0 0 3px;
-		}
-	}
-
-	& p a {
-		color: inherit;
-		text-decoration: none;
-		transition: color 0.2s;
-		border: none;
-
-		&:hover {
-			color: inherit;
-			text-decoration: none;
-			color: #1291ee;
-		}
 	}
 
 	& .links_list-label {
@@ -1354,6 +1359,8 @@ ul.links_list {
 		& li {
 			margin-right: 0;
 			margin-left: 44px;
+			display: inline-flex;
+			gap: 1rem;
 
 			&:first-child {
 				margin-left: 0;
