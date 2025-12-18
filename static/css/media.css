@@ -188,38 +188,6 @@ XL (Extra Large):  ≥ 1200px    Standard desktops & up
         margin: 0 0 30px 30px;
     }
 
-    .section-sb .blog-sb-widget .widgettitle {
-        margin: 0;
-        cursor: pointer;
-        transition: margin 0.4s, color 0.2s;
-        position: relative;
-
-        &:hover {
-            color: #1291ee;
-        }
-
-        &:after {
-            content: '\f107';
-            font-family: FontAwesome;
-            display: inline-block;
-            vertical-align: middle;
-            margin: 0 0 0 13px;
-            font-size: 22px;
-            font-weight: 400;
-        }
-
-        &.opened {
-            margin-bottom: 18px;
-            &:after {
-                content: '\f106';
-            }
-        }
-
-        &+* {
-            display: none;
-        }
-    }
-
     /* CATEGORIES LIST */
     .categs-list li {
         width: 25%;
@@ -950,38 +918,6 @@ XL (Extra Large):  ≥ 1200px    Standard desktops & up
     }
 
     /* CATEGORIES & BRANDS ACCORDION ICONS */
-    .section-sb .blog-sb-widget .widgettitle {
-        margin: 0;
-        cursor: pointer;
-        transition: margin 0.4s, color 0.2s;
-        position: relative;
-        width: max-content;
-
-        &:hover {
-            color: #1291ee;
-        }
-
-        &:after {
-            content: '\f107';
-            font-family: FontAwesome;
-            display: inline-block;
-            vertical-align: middle;
-            margin: 0 0 0 13px;
-            font-size: 22px;
-            font-weight: 400;
-        }
-
-        &.opened {
-            margin-bottom: 18px;
-            &:after {
-                content: '\f106';
-            }
-        }
-
-        &+* {
-            display: none;
-        }
-    }
 
     /* POST */
     .post-img {

@@ -2,9 +2,10 @@
    Section Filter Container
    ========================================================================== */
 
-.section-filter {
+.section-filter-container {
     background-color: var(--secondary-color);
     border-radius: 7px;
+    padding: 15px;
 
     /* IRS Range Slider */
     .irs-from,
@@ -59,12 +60,21 @@
         display: none;
     }
 
-    /* Responsive Styles */
-    @media (max-width: 767px) {
-        padding: 15px;
+    @media screen and (min-width: 768px) and (max-width: 991px) {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 1fr;
+        gap: 15px;
+
+        .section-filter {
+            padding-top: 0 !important;
+        }
+
+        /* &:last-child {
+            margin: 0 auto;
+        } */
     }
 
-    /* Mobile First Media Queries */
     @media (min-width: 992px) {
         .woof_sid_auto_shortcode .woof_container {
             .section-filter-label {
@@ -273,6 +283,10 @@
             border-top: none;
         }
     }
+
+    @media screen and (min-width: 576px) and (max-width: 991px) {
+        padding-right: 5px;
+    }
 }
 
 /* ==========================================================================
@@ -381,11 +395,52 @@
     }
 
     .widgettitle {
-        margin: 0 0 18px;
+        margin: 0 0 10px;
         padding: 0;
         color: var(--placeholder-color);
         font-size: 18px;
         font-weight: 700;
+
+        &.opened {
+            &:after {
+                content: '\f106';
+            }
+        }
+
+        &:after {
+            content: '\f107';
+            font-family: FontAwesome;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 0 0 13px;
+            font-size: 22px;
+            font-weight: 400;
+        }
+
+        &:hover {
+            color: #1291ee;
+        }
+
+        &+* {
+            display: none;
+
+        }
+
+        @media screen and (min-width: 576px) and (max-width: 991px) {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0 !important;
+        }
+
+        @media screen and (min-width: 992px) {
+            &+* {
+                display: block;
+            }
+
+            &:after {
+                content: '';
+            }
+        }
     }
 }
 
