@@ -406,11 +406,6 @@ XL (Extra Large):  ≥ 1200px    Standard desktops & up
 
     /* Moved to static/css/pages/product.css */
 
-    /* CATALOG */
-    .add-to-cart-mobile {
-        display: none;
-    }
-
     /* CONTAINER */
     .cont {
         width: auto;

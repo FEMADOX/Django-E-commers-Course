@@ -50,6 +50,9 @@
                 <a href="{% url 'web:filter_by_brand' product.brand.id %}">{{ product.brand }}</a>
               </p>
               <p class="prod-i-price">${{ product.price }}</p>
+              <button class="add-to-cart-mobile blue-button" type="submit">
+                <i class="bi bi-cart-plus"></i>
+              </button>
             </div>
           </div>
         </div>

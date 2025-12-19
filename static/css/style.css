@@ -543,7 +543,6 @@ TABLE OF CONTENTS:
 
         &:hover {
             background: var(--primary-hover);
-            color: var(--secondary-color);
         }
 
         &:disabled[disabled] {
@@ -566,4 +565,13 @@ TABLE OF CONTENTS:
     height: auto;
     line-height: initial;
     vertical-align: initial;
+}
+
+@media screen and (min-width: 992px) {
+    .blog-sb-widgets.section-sb {
+        max-width: 40rem;
+        height: auto;
+        position: sticky;
+        top: 10rem;
+    }
 }

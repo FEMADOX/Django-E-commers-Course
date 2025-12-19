@@ -76,6 +76,8 @@
     }
 
     @media (min-width: 992px) {
+        max-width: 40rem;
+
         .woof_sid_auto_shortcode .woof_container {
             .section-filter-label {
                 width: 23%;
@@ -429,6 +431,9 @@
         @media screen and (min-width: 576px) and (max-width: 991px) {
             display: flex;
             justify-content: space-between;
+        }
+
+        @media screen and (min-width: 768px) and (max-width: 991px) {
             margin-top: 0 !important;
         }
 
