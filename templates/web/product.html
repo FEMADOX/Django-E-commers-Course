@@ -18,7 +18,7 @@
     </li>
     <li>Product</li>
   </ul>
-  <article>
+  <article class="product-container">
     <div class="prod">
       <div class="prod-slider-wrap prod-slider-shown">
         <div class="flexslider prod-slider" id="prod-slider">
@@ -109,6 +109,7 @@
           </div>
         </div>
       </div>
+
       <div class="prod-cont">
         <div id="product-details">
           <p class="prod-categs prod-brands">
@@ -143,25 +144,11 @@
                 Out of Stock
               {% endif %} {% endcomment %}
             </div>
+
             <div class="prod-add">
               <form class="add-to-cart-form" action="{% url 'cart:add_product_cart' product.id %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="location-url" value="{{ request.get_full_path }}" />
-                <!-- <div class="variations">
-                  <div class="variations-row">
-                    <div class="label">
-                      <label>Color</label>
-                    </div>
-                    <div class="value">
-                      <select>
-                        <option value="">Choose an option</option>
-                        <option value="blue">{{ product.color }}</option>
-                        <option value="green">Green</option>
-                        <option value="yellow">Yellow</option>
-                      </select>
-                    </div>
-                  </div>
-                </div> -->
                 <div class="quantity-wrapper">
                   Quantity:
                   <div class="border rounded quantity-control-component">
@@ -183,122 +170,123 @@
                     <i class="bi bi-heart-fill"></i>
                   </label>
                   <button type="button" class="btn-share" id="btn-share" data-url="{{ request.build_absolute_uri }}">
-                    <!-- TODO(FENYXZ): Implement a smooth transition -->
                     <input type="checkbox" name="share" id="share-checkbox" hidden />
                     <i class="bi bi-share"></i>
                     <i class="bi bi-check-lg"></i>
                   </button>
                 </div>
-                <div class="extra-icons">
-                    <i class="bi bi-truck"></i>
-                    <i class="bi bi-arrow-repeat"></i>
-                    <span class="title">Free Shipping</span>
-                    <span class="title">Easy Return</span>
-                    <span class="info">Orders Over $50</span>
-                    <span class="info">30 Days Return</span>
-                </div>
               </form>
             </div>
 
-            <div class="product-extra-information">
-              <div class="accordion accordion-flush" id="accordionFlushExample">
-                <div class="accordion-item">
-                  <h3 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                      Description
-                    </button>
-                  </h3>
-                  <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
-                    <div class="accordion-body">
-                      <p>
-                        {{ product.description }}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div class="accordion-item">
-                  <h3 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                      Specifications
-                    </button>
-                  </h3>
-                  <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-                    <div class="accordion-body">
-                      <div class="page-styling prod-li-informations">
-                        <dl class="prod-li-props">
-                          <dt>Brand:</dt>
-                          <dd><a href="{% url 'web:filter_by_brand' product.brand.id %}">{{ product.brand.name }}</a></dd>
-                          <dt>Category:</dt>
-                          <dd><a href="{% url 'web:filter_by_category' product.category.id %}">{{ product.category.name }}</a></dd>
-                          <dt>Color:</dt>
-                          <dd>{{ product.color }}</dd>
-                          <dt>Dimension:</dt>
-                          <dd>{{ product.dimension }}</dd>
-                          <dt>Weight:</dt>
-                          <dd>{{ product.weight }} kg</dd>
-                        </dl>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="accordion-item">
-                  <h3 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                      Reviews
-                    </button>
-                  </h3>
-                  <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
-                    <div class="accordion-body">
-                      <div class="rating-average">
-                        <div class="total-stars-display">
-                          <p class="review-aver">4.5</p>
-                          <div>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                          </div>
-                          <p>Based on 250 reviews</p>
-                        </div>
-                        <div class="stars-count-graphic">
-                          <span>5 stars</span>
-                          <div class="star-bar">
-                            <div class="filled-bar" style="width: 60%;"></div>
-                          </div>
-                          <span>150</span>
-                          <span>4 stars</span>
-                          <div class="star-bar">
-                            <div class="filled-bar" style="width: 30%;"></div>
-                          </div>
-                          <span>75</span>
-                          <span>3 stars</span>
-                          <div class="star-bar">
-                            <div class="filled-bar" style="width: 10%;"></div>
-                          </div>
-                          <span>25</span>
-                          <span>2 stars</span>
-                          <div class="star-bar">
-                            <div class="filled-bar"></div>
-                          </div>
-                          <span>0</span>
-                          <span>1 star</span>
-                          <div class="star-bar">
-                            <div class="filled-bar"></div>
-                          </div>
-                          <span>0</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="extra-icons">
+              <i class="bi bi-truck"></i>
+              <i class="bi bi-arrow-repeat"></i>
+              <span class="title">Free Shipping</span>
+              <span class="title">Easy Return</span>
+              <span class="info">Orders Over $50</span>
+              <span class="info">30 Days Return</span>
             </div>
 
           </div>
         </div>
       </div>
     </div>
+
+    <div class="product-extra-information">
+      <div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+              Description
+            </button>
+          </h3>
+          <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p>
+                {{ product.description }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+              Specifications
+            </button>
+          </h3>
+          <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <div class="page-styling prod-li-informations">
+                <dl class="prod-li-props">
+                  <dt>Brand:</dt>
+                  <dd><a href="{% url 'web:filter_by_brand' product.brand.id %}">{{ product.brand.name }}</a></dd>
+                  <dt>Category:</dt>
+                  <dd><a href="{% url 'web:filter_by_category' product.category.id %}">{{ product.category.name }}</a></dd>
+                  <dt>Color:</dt>
+                  <dd>{{ product.color }}</dd>
+                  <dt>Dimension:</dt>
+                  <dd>{{ product.dimension }}</dd>
+                  <dt>Weight:</dt>
+                  <dd>{{ product.weight }} kg</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+              Reviews
+            </button>
+          </h3>
+          <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <div class="rating-average">
+                <div class="total-stars-display">
+                  <p class="review-aver">4.5</p>
+                  <div>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-half"></i>
+                  </div>
+                  <p>Based on 250 reviews</p>
+                </div>
+                <div class="stars-count-graphic">
+                  <span>5 stars</span>
+                  <div class="star-bar">
+                    <div class="filled-bar" style="width: 60%;"></div>
+                  </div>
+                  <span>150</span>
+                  <span>4 stars</span>
+                  <div class="star-bar">
+                    <div class="filled-bar" style="width: 30%;"></div>
+                  </div>
+                  <span>75</span>
+                  <span>3 stars</span>
+                  <div class="star-bar">
+                    <div class="filled-bar" style="width: 10%;"></div>
+                  </div>
+                  <span>25</span>
+                  <span>2 stars</span>
+                  <div class="star-bar">
+                    <div class="filled-bar"></div>
+                  </div>
+                  <span>0</span>
+                  <span>1 star</span>
+                  <div class="star-bar">
+                    <div class="filled-bar"></div>
+                  </div>
+                  <span>0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </article>
   <script>
     document.addEventListener('DOMContentLoaded', () => {

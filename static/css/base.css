@@ -1291,14 +1291,6 @@ body.darkmode {
     }
 }
 
-.main-cont .prod {
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 5px 10px var(--shadow-light);
-    border-radius: 10px;
-}
-
 .prod .prod-slider-wrap {
     position: static;
     padding: 0;
