@@ -109,8 +109,6 @@ form.register {
    ========================================================================== */
 
 form.login {
-    margin-left: 5px;
-
     .woocommerce & {
         border: 1px solid var(--border-color);
         border-radius: 3px;
