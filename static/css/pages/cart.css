@@ -1000,49 +1000,60 @@ form.cart-actions input.checkout-button {
    Responsive Styles
    ========================================================================== */
 
+@media screen and (min-width: 992px) {
+    .cart-actions.cart-page {
+        .order-coupon, .order-total {
+            &::before {
+                width: 90%;
+                left: 5%;
+            }
+        }
+    }
+}
+
 @media (min-width: 768px) {
+    .prod-litems.section-list {
+        .prod-li-inner {
+            align-items: center;
+
+            .prod-li-ttl-wrap {
+                max-width: unset;
+
+                h3 {
+                    max-width: unset;
+                }
+
+                p {
+                    margin-bottom: 5px;
+                }
+            }
+
+            .card-body {
+                row-gap: 5px;
+
+                .prod-li-price-wrap,
+                .prod-li-price-wrap .prod-li-price {
+                    max-width: unset;
+                }
+
+                .quantity-control-component {
+                    justify-self: end;
+                }
+            }
+        }
+    }
+
     .cart-actions {
         .cart-collaterals {
-            float: left;
-            width: 79%;
-            padding: 0 0 0 9.5%;
-            display: block;
-        }
+            justify-content: flex-end;
+            gap: 15px;
 
-        .order-coupon,
-        .order-total {
-            float: right;
-            width: 14%;
-            padding: 3px 0 0 0;
-            display: block;
-            margin-bottom: 0;
+            form.cart-actions input.checkout-button {
+                margin: 0;
+            }
         }
     }
 
-    form.cart-actions input.checkout-button {
-        float: right;
-        margin: 0;
-    }
-
-    .main-cont .prod-litems .prod-li-inner {
-        padding: 0 0 0 140px;
-    }
-
-    .prod-litems .prod-li-img {
-        width: 140px;
-        padding: 15px;
-    }
-
-    .prod-litems .prod-li-ttl-wrap {
-        width: 100%;
-        max-width: 100%;
-        padding: 10px;
-    }
-
-    .prod-litems .prod-li-prices {
-        width: 100%;
-        padding: 10px;
-    }
 }
 
 @media (min-width: 576px) {
