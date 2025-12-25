@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block head %}
@@ -16,7 +16,7 @@
     </li>
     <li>My Account</li>
   </ul>
-  <article class="page-cont">
+  <article class="page-cont account-page">
     <div class="page-styling">
       <div class="auth-wrap">
         <div class="auth-col">
@@ -24,26 +24,52 @@
             <h2>Profile Information</h2>
             <p>Update your profile information</p>
           </div>
-          <form class="register update-account-details" method="post" action="{% url 'account:update_account' %}">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <p class="auth-submit mb-0 mt-4">
-              <input type="submit" value="Update Information" />
-            </p>
-            <div class="divider">
-              <span>or</span>
-            </div>
-          </form>
-          {% if request.user.is_authenticated %}
-            <ul class="logout-account-container m-0">
-              <li>
-                <form action="{% url 'account:logout' %}" method="post">
+
+          <div class="account-details-grid">
+            <form id="update-account-form" class="register update-account-details" method="post" action="{% url 'account:update_account' %}">
+              {% csrf_token %}
+
+              <!-- Personal Details Card -->
+              <div class="account-card personal-details">
+                <h3>Personal Details</h3>
+                <div class="row">
+                  <div class="col-md-6">
+                    {{ form.name|as_crispy_field }}
+                  </div>
+                  <div class="col-md-6">
+                    {{ form.last_name|as_crispy_field }}
+                  </div>
+                </div>
+                {{ form.sex|as_crispy_field }}
+                {{ form.birth|as_crispy_field }}
+                {{ form.dni|as_crispy_field }}
+              </div>
+
+              <!-- Contact Info Card -->
+              <div class="account-card contact-info">
+                <h3>Contact Info</h3>
+                {{ form.email|as_crispy_field }}
+                {{ form.phone|as_crispy_field }}
+                {{ form.address|as_crispy_field }}
+              </div>
+            </form>
+
+            <!-- Actions Card -->
+            <div class="account-card actions">
+              <h3>Actions</h3>
+              <input type="submit" form="update-account-form" value="Update" class="btn btn-primary w-100 mb-3 update-btn" />
+              <div class="divider">
+                <span>or</span>
+              </div>
+              {% if request.user.is_authenticated %}
+                <form action="{% url 'account:logout' %}" method="post" class="w-100">
                   {% csrf_token %}
-                  <input type="submit" class="logout-account" value="LogOut" />
+                  <input type="submit" class="logout-account btn btn-outline-danger w-100" value="LogOut" />
                 </form>
-              </li>
-            </ul>
-          {% endif %}
+              {% endif %}
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
