@@ -291,6 +291,18 @@ div#product-details {
                         margin-bottom: 0;
                     }
                 }
+
+                @media screen and (min-width: 576px) {
+                    grid-template-columns: auto 1fr .2fr;
+
+                    .prod-li-cont {
+                        padding-left: 10px;
+
+                        .prod-li-ttl-wrap .product-ttl {
+                            max-width: none;
+                        }
+                    }
+                }
             }
         }
 
