@@ -14,7 +14,7 @@ dependencies = [
     "gunicorn>=23.0.0",
     "pillow>=11.1.0",
     "pre-commit>=4.3.0",
-    "psycopg2-binary>=2.9.10",
+    "psycopg2-binary==2.9.9",
     "pytest-django>=4.11.1",
     "pytest-xdist>=3.8.0",
     "ruff>=0.12.12",
