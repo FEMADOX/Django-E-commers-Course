@@ -1,13 +1,11 @@
 {
     "version": 2,
     "buildCommand": "bash build_vercel.sh",
-    "functions": {
-        "edshop/wsgi.py": {
-            "maxDuration": 10,
-            "runtime": "vercel/python"
-        }
-    },
     "rewrites": [
+        {
+            "source": "/static/(.*)",
+            "destination": "/static/$1"
+        },
         {
             "source": "/(.*)",
             "destination": "/edshop/wsgi.py"
