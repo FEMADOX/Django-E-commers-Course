@@ -4,7 +4,7 @@
     "functions": {
         "edshop/wsgi.py": {
             "maxDuration": 10,
-            "runtime": "@vercel/python"
+            "runtime": "vercel/python"
         }
     },
     "rewrites": [
