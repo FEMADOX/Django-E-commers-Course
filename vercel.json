@@ -3,8 +3,7 @@
     "buildCommand": "bash build_vercel.sh",
     "functions": {
         "edshop/wsgi.py": {
-            "maxDuration": 10,
-            "runtime": "python3.12"
+            "maxDuration": 10
         }
     },
     "rewrites": [
