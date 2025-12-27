@@ -1,6 +1,7 @@
 {
     "version": 2,
     "buildCommand": "bash build_vercel.sh",
+    "outputDirectory": "staticfiles",
     "rewrites": [
         {
             "source": "/static/(.*)",
