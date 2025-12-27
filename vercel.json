@@ -1,18 +1,16 @@
 {
-    "builds": [
-        {
-            "src": "edshop/wsgi.py",
-            "use": "@vercel/python",
-            "config": {
-                "maxLambdaSize": "15mb",
-                "runtime": "python3.12"
-            }
+    "version": 2,
+    "buildCommand": "bash build_vercel.sh",
+    "functions": {
+        "edshop/wsgi.py": {
+            "maxDuration": 10,
+            "runtime": "python3.12"
         }
-    ],
-    "routes": [
+    },
+    "rewrites": [
         {
-            "src": "/(.*)",
-            "dest": "edshop/wsgi.py"
+            "source": "/(.*)",
+            "destination": "/edshop/wsgi.py"
         }
     ]
 }
