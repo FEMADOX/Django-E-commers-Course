@@ -1,13 +1,18 @@
 {
-    "version": 2,
-    "rewrites": [
+    "builds": [
         {
-            "source": "/static/(.*)",
-            "destination": "/static/$1"
-        },
+            "src": "edshop/wsgi.py",
+            "use": "@vercel/python",
+            "config": {
+                "maxLambdaSize": "15mb",
+                "runtime": "python3.12"
+            }
+        }
+    ],
+    "routes": [
         {
-            "source": "/(.*)",
-            "destination": "/edshop/wsgi.py"
+            "src": "/(.*)",
+            "dest": "edshop/wsgi.py"
         }
     ]
 }
