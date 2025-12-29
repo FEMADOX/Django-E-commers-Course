@@ -4,14 +4,13 @@
       <i class="bi bi-github"></i>
       <span class="header-title">Django E-commerce</span>
     </a>
-    <!-- <a class="header-title" href="{% url 'web:index' %}">Django E-commerce</a> -->
     <div class="h-nav">
       <div class="h-shop position-static">
         <ul class="h-shop-links d-flex">
           <form method="post" action="{% url 'web:search_product_title' %}" class="h-search" id="h-search">
             {% csrf_token %}
             <label>
-              <input type="text" name="title" placeholder="Search..." />
+              <input type="text" name="title" placeholder="Search product..." />
             </label>
             <button type="submit"><i class="ion-search"></i></button>
           </form>

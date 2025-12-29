@@ -70,7 +70,9 @@
   <body>
     <div id="page" class="site">
       {% include 'includes/top-info.html' %}
-      {% include 'includes/header.html' %}
+      <div class="header-sticky">
+        {% include 'includes/header.html' %}
+      </div>
       <div id="content" class="site-content">
         <div id="primary" class="content-area">
           <main id="main" class="site-main">

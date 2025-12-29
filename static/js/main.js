@@ -697,8 +697,13 @@ jQuery(document).ready(function ($) {
 						$site_header_before.css('margin-bottom', '0px');
 					}
 				} else {
-					$site_header_sticky.addClass('header_sticky');
-					$('body').css('margin-top', $site_header_sticky.outerHeight(true));
+					if ($(window).scrollTop() > 0) {
+						$site_header_sticky.addClass('header_sticky');
+						$('body').css('margin-top', $site_header_sticky.outerHeight(true));
+					} else {
+						$site_header_sticky.removeClass('header_sticky');
+						$('body').css('margin-top', '0px');
+					}
 				}
 			});
 		}
