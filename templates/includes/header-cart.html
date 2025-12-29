@@ -7,30 +7,36 @@
   </a>
   <div class="widget_shopping_cart">
     <div class="widget_shopping_cart_content">
-      {% for product_id, product_order_detail in request.session.cart.items %}
-        <form action="{% url 'cart:delete_product_cart' product_id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="location-url" value="{{ request.get_full_path }}"/>
-          <ul class="cart_list">
-            <li>
-              <button type="submit" class="remove">x</button>
-              <a href="{% url 'web:product_detail' product_id %}">
-                <img src="{{ product_order_detail.image }}" alt=""/>
-                {{ product_order_detail.title }}
-              </a>
-              <span class="quantity">{{ product_order_detail.quantity }} &times; ${{ product_order_detail.subtotal }}</span>
-            </li>
-          </ul>
-        </form>
-      {% endfor %}
-      {% if request.session.cart.items|length > 0 %}
+      {% if request.session.cart.items %}
+        {% for product_id, product_order_detail in request.session.cart.items %}
+          <form action="{% url 'cart:delete_product_cart' product_id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="location-url" value="{{ request.get_full_path }}"/>
+            <ul class="cart_list">
+              <li>
+                <button type="submit" class="remove">x</button>
+                <a href="{% url 'web:product_detail' product_id %}">
+                  <img src="{{ product_order_detail.image }}" alt=""/>
+                  {{ product_order_detail.title }}
+                </a>
+                <span class="quantity">{{ product_order_detail.quantity }} &times; ${{ product_order_detail.subtotal }}</span>
+              </li>
+            </ul>
+          </form>
+        {% endfor %}
         <p class="total">
           <b>Total:</b> ${{ request.session.cart_total_price }}
         </p>
+        <p class="buttons">
+          <a href="{% url 'order:create_order' %}" class="button">Place Order</a>
+        </p>
+      {% else %}
+        <div class="empty-cart-box text-center" role="status" aria-label="Your cart is empty">
+          <i class="bi bi-cart-x" aria-hidden="true"></i>
+          <p class="empty-message" aria-hidden="true">Your cart is empty</p>
+          <a href="{% url 'web:index' %}" class="button">Go Shopping</a>
+        </div>
       {% endif %}
-      <p class="buttons">
-        <a href="{% url 'order:create_order' %}" class="button">Place Order</a>
-      </p>
     </div>
   </div>
 </li>

@@ -56,6 +56,7 @@ class CreateOrderView(LoginRequiredMixin, TemplateView):
         cart = Cart(request)
 
         if not cart.cart:
+            messages.info(request, "Your cart is empty. Please add items to proceed.")
             return redirect(reverse("web:index"))
 
         if "cart_total_price" not in request.session:
