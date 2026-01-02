@@ -245,8 +245,7 @@ class TestDeleteProductCartView:
         )
         request.user = user
 
-        middleware = SessionMiddleware(lambda _: HttpResponse())
-        middleware.process_request(request)
+        _add_session_to_request(request)
         request.session["cart"] = cart_with_products.cart
         request.session.save()
 
@@ -270,8 +269,7 @@ class TestDeleteProductCartView:
         )
         request.user = user
 
-        middleware = SessionMiddleware(lambda _: HttpResponse())
-        middleware.process_request(request)
+        _add_session_to_request(request)
         request.session["cart"] = cart_with_products.cart
         request.session.save()
 

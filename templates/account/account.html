@@ -21,7 +21,7 @@
       <div class="auth-wrap">
         <div class="auth-col">
 
-          
+
           <ul class="nav nav-tabs mb-4" id="accountTabs" role="tablist">
             <li class="nav-item" role="presentation">
               <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab"
@@ -103,7 +103,7 @@
                       <div class="account-card order-card mb-3">
                         <div class="order-header d-flex justify-content-between align-items-center mb-3">
                           <div>
-                            <h4 class="mb-0 order-number"><i class="bi bi-receipt"></i> Order {{ order.order_num }}</h4>
+                            <a class="mb-0 order-number" href="{% url 'order:order_summary' order.id %}"><i class="bi bi-receipt"></i> Order {{ order.order_num }}</a>
                             <small class="text-muted">{{ order.registration_date|date:"M d, Y" }}</small>
                           </div>
                           <div class="order-status">
@@ -112,7 +112,7 @@
                             </span>
                           </div>
                         </div>
-                        
+
                         <div class="order-details mb-3">
                           {% for detail in order.order_details.all %}
                             <div class="order-item d-flex justify-content-between mb-2">
@@ -121,7 +121,7 @@
                             </div>
                           {% endfor %}
                         </div>
-                        
+
                         <div class="order-footer border-top pt-3 d-flex justify-content-between align-items-center">
                           <strong class="order-total-label">Total:</strong>
                           <span class="fs-5 order-total-amount">$ {{ order.total_price }}</span>

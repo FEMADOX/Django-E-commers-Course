@@ -21,7 +21,6 @@
                 margin: 0 0 0.5rem 0;
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
                 gap: 1rem;
                 flex-wrap: wrap;
 
@@ -46,9 +45,13 @@
                     font-weight: 400;
 
                     @media (min-width: 768px) {
-                        font-size: 0.95rem;
+                        font-size: 1.2rem;
                         font-weight: inherit;
                     }
+                }
+
+                .order-status {
+                    margin-left: auto;
                 }
             }
         }
@@ -80,7 +83,6 @@
 
                 @media (min-width: 768px) {
                     gap: 1.5rem;
-                    align-items: stretch;
                 }
 
                 .item-image {
@@ -122,13 +124,13 @@
                             font-weight: 600;
 
                             @media (min-width: 768px) {
-                                font-size: 0.8rem;
+                                font-size: 1.2rem;
                             }
                         }
 
                         .item-title {
                             font-size: 1.4rem;
-                            font-weight: 600;
+                            font-weight: 700;
                             color: var(--base-text-color);
                             text-decoration: none;
                             transition: color 0.2s;
@@ -138,13 +140,17 @@
                             }
 
                             @media (min-width: 768px) {
-                                font-size: 1.25rem;
+                                font-size: 1.4rem;
                             }
                         }
 
                         .item-brand {
                             font-size: 1rem;
                             color: var(--secondary-text-color);
+
+                            @media screen and (min-width: 768px) {
+                                font-size: 1.2rem;
+                            }
                         }
                     }
 
@@ -157,7 +163,6 @@
                         @media (min-width: 768px) {
                             gap: 2rem;
                             margin-top: 0.5rem;
-                            justify-content: flex-start;
                         }
 
                         .price-row,
@@ -173,7 +178,7 @@
                                 color: var(--secondary-text-color);
 
                                 @media (min-width: 768px) {
-                                    font-size: 0.8rem;
+                                    font-size: 1.2rem;
                                 }
                             }
 
@@ -238,7 +243,7 @@
                 color: var(--base-text-color);
 
                 @media (min-width: 768px) {
-                    font-size: 1.25rem;
+                    font-size: 1.5rem;
                 }
             }
 
@@ -347,5 +352,11 @@
                 }
             }
         }
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .price-label, .total-label, .quantity-label {
+        font-size: 1rem;
     }
 }

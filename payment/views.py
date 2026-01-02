@@ -62,7 +62,7 @@ class PaymentProcessView(LoginRequiredMixin, View):
 
     @staticmethod
     def order_preprocessing(
-            request: HttpRequest,
+        request: HttpRequest,
     ) -> HttpResponseBadRequest | HttpResponseRedirect | dict[str, Any]:
         """Perform any necessary preprocessing on the order before payment."""
 
@@ -174,9 +174,9 @@ class PaymentCompletedView(LoginRequiredMixin, View):
 
     @staticmethod
     def _send_confirmation_email(
-            order: Order,
-            client: Client,
-            order_details_products: list[str],
+        order: Order,
+        client: Client,
+        order_details_products: list[str],
     ) -> bool:
         """
         Send order confirmation email.

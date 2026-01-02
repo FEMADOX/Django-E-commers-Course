@@ -587,7 +587,7 @@ form.register {
             gap: 2rem;
         }
     }
-    
+
     .text-center {
         i {
             color: var(--secondary-text-color);
@@ -601,7 +601,7 @@ form.register {
             color: var(--base-text-color);
             margin-bottom: 0.5rem;
         }
-        
+
         p {
             color: var(--secondary-text-color);
         }
@@ -622,7 +622,7 @@ form.register {
         box-shadow: 0 8px 20px rgba(18, 145, 238, 0.2);
         /* border-color: rgba(18, 145, 238, 0.5); */
     }
-    
+
     .order-header {
         .order-number {
             color: var(--base-text-color);
@@ -632,13 +632,22 @@ form.register {
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            border: 0;
+            transition: color 0.2s;
+            width: fit-content;
+            cursor: pointer;
 
             i {
                 color: var(--third-color);
                 font-size: 1.5rem;
             }
+
+            &:hover, &:active {
+                color: var(--third-color);
+                border: 0;
+            }
         }
-        
+
         small {
             font-size: 0.9rem;
             color: var(--secondary-text-color) !important;
@@ -657,6 +666,7 @@ form.register {
                 font-weight: 600;
                 border-radius: 20px;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                color: white;
             }
         }
     }
@@ -705,7 +715,7 @@ form.register {
                 color: var(--base-text-color);
                 transition: color 0.2s;
                 border-bottom: 0;
-                
+
                 .quantity {
                     margin-left: 5px;
                     color: var(--secondary-text-color) !important;
@@ -782,4 +792,3 @@ form.register {
         }
     }
 }
-

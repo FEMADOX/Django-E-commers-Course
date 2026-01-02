@@ -14,6 +14,9 @@
           <h1 class="summary-title">
             <span class="summary-id">Order {{ order.order_num }}</span>
             <span class="summary-date">{{ order.registration_date|date:"M d, Y, g:i a" }}</span>
+            <div class="order-status">
+              <span class="badge {% if order.status == '1' %}bg-success{% else %}bg-warning{% endif %}">{{ order.get_status_display }}</span>
+            </div>
           </h1>
         </div>
       </div>
@@ -61,30 +64,34 @@
           <span class="grand-total-value">$ {{ order.total_price }}</span>
         </div>
 
-        <div class="actions-wrap">
-          <form class="payment-form" action="{% url 'payment:payment_process' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn-pay-now">
-              Pay Now
-            </button>
-          </form>
+        <!-- If order is pending display actions -->
+        {% if order.status == "0" %}
+          <div class="actions-wrap">
+            <form class="payment-form" action="{% url 'payment:payment_process' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn-pay-now">
+                Pay Now
+              </button>
+            </form>
 
-          <form class="restore-form" action="{% url 'cart:restore_order_pending_cart' order.id %}" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="location-url" value="{% url 'cart:cart' %}" />
-            <button class="btn-restore" type="submit" title="Restore to Cart">
-              <i class="bi bi-cart-plus"></i>
-              Restore
-            </button>
-          </form>
+            <form class="restore-form" action="{% url 'cart:restore_order_pending_cart' order.id %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="location-url" value="{% url 'cart:cart' %}" />
+              <button class="btn-restore" type="submit" title="Restore to Cart">
+                <i class="bi bi-cart-plus"></i>
+                Restore
+              </button>
+            </form>
 
-          <form class="delete-form" action="{% url 'order:delete_pending_order' order.id %}" method="post">
-            {% csrf_token %}
-            <button class="btn-delete-order" type="submit" title="Delete Pending Order">
-              Delete Order
-            </button>
-          </form>
-        </div>
+            <form class="delete-form" action="{% url 'order:delete_pending_order' order.id %}" method="post">
+              {% csrf_token %}
+              <button class="btn-delete-order" type="submit" title="Delete Pending Order">
+                Delete Order
+              </button>
+            </form>
+          </div>
+        {% endif %}
+
       </div>
     </div>
   </div>

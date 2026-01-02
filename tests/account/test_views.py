@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import time
+from datetime import timedelta
 from typing import TYPE_CHECKING, Any
 from unittest.mock import MagicMock, patch
 
@@ -10,12 +11,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages import get_messages
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
 from account.forms import CustomPasswordResetForm, SmartAuthenticationForm
 from account.models import Client
 from account.views import AccountActivationView, CustomPasswordResetConfirmView
+from order.models import Order
 from tests.common.parametrizes import (
     PARAM_EMPTY_SPACES,
     PARAM_INVALID_EMAIL,
@@ -95,6 +98,37 @@ class TestUserAccountView:
         assert form_data["sex"] == client_profile.sex
         assert form_data["phone"] == client_profile.phone
         assert form_data["address"] == client_profile.address
+
+    def test_account_view_auto_deletes_old_pending_orders(
+        self,
+        authenticated_client: DjangoClient,
+        client_profile: Client,
+    ) -> None:
+        """Test that accessing account view deletes old pending orders."""
+        now = timezone.now()
+        old_date = now - timedelta(hours=2)
+        recent_date = now - timedelta(minutes=30)
+
+        # Create old paid order (should be kept)
+        old_paid = Order.objects.create(client=client_profile, status="1")
+        Order.objects.filter(pk=old_paid.pk).update(registration_date=old_date)
+
+        # Create old pending order (should be deleted)
+        old_pending = Order.objects.create(client=client_profile, status="0")
+        Order.objects.filter(pk=old_pending.pk).update(registration_date=old_date)
+
+        # Create recent pending order (should be kept)
+        recent_pending = Order.objects.create(client=client_profile, status="0")
+        Order.objects.filter(pk=recent_pending.pk).update(registration_date=recent_date)
+
+        # Access the view
+        response = authenticated_client.get(reverse("account:user_account"))
+        assert response.status_code == HTTP_200_OK
+
+        # Verify deletion
+        assert not Order.objects.filter(pk=old_pending.pk).exists()
+        assert Order.objects.filter(pk=recent_pending.pk).exists()
+        assert Order.objects.filter(pk=old_paid.pk).exists()
 
 
 @pytest.mark.django_db

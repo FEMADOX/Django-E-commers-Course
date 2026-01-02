@@ -92,6 +92,7 @@ class DeleteProductCartView(LoginRequiredMixin, View):
     ) -> HttpResponse:
         cart = Cart(request)
         cart.delete(str(product_id))
+        messages.success(request, "Product removed successfully.")
 
         actual_location = request.POST.get("location-url")
         if actual_location:

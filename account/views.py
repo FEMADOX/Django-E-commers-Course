@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import time
+from datetime import timedelta
 from typing import TYPE_CHECKING, Any
 
 from django.contrib import messages
@@ -18,6 +19,7 @@ from django.contrib.auth.views import (
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.http.request import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
@@ -51,7 +53,20 @@ class UserAccountView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs: dict) -> dict:
         context = super().get_context_data(**kwargs)
         user = User.objects.get(pk=self.request.user.pk)
-        user_orders = Client.objects.get(user=user).orders.filter(status="1")
+        try:
+            client = Client.objects.get(user=user)
+
+            expiration_threshold = timezone.now() - timedelta(hours=1)
+            orders_pending = client.orders.filter(
+                status="0", registration_date__lt=expiration_threshold
+            )
+
+            if orders_pending.exists():
+                orders_pending.delete()
+
+            user_orders = client.orders.all()
+        except Client.DoesNotExist:
+            user_orders = []
 
         context["form"] = get_or_create_client_form(user)
         context["user_orders"] = user_orders
