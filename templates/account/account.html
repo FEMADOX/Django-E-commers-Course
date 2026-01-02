@@ -20,53 +20,124 @@
     <div class="page-styling">
       <div class="auth-wrap">
         <div class="auth-col">
-          <div class="auth-header">
-            <h2>Profile Information</h2>
-            <p>Update your profile information</p>
-          </div>
 
-          <div class="account-details-grid">
-            <form id="update-account-form" class="register update-account-details" method="post" action="{% url 'account:update_account' %}">
-              {% csrf_token %}
+          
+          <ul class="nav nav-tabs mb-4" id="accountTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab"
+                aria-controls="profile" aria-selected="true">
+                Profile
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab"
+                aria-controls="orders" aria-selected="false">
+                Orders
+              </button>
+            </li>
+          </ul>
 
-              <!-- Personal Details Card -->
-              <div class="account-card personal-details">
-                <h3>Personal Details</h3>
-                <div class="row">
-                  <div class="col-md-6">
-                    {{ form.name|as_crispy_field }}
-                  </div>
-                  <div class="col-md-6">
-                    {{ form.last_name|as_crispy_field }}
-                  </div>
+          <div class="tab-content" id="accountTabsContent">
+            <!-- Profile Tab -->
+            <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+              <div class="account-details-grid">
+                <div class="auth-header">
+                  <h2>Profile Information</h2>
+                  <p>Update your profile information</p>
                 </div>
-                {{ form.sex|as_crispy_field }}
-                {{ form.birth|as_crispy_field }}
-                {{ form.dni|as_crispy_field }}
-              </div>
-
-              <!-- Contact Info Card -->
-              <div class="account-card contact-info">
-                <h3>Contact Info</h3>
-                {{ form.email|as_crispy_field }}
-                {{ form.phone|as_crispy_field }}
-                {{ form.address|as_crispy_field }}
-              </div>
-            </form>
-
-            <!-- Actions Card -->
-            <div class="account-card actions">
-              <h3>Actions</h3>
-              <input type="submit" form="update-account-form" value="Update" class="btn btn-primary w-100 mb-3 update-btn" />
-              <div class="divider">
-                <span>or</span>
-              </div>
-              {% if request.user.is_authenticated %}
-                <form action="{% url 'account:logout' %}" method="post" class="w-100">
+                <form id="update-account-form" class="register update-account-details" method="post" action="{% url 'account:update_account' %}">
                   {% csrf_token %}
-                  <input type="submit" class="logout-account btn btn-outline-danger w-100" value="LogOut" />
+
+                  <!-- Personal Details Card -->
+                  <div class="account-card personal-details">
+                    <h3>Personal Details</h3>
+                    <div class="row">
+                      <div class="col-md-6">
+                        {{ form.name|as_crispy_field }}
+                      </div>
+                      <div class="col-md-6">
+                        {{ form.last_name|as_crispy_field }}
+                      </div>
+                    </div>
+                    {{ form.sex|as_crispy_field }}
+                    {{ form.birth|as_crispy_field }}
+                    {{ form.dni|as_crispy_field }}
+                  </div>
+
+                  <!-- Contact Info Card -->
+                  <div class="account-card contact-info">
+                    <h3>Contact Info</h3>
+                    {{ form.email|as_crispy_field }}
+                    {{ form.phone|as_crispy_field }}
+                    {{ form.address|as_crispy_field }}
+                  </div>
                 </form>
-              {% endif %}
+
+                <!-- Actions Card -->
+                <div class="account-card actions">
+                  <h3>Actions</h3>
+                  <input type="submit" form="update-account-form" value="Update" class="btn btn-primary w-100 mb-3 update-btn" />
+                  <div class="divider">
+                    <span>or</span>
+                  </div>
+                  {% if request.user.is_authenticated %}
+                    <form action="{% url 'account:logout' %}" method="post" class="w-100">
+                      {% csrf_token %}
+                      <input type="submit" class="logout-account btn btn-outline-danger w-100" value="LogOut" />
+                    </form>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <!-- Orders Tab -->
+            <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+              <div class="auth-header">
+                <h2>Orders Information</h2>
+                <p>Here you can take a look at the orders you've made</p>
+              </div>
+              <div class="orders-container">
+                {% if user_orders %}
+                  <div class="orders-list">
+                    {% for order in user_orders %}
+                      <div class="account-card order-card mb-3">
+                        <div class="order-header d-flex justify-content-between align-items-center mb-3">
+                          <div>
+                            <h4 class="mb-0 order-number"><i class="bi bi-receipt"></i> Order {{ order.order_num }}</h4>
+                            <small class="text-muted">{{ order.registration_date|date:"M d, Y" }}</small>
+                          </div>
+                          <div class="order-status">
+                            <span class="badge {% if order.status == '1' %}bg-success{% else %}bg-warning{% endif %}">
+                              {{ order.get_status_display }}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div class="order-details mb-3">
+                          {% for detail in order.order_details.all %}
+                            <div class="order-item d-flex justify-content-between mb-2">
+                              <a class="order-item-title" href="{% url 'web:product_detail' detail.product.id %}" target="_blank">{{ detail.product.title }}<span class="quantity">(x{{ detail.quantity }})</span></a>
+                              <span>$ {{ detail.subtotal }}</span>
+                            </div>
+                          {% endfor %}
+                        </div>
+                        
+                        <div class="order-footer border-top pt-3 d-flex justify-content-between align-items-center">
+                          <strong class="order-total-label">Total:</strong>
+                          <span class="fs-5 order-total-amount">$ {{ order.total_price }}</span>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <div class="account-card text-center py-5">
+                    <i class="bi bi-cart-x display-1 text-muted mb-3"></i>
+                    <h3>No orders found</h3>
+                    <p class="text-muted">You haven't placed any orders yet.</p>
+                    <a href="{% url 'web:index' %}" class="btn btn-primary mt-3">Start Shopping</a>
+                  </div>
+                {% endif %}
+              </div>
             </div>
           </div>
 

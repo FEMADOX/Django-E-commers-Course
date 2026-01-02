@@ -51,8 +51,10 @@ class UserAccountView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs: dict) -> dict:
         context = super().get_context_data(**kwargs)
         user = User.objects.get(pk=self.request.user.pk)
+        user_orders = Client.objects.get(user=user).orders.filter(status="1")
 
         context["form"] = get_or_create_client_form(user)
+        context["user_orders"] = user_orders
         return context
 
 

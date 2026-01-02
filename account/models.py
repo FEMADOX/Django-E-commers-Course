@@ -1,7 +1,12 @@
+from typing import TYPE_CHECKING
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from phonenumber_field.modelfields import PhoneNumberField
+
+if TYPE_CHECKING:
+    from order.models import Order
 
 
 class Client(models.Model):
@@ -23,3 +28,6 @@ class Client(models.Model):
 
     def get_absolute_url(self) -> str:
         return reverse("client_detail", kwargs={"pk": self.pk})
+
+    if TYPE_CHECKING:
+        orders: models.QuerySet["Order"]

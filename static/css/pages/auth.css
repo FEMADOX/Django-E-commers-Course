@@ -144,6 +144,7 @@
 
 .auth-header {
     text-align: center;
+    grid-column: 1 / span 2;
 
     h2 {
         margin-bottom: 1rem;
@@ -531,6 +532,254 @@ form.register {
         box-shadow: none;
         padding: 0;
     }
-
-
 }
+
+/* ==========================================================================
+   Account Tabs
+   ========================================================================== */
+
+.nav-tabs {
+    border-bottom: 2px solid rgba(18, 145, 238, 0.2);
+    margin-bottom: 2rem !important;
+
+    .nav-link {
+        color: var(--secondary-text-color);
+        border: none;
+        border-bottom: 3px solid transparent;
+        font-weight: 600;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.2s ease;
+        margin-bottom: -2px;
+        background: transparent;
+
+        &:hover {
+            color: var(--base-text-color);
+            border-color: rgba(18, 145, 238, 0.5);
+        }
+
+        &.active {
+            color: var(--third-color);
+            background: transparent;
+            border-bottom: 3px solid var(--third-color);
+        }
+    }
+}
+
+/* ==========================================================================
+   Orders Styles
+   ========================================================================== */
+
+.orders-container {
+    width: 100%;
+
+    .orders-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+
+        @media (min-width: 768px) {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 1200px) {
+            gap: 2rem;
+        }
+    }
+    
+    .text-center {
+        i {
+            color: var(--secondary-text-color);
+            opacity: 0.5;
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        h3 {
+            color: var(--base-text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        p {
+            color: var(--secondary-text-color);
+        }
+    }
+}
+
+.order-card {
+    border: 1px solid rgba(18, 145, 238, 0.2);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(18, 145, 238, 0.2);
+        /* border-color: rgba(18, 145, 238, 0.5); */
+    }
+    
+    .order-header {
+        .order-number {
+            color: var(--base-text-color);
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            i {
+                color: var(--third-color);
+                font-size: 1.5rem;
+            }
+        }
+        
+        small {
+            font-size: 0.9rem;
+            color: var(--secondary-text-color) !important;
+            font-weight: 500;
+        }
+
+        .order-status {
+            display: inline-flex;
+            align-self: flex-start;
+            text-align: end;
+            width: fit-content;
+
+            .badge {
+                font-size: 1rem;
+                padding: 0.5em 1em;
+                font-weight: 600;
+                border-radius: 20px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            }
+        }
+    }
+
+    .order-details {
+        background: var(--base-color);
+        border-radius: 10px;
+        padding: .5rem .5rem;
+        margin: 1rem 0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+        .order-item {
+            font-size: 1rem;
+            color: var(--base-text-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 0.7rem;
+            margin-bottom: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s ease;
+
+            &:hover {
+                background: rgba(18, 145, 238, 0.05);
+                border-radius: 5px;
+            }
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            span:first-child {
+                font-weight: 500;
+            }
+
+            span:last-child {
+                color: var(--third-color);
+                font-weight: 700;
+            }
+
+            span {
+                font-size: 1.2rem;
+            }
+
+            .order-item-title {
+                color: var(--base-text-color);
+                transition: color 0.2s;
+                border-bottom: 0;
+                
+                .quantity {
+                    margin-left: 5px;
+                    color: var(--secondary-text-color) !important;
+                }
+
+                &:hover, &:active {
+                    color: var(--third-color);
+                }
+            }
+        }
+    }
+
+    .order-footer {
+        border-top: 2px solid var(--border-color);
+        margin-top: auto;
+        padding: 1.5rem 15px 0;
+
+        .order-total-label {
+            color: var(--base-text-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .order-total-amount {
+            color: var(--third-color);
+            font-weight: 800;
+            font-size: 1.8rem !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    /* Dark mode adjustments */
+    .darkmode & {
+        border-color: rgba(18, 145, 238, 0.4);
+
+        &:hover {
+            box-shadow: 0 8px 30px rgba(18, 145, 238, 0.3);
+        }
+
+        .order-details {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+
+            .order-item {
+                border-bottom-color: rgba(255, 255, 255, 0.1);
+
+                &:hover {
+                    background: rgba(18, 145, 238, 0.1);
+                }
+            }
+        }
+
+        .order-footer {
+            border-top-color: rgba(255, 255, 255, 0.15);
+            /* background: linear-gradient(to bottom, transparent, rgba(18, 145, 238, 0.08)); */
+        }
+    }
+}
+
+/* Empty state styling */
+.orders-container {
+    .text-center {
+        i.bi-cart-x {
+            color: var(--secondary-text-color);
+            opacity: 0.4;
+        }
+
+        h3 {
+            color: var(--base-text-color);
+            font-weight: 600;
+        }
+    }
+}
+

@@ -934,6 +934,7 @@ form.cart-actions input.checkout-button {
     font-size: 1.9rem;
     height: 16px;
     width: 16px;
+    color: var(--base-text-color);
 }
 
 .card-header i.bi-truck::before {

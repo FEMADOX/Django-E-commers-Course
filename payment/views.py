@@ -28,7 +28,6 @@ if TYPE_CHECKING:
 
     from cart.cart import Cart
 
-
 # Create your views here.
 
 stripe.api_key = STRIPE_API
@@ -61,9 +60,9 @@ class PaymentProcessView(LoginRequiredMixin, View):
                 "An unexpected error occurred. Please try again later.",
             )
 
+    @staticmethod
     def order_preprocessing(
-        self,
-        request: HttpRequest,
+            request: HttpRequest,
     ) -> HttpResponseBadRequest | HttpResponseRedirect | dict[str, Any]:
         """Perform any necessary preprocessing on the order before payment."""
 
@@ -173,16 +172,15 @@ class PaymentCompletedView(LoginRequiredMixin, View):
             request.session.pop("order_id", None)
             return redirect(reverse("web:index"))
 
+    @staticmethod
     def _send_confirmation_email(
-        self,
-        order: Order,
-        client: Client,
-        order_details_products: list[str],
+            order: Order,
+            client: Client,
+            order_details_products: list[str],
     ) -> bool:
         """
         Send order confirmation email.
 
-        :param self: Description
         :param order: Description
         :type order: Order
         :param client: Description

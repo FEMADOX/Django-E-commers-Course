@@ -17,7 +17,7 @@ class Order(models.Model):
         ("1", "Paid"),
     )
 
-    client = models.ForeignKey(Client, on_delete=models.RESTRICT)
+    client = models.ForeignKey(Client, related_name="orders", on_delete=models.RESTRICT)
     registration_date = models.DateTimeField(auto_now_add=True)
     order_num = models.CharField(max_length=20, blank=True, default="0000")
     total_price = models.DecimalField(
