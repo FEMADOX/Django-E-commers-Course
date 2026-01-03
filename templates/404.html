@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | Django E-commerce</title>
+    <!-- Inline CSS for maximum reliability on error pages -->
+    <style>
+        /* ==========================================================================
+           404 Error Page Styles
+           ========================================================================== */
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        :root {
+            --base-color: #ffffff;
+            --base-text-color: #333333;
+            --secondary-text-color: #666666;
+            --accent-color: #1291ee;
+            --bg-gradient-start: #f8f9fa;
+            --bg-gradient-end: #e9ecef;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --base-color: #1a1a1a;
+                --base-text-color: #f1f1f1;
+                --secondary-text-color: #a0a0a0;
+                --bg-gradient-start: #121212;
+                --bg-gradient-end: #1e1e1e;
+            }
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            color: var(--base-text-color);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .error-container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: 800;
+            line-height: 1;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            text-shadow: 4px 4px 0px rgba(18, 145, 238, 0.2);
+            display: block;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .error-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--base-text-color);
+        }
+
+        .error-description {
+            font-size: 1.1rem;
+            color: var(--secondary-text-color);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .home-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(18, 145, 238, 0.3);
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(18, 145, 238, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .home-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .error-code {
+                font-size: 12rem;
+            }
+
+            .error-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="error-container">
+      <div class="error-code">404</div>
+      <h1 class="error-title">Page Not Found</h1>
+      <p class="error-description">
+        Oops! The page you are looking for seems to have wandered off.
+        It might have been removed, renamed, or seemingly never existed.
+      </p>
+      <a href="{% url 'web:index' %}" class="home-btn">
+        <i class="fas fa-home"></i> Go Back Home
+      </a>
+    </div>
+
+  </body>
+
+</html>
