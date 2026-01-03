@@ -130,10 +130,10 @@
                     {% endfor %}
                   </div>
                 {% else %}
-                  <div class="account-card text-center py-5">
-                    <i class="bi bi-cart-x display-1 text-muted mb-3"></i>
+                  <div class="account-card no-orders text-center py-5">
+                    <i class="bi bi-cart-x display-1 mb-3"></i>
                     <h3>No orders found</h3>
-                    <p class="text-muted">You haven't placed any orders yet.</p>
+                    <p class="card-description">You haven't placed any orders yet.</p>
                     <a href="{% url 'web:index' %}" class="btn btn-primary mt-3">Start Shopping</a>
                   </div>
                 {% endif %}
