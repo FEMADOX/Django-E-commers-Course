@@ -509,6 +509,21 @@ form.register {
             }
         }
     }
+
+    &.no-orders {
+        i.bi-cart-x {
+            color: var(--secondary-text-color) !important;
+        }
+
+        p.text-muted {
+            color: var(--secondary-text-color) !important;
+        }
+
+        .btn-primary {
+            color: white;
+            font-size: 1.3rem;
+        }
+    }
 }
 
 .update-btn {
